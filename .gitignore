@@ -1,0 +1,24 @@
+.git/
+
+# PyCharm stuff
+.idea/
+
+# OS generated files
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Python compiled source code
+*.pyc
+
+# Vim swap files
+*.swp
+
+# SQLite database
+*.sqlite
+
+# Virtual environment
+/env_*
+
+# Generated documentation
+/docs/_build/

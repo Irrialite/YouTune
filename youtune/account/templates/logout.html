@@ -1,0 +1,12 @@
+{% extends "plain.html" %}
+
+{% load i18n %}
+
+{% block fulltitle %} logged out {% endblock %}
+
+{% block content %}
+<div class="main">
+    <p>You have been logged out.</p>
+    <a href="{% url "home" %}">Home page</a>
+</div>
+{% endblock %}

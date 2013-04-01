@@ -1,11 +1,14 @@
 # Django settings for youtune project.
 
-DEBUG = False #True to see obicen page
+import os.path
+settings_dir = os.path.abspath(os.path.dirname(__file__))
+database_file = os.path.join(settings_dir, 'db.sqlite')
+
+
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
+ADMINS = ()
 
 MANAGERS = ADMINS
 
@@ -13,7 +16,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',# sqlite3 zato ker generira samo 1 file, na pc  | # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'maindb.db',                      # Or path to database file if using sqlite3.
+        'NAME': database_file,                      # Or path to database file if using sqlite3.
 
         # The following settings are not used with sqlite3:
         'USER': '',
@@ -37,6 +40,14 @@ TIME_ZONE = 'Europe/Ljubljana'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
+# Dummy function, so that "makemessages" can find strings which should be translated.
+_ = lambda s: s
+
+LANGUAGES = (
+    ('sl', _('Slovenian')),
+    ('en', _('English')),
+)
+
 SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
@@ -52,18 +63,18 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.join(settings_dir, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(settings_dir, 'static')
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -94,6 +105,18 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages',
+    # ours below
+    # 'youtune.context_processors.global_vars',
+)
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -113,12 +136,17 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-
-    "C:/Users/SnowMan/youtune/templates",
-
+    os.path.join(settings_dir, 'templates'),
+    os.path.join(settings_dir, 'admin/templates/admin'),
 )
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
 INSTALLED_APPS = (
+		'youtune.frontend',
+		'youtune.account',
+		'youtune.admin',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -126,10 +154,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'polls',
-    # Uncomment the next line to enable the admin:
-     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'django.contrib.admin',
+    'django.contrib.admindocs',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -160,3 +186,22 @@ LOGGING = {
         },
     }
 }
+
+
+LOGIN_REDIRECT_URL = '/'
+
+AUTH_PROFILE_MODULE = 'account.UserProfile'
+
+AUTHENTICATION_BACKENDS = (
+    'youtune.account.backends.CaseInsensitiveModelBackend',
+)
+
+# Facebook settings:
+# Site URL for Facebook app is set to http://127.0.0.1:8000/
+# so run your development server on port 8000
+# and access your site by local ip 127.0.0.1:8000 in your browser.
+FACEBOOK_APP_ID = '' # Add your app ID/API key
+FACEBOOK_APP_SECRET = '' # Add your app secret key
+FACEBOOK_SCOPE = 'email' # You may add additional parameters
+FACEBOOK_LOGIN_REDIRECT = '/' # Redirects here after login
+FACEBOOK_ERROR_REDIRECT = '/' # Redirects here if user is not connected with Facebook

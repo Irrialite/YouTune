@@ -1,6 +1,6 @@
 # Django settings for youtune project.
 
-DEBUG = True
+DEBUG = False #True to see obicen page
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (

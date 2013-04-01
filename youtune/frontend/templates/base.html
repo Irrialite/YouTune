@@ -1,0 +1,18 @@
+{% load i18n %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>{% block fulltitle %}{% block title %}{% endblock %}{% endblock %}</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <link type="image/x-icon" href="{{ STATIC_URL }}youtune/images/favicon.ico" rel="shortcut icon" />
+        <link type="image/x-icon" href="{{ STATIC_URL }}youtune/images/favicon.ico" rel="icon" />
+        <link rel="stylesheet" href="{{ STATIC_URL }}youtune/css/style.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="https://www.google.com/cse/style/look/default.css" type="text/css" />
+        <script src="{{ STATIC_URL }}youtune/js/jQuery_library_1_7_1.js" type="text/javascript"></script>
+        {% block extrahead %}{% endblock %}
+        {% block js %}{% endblock %}
+        {% block css %}{% endblock %}
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+    </body>
+</html>

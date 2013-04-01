@@ -136,13 +136,8 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-<<<<<<< HEAD
-
-    '/templates',
-
-=======
     os.path.join(settings_dir, 'templates'),
->>>>>>> remotes/origin/master
+    os.path.join(settings_dir, 'admin/templates/admin'),
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
@@ -150,6 +145,7 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 INSTALLED_APPS = (
 		'youtune.frontend',
 		'youtune.account',
+		'youtune.admin',
 
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -158,15 +154,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'polls',
-<<<<<<< HEAD
-    # Uncomment the next line to enable the admin:
-     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
-=======
     'django.contrib.admin',
     'django.contrib.admindocs',
->>>>>>> remotes/origin/master
 )
 
 # A sample logging configuration. The only tangible logging

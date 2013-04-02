@@ -3,7 +3,7 @@ from django.conf.urls.defaults import handler404, handler500
 from django.contrib import admin
 
 from youtune import settings
-from youtune.account import views as account_views
+from youtune.account import views as account_views, models as account_models
 from youtune.frontend import views as frontend_views
 
 admin.autodiscover()
@@ -24,6 +24,14 @@ urlpatterns = patterns('',
     url(r'^register/$', account_views.RegistrationView.as_view(), name='registration'),
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}, name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'template_name': 'logout.html'}, name='logout'),
+
+    # Profile, account
+    url(r'^user/(?P<username>' + account_models.USERNAME_REGEX + ')/$', frontend_views.UserView.as_view(), name='profile'),
+    url(r'^account/$', account_views.AccountChangeView.as_view(), name='account'),
+    url(r'^account/password/change/$', account_views.PasswordChangeView.as_view(), name='password_change'),
+    url(r'^account/confirmation/$', account_views.EmailConfirmationSendToken.as_view(), name='email_confirmation_send_token'),
+    url(r'^account/confirmation/token/(?:(?P<confirmation_token>\w+)/)?$', account_views.EmailConfirmationProcessToken.as_view(), name='email_confirmaton_process_token'),
+
     # Facebook
     url(r'^facebook/login/$', account_views.FacebookLoginView.as_view(), name='facebook_login'),
     url(r'^facebook/callback/$', account_views.FacebookCallbackView.as_view(), name='facebook_callback'),

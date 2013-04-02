@@ -3,6 +3,10 @@
 # PyCharm stuff
 .idea/
 
+# Eclipse stuff
+.project
+.pydevproject
+
 # OS generated files
 ehthumbs.db
 Icon?

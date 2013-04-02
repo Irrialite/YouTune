@@ -146,6 +146,7 @@ INSTALLED_APPS = (
 		'youtune.frontend',
 		'youtune.account',
 		'youtune.admin',
+		'youtune.polls',
 
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -153,7 +154,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'polls',
     'django.contrib.admin',
     'django.contrib.admindocs',
 )

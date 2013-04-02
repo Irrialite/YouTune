@@ -12,7 +12,6 @@ ADMINS = ()
 
 MANAGERS = ADMINS
 
-# Tle bo SQL BAZA :)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',# sqlite3 zato ker generira samo 1 file, na pc  | # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -194,6 +193,7 @@ AUTH_PROFILE_MODULE = 'account.UserProfile'
 
 AUTHENTICATION_BACKENDS = (
     'youtune.account.backends.CaseInsensitiveModelBackend',
+    'youtune.account.backends.FacebookBackend',
 )
 
 # Facebook settings:

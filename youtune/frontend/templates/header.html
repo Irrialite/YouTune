@@ -3,7 +3,7 @@
     <div id="header">
         <div id="logo">
 			<a href="{% url "home" %}">
-            	<img src="{{ STATIC_URL }}youtune/images/logo-sl.png" alt="PiplMesh" />
+            	<img src="{{ STATIC_URL }}youtune/images/logo-sl.png" alt="YouTune" />
             </a>
         </div>
         <div id="search">
@@ -18,7 +18,7 @@
             {% load facebook %}
             {% if user.is_authenticated %}
                 <img src="{% facebook_picture user.username "square" %}" />
-                <p>Username:<strong>{{ user.username }}</strong> </p>
+                <p><a href="{% url "profile" username=user.username %}"><strong>{{ user.username }}</strong></a></p>
                 <form method="post" action="{% url "logout" %}" id="logout_form">
                 	  {% csrf_token %}
                     <p><button type="submit" class="auth_button" value="value">Log out</button></p>

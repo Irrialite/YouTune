@@ -1,0 +1,25 @@
+{% extends "plain.html" %}
+
+{% load future i18n staticfiles %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block content %}
+    {% include "profile/menu.html" %}
+    <div class="profile">
+        <h1>{% trans "Profile" %}</h1>
+        <p>{% trans "Username:" %} {{ user.username }}</p>
+        <p>{% trans "Name:" %} {{ user.get_full_name }}</p>
+        <p>{% trans "Gender:" %} {{ user.get_profile.gender }}</p>
+        <p>{% trans "Birthdate:" %} {{ user.get_profile.birthdate }}</p>
+        <p>{% trans "E-mail:" %} {{ user.email }}</p>
+        <p>{% trans "Last login:" %} {{ user.last_login }}</p>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+    </div>
+{% endblock %}

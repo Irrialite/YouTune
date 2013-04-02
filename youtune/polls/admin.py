@@ -2,7 +2,8 @@ __author__ = 'SnowMan'
 
 
 from django.contrib import admin
-from polls.models import Poll, Choice
+
+from youtune.polls.models import Poll, Choice
 
 
 #this change makes the Publication date come before the Question field - says so in tutorial

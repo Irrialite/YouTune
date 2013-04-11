@@ -1,0 +1,26 @@
+{% extends "students/base.html" %}
+
+{% block content %}
+    <h1>IPRI 2013</h1>
+
+    <h2>Teams</h2>
+    {% if team_list %}
+        <ul>
+            {% for team in team_list %}
+                <li>{{ team.name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No teams are available.</p>
+    {% endif %}
+    <h2>Students</h2>
+    {% if student_list %}
+        <ul>
+            {% for student in student_list %}
+                <li>{{ student.name }} {{ student.surname }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No teams are available.</p>
+    {% endif %}
+{% endblock %}

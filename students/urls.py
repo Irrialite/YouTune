@@ -11,5 +11,5 @@ v1_api.register(StudentResource())
 urlpatterns = patterns('',
     url(r'^server/$', views.server, name='server'),
     url(r'^api/', include(v1_api.urls)),
-    url(r'^', views.index, name='index'),
+    url(r'^$', views.index, name='index'),
 )

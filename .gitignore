@@ -1,5 +1,5 @@
 .git/
-
+sqlite.db
 # PyCharm stuff
 .idea/
 

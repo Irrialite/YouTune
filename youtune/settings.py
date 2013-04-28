@@ -146,6 +146,7 @@ INSTALLED_APPS = (
 		'youtune.account',
 		'youtune.admin',
 		'youtune.polls',
+        'youtune.api',
 
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -155,6 +156,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    
+    'tastypie',
 )
 
 # A sample logging configuration. The only tangible logging

@@ -5,6 +5,12 @@ from django.contrib import admin
 from youtune import settings
 from youtune.account import views as account_views, models as account_models
 from youtune.frontend import views as frontend_views
+from youtune.api import resources, views
+
+from tastypie.api import Api
+
+v1_api = Api(api_name='v1')
+v1_api.register(resources.UserResource())
 
 admin.autodiscover()
 
@@ -12,7 +18,13 @@ handler404 = frontend_views.Error404View.as_view( )
 handler500 = frontend_views.Error500View.as_view( )
 
 urlpatterns = patterns('',
-    url('^$', frontend_views.HomeView.as_view(), name='home'),
+    # Switch to API-based JS views
+    url(r'^$', views.index, name='index'),
+    
+    # API
+    url(r'^api/', include(v1_api.urls)),
+    
+    url('^server/', frontend_views.HomeView.as_view(), name='home'),
     
     url(r'^search', frontend_views.SearchView.as_view(), name='search'),
     
@@ -35,6 +47,7 @@ urlpatterns = patterns('',
     # Facebook
     url(r'^facebook/login/$', account_views.FacebookLoginView.as_view(), name='facebook_login'),
     url(r'^facebook/callback/$', account_views.FacebookCallbackView.as_view(), name='facebook_callback'),
+    
 )
 
 if settings.DEBUG:

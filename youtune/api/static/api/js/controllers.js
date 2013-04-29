@@ -22,14 +22,14 @@ app.directive('username', function (){
 
             //For DOM -> model validation
             ctrl.$parsers.unshift(function(value) {
-                var valid = username_regexp.test(value);
-                ctrl.$setValidity('username', valid);
+                ctrl.$setValidity('username', username_regexp.test(value));
+                scope.user.name = value;
                 return valid ? value : undefined;
             });
             
             //For model -> DOM validation
-            ngModel.$formatters.unshift(function(value) {
-                ngModel.$setValidity('username', username_regexp.test(value));
+            ctrl.$formatters.unshift(function(value) {
+            	ctrl.$setValidity('username', username_regexp.test(value));
                 return value;
             });   
             

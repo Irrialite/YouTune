@@ -1,14 +1,22 @@
+from datetime import datetime
+
 from django.contrib.auth import authenticate, login, logout, models as auth_models
+from django.contrib.auth.hashers import make_password
 from django.conf.urls import url
 
 from tastypie import resources, fields
+from tastypie.authentication import Authentication
+from tastypie.authorization import Authorization
 from tastypie.utils import trailing_slash
 from tastypie.http import HttpUnauthorized, HttpForbidden
 
+from youtune.account import models, forms
 from youtune.api.helpers import FieldsValidation
-from youtune.account import models
+from youtune.api.authorization import UserObjectsOnlyAuthorization
 
 class UserResource(resources.ModelResource):
+    id = fields.IntegerField(attribute="id", null=True)
+    userprofile = fields.ToOneField('youtune.api.resources.UserProfileResource', 'userprofile')
     
     class Meta:
         queryset = auth_models.User.objects.all()
@@ -24,11 +32,14 @@ class UserResource(resources.ModelResource):
         return bundle
 
 class UserProfileResource(resources.ModelResource):
+    id = fields.IntegerField(attribute="id", null=True)
     user = fields.ToOneField(UserResource, 'user', related_name='userprofile', full=True)
     
     class Meta:
         queryset = models.UserProfile.objects.all()
         resource_name = 'userprofile'
+        authentication = Authentication()
+        authorization = Authorization()
     
     def override_urls(self):
         return [
@@ -38,6 +49,12 @@ class UserProfileResource(resources.ModelResource):
             url(r'^(?P<resource_name>%s)/logout%s$' %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('logout'), name='api_logout'),
+            url(r'^(?P<resource_name>%s)/register%s$' %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('register'), name='api_register'),
+            url(r'^(?P<resource_name>%s)/loggedin%s$' %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('loggedin'), name='api_loggedin'),
         ]
 
     def login(self, request, **kwargs):
@@ -73,6 +90,48 @@ class UserProfileResource(resources.ModelResource):
             return self.create_response(request, { 'success': True })
         else:
             return self.create_response(request, { 'success': False }, HttpUnauthorized)
+
+    def hydrate(self, bundle):
+        # About to do some ninja skills
+        bundle.data['password'] = make_password(bundle.data['password'])
+        print bundle.data
+        return bundle        
+        
+    def register(self, request, **kwargs):
+        self.method_check(request, allowed=['post'])
+        
+        data = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        
+        username = data.get('username', '')
+        password = data.get('password', '')
+        currentdate = datetime.now()
+        """
+        new_user = auth_models.User(
+            username=data.get(username),
+            first_name=data.get('firstname', ''),
+            last_name=data.get('lastname', ''),
+            email=data.get('email', ''),
+        )    
+        
+        new_user.set_password(password)
+        new_user.save()
+        
+        profile = models.UserProfile(user=new_user, gender=data.get('gender', ''), birthdate=data.get('birthdate', ''))
+        profile.save()
+        """
+        return self.create_response(request, {
+                    'success': True
+                })
+                
+    def loggedIn(self, request, **kwargs):
+        if request.user.is_authenticated():
+            return self.create_response(request, {
+                'success': True
+            })
+        else:
+            return self.create_response(request, {
+                'success': False
+            })
 
 class UserValidation(FieldsValidation):
 

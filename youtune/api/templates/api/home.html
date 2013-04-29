@@ -1,0 +1,14 @@
+{% extends "api/base.html" %}
+
+{% block html_attributes %}ng-app="youtune"{% endblock %}
+{% block body_attributes %}ng-controller="YouTuneCtrl"{% endblock %}
+
+
+{% block body %}
+    <div ng-view>
+        {% include "api/header.html" %}
+        {% block content %}
+        {% endblock %}
+        {% include "api/footer.html" %}
+    </div>
+{% endblock %}

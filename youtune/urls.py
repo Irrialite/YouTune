@@ -10,7 +10,7 @@ from youtune.api import resources, views
 from tastypie.api import Api
 
 v1_api = Api(api_name='v1')
-v1_api.register(resources.UserResource())
+v1_api.register(resources.UserProfileResource())
 
 admin.autodiscover()
 

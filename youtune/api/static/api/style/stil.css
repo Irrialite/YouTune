@@ -1,0 +1,36 @@
+
+
+
+#searchBar{
+    position: absolute;
+    top: 0px;
+    background:#e3e3e3;
+    width: 100%;
+    height: 50px;
+
+}
+
+#mainLogo{
+    position: absolute;
+    background-image: url("../Images/logo.png");
+    top: 8px;
+    left: 10px;
+    width: 90px;
+    height: 29px;
+    border-style: hidden;
+}
+
+#searchField{
+    position: absolute;
+    left: 120px;
+    right: 150px;
+    top: 10px;
+    margin: auto;
+    width:74%;
+}
+
+.doSearch{
+    position: absolute;
+    right: 8px;
+    top: 8px;
+}

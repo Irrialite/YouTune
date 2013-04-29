@@ -22,8 +22,8 @@ app.directive('username', function (){
 
             //For DOM -> model validation
             ctrl.$parsers.unshift(function(value) {
-                ctrl.$setValidity('username', username_regexp.test(value));
-                scope.user.name = value;
+                var valid = username_regexp.test(value);
+                ctrl.$setValidity('username', valid);
                 return valid ? value : undefined;
             });
             

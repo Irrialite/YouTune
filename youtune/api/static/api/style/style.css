@@ -22,14 +22,22 @@
 
 #searchField{
     position: absolute;
-    left: 120px;
+    left: 110px;
     right: 150px;
     top: 10px;
     margin: auto;
-    width:74%;
+    width:60%;
 }
 
 .doSearch{
+    position: absolute;
+    right: 18%;
+    top: 8px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login{
     position: absolute;
     right: 8px;
     top: 8px;

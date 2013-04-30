@@ -10,8 +10,8 @@
         <h1>{% trans "Profile" %}</h1>
         <p>{% trans "Username:" %} {{ user.username }}</p>
         <p>{% trans "Name:" %} {{ user.get_full_name }}</p>
-        <p>{% trans "Gender:" %} {{ user.get_profile.gender }}</p>
-        <p>{% trans "Birthdate:" %} {{ user.get_profile.birthdate }}</p>
+        <p>{% trans "Gender:" %} {{ user.gender }}</p>
+        <p>{% trans "Birthdate:" %} {{ user.birthdate }}</p>
         <p>{% trans "E-mail:" %} {{ user.email }}</p>
         <p>{% trans "Last login:" %} {{ user.last_login }}</p>
         <br/>

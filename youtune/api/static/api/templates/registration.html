@@ -20,8 +20,9 @@
     I agree: <input ng-show="registerUser.agree" type="text" ng-model="registerUser.agreeSign"
               required /><br />
     <div ng-show="!registerUser.agree || !registerUser.agreeSign">Please agree and sign.</div>
+    <div ng-show="dupename">DUPE OMG.</div>
     
-    <button ng-click="goBack()">BACK</button>
+    <button ng-click="isLoggedInCheck()">BACK</button>
     <button ng-click="register(registerUser)"
             ng-disabled="registerForm.$invalid">REGISTER</button>
     <pre>form = {{registerUser | json}}</pre>

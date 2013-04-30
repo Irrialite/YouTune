@@ -15,7 +15,7 @@ angular.module('youtuneServices', ['ngResource'])
 })
     .service('userAccount', ['$rootScope', 'apiCall', function($rootScope, apiCall) {
         var accName = undefined;
-        var loggedIn = false;
+        var loggedIn = undefined;
         
         this.setAccName = function(name) {
             this.accName = name;
@@ -27,8 +27,11 @@ angular.module('youtuneServices', ['ngResource'])
                 username: user.name,
                 password: user.pw,
             }, function(data) {
-                alert(data.success);
-                accName = user.name;
+                if (data.success == true)
+                {
+                    this.accName = user.name;
+                    this.loggedIn = true;
+                }
             });
         };
         this.logOut = function() {
@@ -37,6 +40,7 @@ angular.module('youtuneServices', ['ngResource'])
                 id: 'logout',
             });
             this.setAccName(undefined);
+            this.loggedIn = false;
         };
         this.register = function(registerUser) {
             apiCall.post({
@@ -48,20 +52,7 @@ angular.module('youtuneServices', ['ngResource'])
                 last_name: 'Master',
                 //birthdate: '',
                 gender: registerUser.gender,
-                facebook_id: null,
-                language: 'en-us',
-                token: '',
                 id: null,
-                user: {
-                    //date_joined: '',
-                    first_name: '',
-                    is_active: true,
-                    last_name: '',
-                    username: registerUser.name,
-                    id: null,
-                },  
-            }, function(data) {
-                alert(data.success);
             });
         };
         this.getLoggedIn = function() {
@@ -71,7 +62,8 @@ angular.module('youtuneServices', ['ngResource'])
             }, function(data) {
                 if (data.success == true)
                     this.loggedIn = true;
-                this.loggedIn = false;
+                else
+                    this.loggedIn = false;
             });
         };
     }]);

@@ -18,12 +18,29 @@ function YouTuneCtrl($scope, apiCall, userAccount) {
     $scope.logout = function() {
         userAccount.logOut();
     };
+    
+    $scope.isLoggedInCheck = function() {
+        userAccount.getLoggedIn();
+    }
+    
+    $scope.userAccount = userAccount;
 }
 
-function YouTuneRegisterCtrl($scope, userAccount) {
+function YouTuneRegisterCtrl($scope, userAccount, apiCall) {
     $scope.registerUser = {};    
+    $scope.dupename = false;
     
     $scope.register = function(registerUser) {
-        userAccount.register(registerUser);
+        var users = apiCall.post({
+            type: 'userprofile',
+            id: 'checkfordupe',
+            username: registerUser.name,
+        }, function(data) {
+            console.log(data);
+            if (data.success == true)
+                userAccount.register(registerUser);
+            else
+                $scope.dupename = true;
+        });               
     };
 }

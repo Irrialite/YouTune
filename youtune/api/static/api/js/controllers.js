@@ -2,7 +2,7 @@ app = angular.module('youtune', ['youtuneServices']);
 
 function YouTuneCtrl($scope, apiCall) {
     $scope.users = apiCall.get({
-        type: 'userprofile',
+        type: 'userprofile'
         });
 
     $scope.goBack = function() {
@@ -13,6 +13,9 @@ function YouTuneCtrl($scope, apiCall) {
 function YouTuneRegisterCtrl($scope) {
     $scope.user = {};
 }
+
+
+
 
 var username_regexp = /^[\w]+$/;
 app.directive('username', function (){ 
@@ -58,3 +61,14 @@ app.directive("repeatPassword", function() {
         }
     };
 });
+
+
+
+
+function show($scope) {
+    var visible=false;
+    $scope.action = function() {
+        visible ? $(".loginForm").fadeOut("slow") : $(".loginForm").css('visibility', 'visible').hide().fadeIn("slow");
+        visible=!visible;
+    }
+}

@@ -66,8 +66,8 @@ class AccountChangeView(edit_views.FormView):
             'first_name': self.request.user.first_name,
             'last_name': self.request.user.last_name,
             'email': self.request.user.email,
-            'gender': self.request.user.get_profile().gender,
-            'birthdate': self.request.user.get_profile().birthdate,
+            'gender': self.request.user.gender,
+            'birthdate': self.request.user.birthdate,
         }
 
 class PasswordChangeView(edit_views.FormView):

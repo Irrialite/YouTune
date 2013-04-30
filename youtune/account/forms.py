@@ -44,8 +44,8 @@ class UserUsernameForm(forms.Form):
     def clean_username(self):
         username = self.cleaned_data['username']
         try:
-            auth_models.User.objects.get(username__iexact=username)
-        except auth_models.User.DoesNotExist:
+            models.UserProfile.objects.get(username__iexact=username)
+        except models.UserProfile.DoesNotExist:
             return username
         raise forms.ValidationError(_("A user with that username already exists."))
 
@@ -129,19 +129,17 @@ class RegistrationForm(UserUsernameForm, UserPasswordForm, UserBasicInfoForm):
     
     def save(self):    
         # We first have to save user to database
-        new_user = auth_models.User(
+        new_user = models.UserProfile(
             username=self.cleaned_data['username'],
             first_name=self.cleaned_data['first_name'],
             last_name=self.cleaned_data['last_name'],
             email=self.cleaned_data['email'],
+            gender=self.cleaned_data['gender'],
+            birthdate=self.cleaned_data['birthdate'],
         )    
                                     
         new_user.set_password(self.cleaned_data['password2'])
         new_user.save()
-        
-        # Then we asign profile to this user
-        profile = models.UserProfile(user=new_user, gender=self.cleaned_data['gender'], birthdate=self.cleaned_data['birthdate'])
-        profile.save()
 
         return self.cleaned_data['username'], self.cleaned_data['password2']
 

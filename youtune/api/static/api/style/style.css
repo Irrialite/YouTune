@@ -81,6 +81,11 @@
 
 
 /* ------REGISTRATION PAGE-------- */
+.date{
+    margin-right: 15px;
+}
+
+
 .register-form{
     background-color: #0077b3;
     color: #ffffff;

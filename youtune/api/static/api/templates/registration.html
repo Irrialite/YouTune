@@ -69,32 +69,5 @@
 
 
     <pre>form = {{user | json}}</pre>
-</form>
-      <input type="text" ng-model="registerUser.name" name="uName" username required /><br />
-      <span ng-show="registerForm.uName.$error.username">This is not a valid username.<br /></span>
-    E-mail:
-      <input type="email" ng-model="registerUser.email" name="uEmail" required/><br />
-      <div ng-show="registerForm.uEmail.$dirty && registerForm.uEmail.$invalid">Invalid:
-          <span ng-show="registerForm.uEmail.$error.required">Tell us your email.</span>
-          <span ng-show="registerForm.uEmail.$error.email">This is not a valid email.</span>
-      </div>
-    Password:
-      <input type="password" ng-model="registerUser.pw" name="uPassword" required/><br />
-    Repeat Password:
-      <input type="password" ng-model="registerUser.pw2" name="uPassword2" repeat-password="uPassword" required/><br />
-      <span ng-show="registerForm.uPassword2.$error.repeat">Passwords do not match.<br /></span>
-    Gender: <input type="radio" ng-model="registerUser.gender" value="male" />male
-    <input type="radio" ng-model="registerUser.gender" value="female" />female<br />
-    
-    <input type="checkbox" ng-model="registerUser.agree" name="userAgree" required />
-    I agree: <input ng-show="registerUser.agree" type="text" ng-model="registerUser.agreeSign"
-              required /><br />
-    <div ng-show="!registerUser.agree || !registerUser.agreeSign">Please agree and sign.</div>
-    <div ng-show="dupename">DUPE OMG.</div>
-    
-    <button ng-click="isLoggedInCheck()">BACK</button>
-    <button ng-click="register(registerUser)"
-            ng-disabled="registerForm.$invalid">REGISTER</button>
-    <pre>form = {{registerUser | json}}</pre>
-</form>
 
+</form>

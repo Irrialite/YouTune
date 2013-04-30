@@ -23,10 +23,9 @@ function YouTuneCtrl($scope, apiCall, userAccount) {
         userAccount.getLoggedIn();
     }
     
-    $scope.userAccount = userAccount;
 }
 
-function YouTuneRegisterCtrl($scope, userAccount, apiCall) {
+function YouTuneRegisterCtrl($scope, $location, userAccount, apiCall) {
     $scope.registerUser = {};    
     $scope.dupename = false;
     
@@ -36,15 +35,29 @@ function YouTuneRegisterCtrl($scope, userAccount, apiCall) {
             id: 'checkfordupe',
             username: registerUser.name,
         }, function(data) {
-            console.log(data);
             if (data.success == true)
                 userAccount.register(registerUser);
             else
                 $scope.dupename = true;
         });               
     };
+    
+    $scope.$on('userAccount::successLogin', function(event, state) {
+        $scope.loggedIn = state;
+        $location.path('channel/test');
+    });
 }
 
+
+function YouTuneLoginWindowCtrl($scope, $location) {
+    $scope.$on('userAccount::failedLogin', function(event, state) {
+        $scope.incorrectLoginInfo = state;
+    });
+    $scope.$on('userAccount::successLogin', function(event, state) {
+        $scope.loggedIn = state;
+        $location.path('channel/test');
+    });
+}
 
 
 

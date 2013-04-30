@@ -13,9 +13,10 @@ angular.module('youtuneServices', ['ngResource'])
         
      return apiCall;
 })
-    .service('userAccount', ['$rootScope', 'apiCall', function($rootScope, apiCall) {
-        var accName = undefined;
-        var loggedIn = undefined;
+    .service('userAccount', ['$rootScope', 'apiCall', '$timeout', function($rootScope, apiCall, $timeout) {
+        this.accName = undefined;
+        this.loggedIn = undefined;
+        this.incorrectLoginInfo = false;
         
         this.setAccName = function(name) {
             this.accName = name;
@@ -27,11 +28,18 @@ angular.module('youtuneServices', ['ngResource'])
                 username: user.name,
                 password: user.pw,
             }, function(data) {
-                if (data.success == true)
-                {
-                    this.accName = user.name;
-                    this.loggedIn = true;
-                }
+                this.accName = user.name;
+                this.loggedIn = true;
+                this.incorrectLoginInfo = false;
+                $rootScope.$broadcast('userAccount::failedLogin', this.incorrectLoginInfo);
+                $rootScope.$broadcast('userAccount::successLogin', this.loggedIn);
+            }, function(data) { 
+                this.incorrectLoginInfo = true;
+                $rootScope.$broadcast('userAccount::failedLogin', this.incorrectLoginInfo);
+                $timeout(function() {
+                    this.incorrectLoginInfo = false;
+                    $rootScope.$broadcast('userAccount::failedLogin', this.incorrectLoginInfo);
+                }, 5000); 
             });
         };
         this.logOut = function() {
@@ -41,6 +49,7 @@ angular.module('youtuneServices', ['ngResource'])
             });
             this.setAccName(undefined);
             this.loggedIn = false;
+            $rootScope.$broadcast('userAccount::successLogin', this.loggedIn);
         };
         this.register = function(registerUser) {
             apiCall.post({
@@ -50,9 +59,28 @@ angular.module('youtuneServices', ['ngResource'])
                 email: registerUser.email,
                 first_name: 'Pwn',
                 last_name: 'Master',
+                // TODO:
+                // Fix birthdate field
                 //birthdate: '',
                 gender: registerUser.gender,
                 id: null,
+            }, function(data) {
+                // Whyyyyyy won't this work
+                //this.logIn({name: registerUser.name, pw: registerUser.pw});
+                // Login and redirect
+                apiCall.post({
+                    type: 'userprofile',
+                    id: 'login',
+                    username: registerUser.name,
+                    password: registerUser.pw,
+                }, function(data) {
+                    this.accName = registerUser.name;
+                    this.loggedIn = true;
+                    this.incorrectLoginInfo = false;
+                    $rootScope.$broadcast('userAccount::failedLogin', this.incorrectLoginInfo);
+                    $rootScope.$broadcast('userAccount::successLogin', this.loggedIn);
+                });
+            }, function(data) {
             });
         };
         this.getLoggedIn = function() {

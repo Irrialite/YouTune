@@ -9,15 +9,16 @@
     <span  class="textField">
     Name:
     </span>
-    <input class="inputField" type="text" ng-model="user.name" name="uName" username required /><br />
+    <input class="inputField" type="text" ng-model="registerUser.name" name="uName" username required /><br />
     <span ng-show="registerForm.uName.$error.username">This is not a valid username.<br /></span>
+    <span ng-show="dupename">A duplicate user exists!<br /></span>
 
 
     <span class="textField">
     E-mail:
     </span>
-    <input class="inputField" type="email" ng-model="user.email" name="uEmail" required/><br />
-    <div ng-show="registerForm.uEmail.$dirty && registerForm.uEmail.$invalid">Invalid:
+    <input class="inputField" type="email" ng-model="registerUser.email" name="uEmail" required/><br />
+    <div ng-show="registerForm.uEmail.$dirty && registerForm.uEmail.$invalid">
         <span ng-show="registerForm.uEmail.$error.required">Tell us your email.</span>
         <span ng-show="registerForm.uEmail.$error.email">This is not a valid email.</span>
     </div>
@@ -26,13 +27,13 @@
     <span class="textField">
     Password:
     </span>
-    <input class="inputField" type="password" ng-model="user.pw" name="uPassword" required/><br />
+    <input class="inputField" type="password" ng-model="registerUser.pw" name="uPassword" required/><br />
 
 
     <span class="textField">
     Repeat Password:
     </span>
-      <input class="inputField" type="password" ng-model="user.pw2" name="uPassword2" repeat-password="uPassword" required/><br />
+      <input class="inputField" type="password" ng-model="registerUser.pw2" name="uPassword2" repeat-password="uPassword" required/><br />
       <span ng-show="registerForm.uPassword2.$error.repeat">Passwords do not match.<br /></span>
 
 
@@ -40,8 +41,8 @@
     Gender:
     </span>
     <div class="choice">
-        <input type="radio" ng-model="user.gender" value="male" />male
-        <input type="radio" ng-model="user.gender" value="female" />female<br />
+        <input type="radio" ng-model="registerUser.gender" value="male" />male
+        <input type="radio" ng-model="registerUser.gender" value="female" />female<br />
     </div>
 
 
@@ -49,13 +50,13 @@
         SUPPLIER’S DELIVERY. Supplier shall ensure its delivery of Ads (“Delivery”) is at a rate that is within 10% of the Target Rate. Supplier’s over-delivery of Ads shall not relieve Supplier of such obligation, nor obligate Avenue A to pay more than the Total Spend. In any event, Supplier is still obligated to deliver evenly, or at the most recent Target Rate communicated by Avenue A.
     </p>
     <div class="choice">
-        <input type="checkbox" ng-model="user.agree" name="userAgree" required />
-        I agree: <input ng-show="user.agree" type="text" ng-model="user.agreeSign" required />
+        <input type="checkbox" ng-model="registerUser.agree" name="userAgree" required />
+        I agree: <input ng-show="registerUser.agree" type="text" ng-model="registerUser.agreeSign" required />
     </div>
 
     <br />
 
-    <div ng-show="!user.agree || !user.agreeSign">Please agree and sign.</div>
+    <div ng-show="!registerUser.agree || !registerUser.agreeSign">Please agree and sign.</div>
     
     <button class="btn"
             ng-click="goBack()">BACK</button>
@@ -64,10 +65,9 @@
         [] fix register button onclick action
     -->
     <button class="btn btn-success"
-            ng-click="register(user)"
+            ng-click="register(registerUser)"
             ng-disabled="registerForm.$invalid">REGISTER</button>
 
 
-    <pre>form = {{user | json}}</pre>
 
 </form>

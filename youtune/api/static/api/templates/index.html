@@ -10,15 +10,17 @@
     <button class="btn btn-primary login"
             ng-click="action()">Login</button>
 </div>
-<div class="form-actions loginForm">
-    <input type="text" placeholder="Username">
-    <input type="text" placeholder="Password">
-    <button type="submit" class="btn btn-primary">Login</button>
+<div name="loginForm" class="form-actions loginForm" ng-controller="YouTuneLoginWindowCtrl">
+    <input type="text" ng-model="user.name" placeholder="Username" required>
+    <input type="password" ng-model="user.pw" placeholder="Password" required>
+    <button class="btn btn-primary" ng-click="login(user)">Login</button>
     <a href="/#/register" target="_self">
         <button type="button" class="btn btn-success">
         Register
         </button>
-    </a>
+    </a> <br />
+    <span ng-show="incorrectLoginInfo">Invalid credentials.</span>
+    <span ng-show="loggedIn">Successfully logged in.</span>
 </div>
 
 

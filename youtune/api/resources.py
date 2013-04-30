@@ -24,7 +24,7 @@ class UserProfileResource(resources.ModelResource):
         # Add custom Authorization (important)
         authentication = Authentication()
         authorization = Authorization()
-        excludes = ['email', 'password', 'is_staff', 'is_superuser']
+        #excludes = ['email', 'password', 'is_staff', 'is_superuser']
         
     def dehydrate(self, bundle):
         if bundle.request.user.pk == bundle.obj.pk:

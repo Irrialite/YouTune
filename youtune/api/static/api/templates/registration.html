@@ -40,14 +40,15 @@
     <span  class="textField">
     First name:
     </span>
-    <input class="inputField" type="text" name="fName" username required /><br />
-
+    <input class="inputField" type="text" ng-model="registerUser.firstname" name="uFirstName" username required /><br />
+    <span ng-show="registerForm.uFirstName.$error.username">This is not a valid first name.<br /></span>
 
 
     <span  class="textField">
     Last name:
     </span>
-    <input class="inputField" type="text" name="lName" username required /><br />
+    <input class="inputField" type="text" ng-model="registerUser.lastname" name="uLastName" username required /><br />
+    <span ng-show="registerForm.uLastName.$error.username">This is not a valid last name.<br /></span>
 
 
     <!-- TODO:

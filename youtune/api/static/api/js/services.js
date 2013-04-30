@@ -57,8 +57,8 @@ angular.module('youtuneServices', ['ngResource'])
                 username: registerUser.name,
                 password: registerUser.pw,
                 email: registerUser.email,
-                first_name: 'Pwn',
-                last_name: 'Master',
+                first_name: registerUser.firstname,
+                last_name: registerUser.lastname,
                 // TODO:
                 // Fix birthdate field
                 //birthdate: '',

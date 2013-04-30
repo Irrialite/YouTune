@@ -2,7 +2,7 @@ app = angular.module('youtune', ['youtuneServices']);
 
 function YouTuneCtrl($scope, apiCall, userAccount) {
     $scope.users = apiCall.get({
-        type: 'userprofile',
+        type: 'userprofile'
         });
 
     $scope.goBack = function() {
@@ -10,7 +10,7 @@ function YouTuneCtrl($scope, apiCall, userAccount) {
     }
     
     $scope.user = {};
-    
+
     $scope.login = function(user) {
         userAccount.logIn(user);
     };
@@ -43,4 +43,15 @@ function YouTuneRegisterCtrl($scope, userAccount, apiCall) {
                 $scope.dupename = true;
         });               
     };
+}
+
+
+
+
+function ShowCtrl($scope) {
+    var visible=false;
+    $scope.action = function() {
+        visible ? $(".loginForm").fadeOut("slow") : $(".loginForm").css('visibility', 'visible').hide().fadeIn("slow");
+        visible=!visible;
+    }
 }

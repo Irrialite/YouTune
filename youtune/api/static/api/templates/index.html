@@ -1,17 +1,46 @@
-﻿<div id="searchBar">
+﻿
+<div id="searchBar" ng-controller="ShowCtrl">
     <div id="mainLogo"></div>
 
     <form>
-        <input id="searchField">
+        <input id="searchField" title="Find your music">
         <button class="btn doSearch">♥</button>
     </form>
 
-    <button class="btn btn-primary login">Login</button>
+    <button class="btn btn-primary login"
+            ng-click="action()">Login</button>
+</div>
+<div class="form-actions loginForm">
+    <input type="text" placeholder="Username">
+    <input type="text" placeholder="Password">
+    <button type="submit" class="btn btn-primary">Login</button>
+    <a href="/#/register" target="_self">
+        <button type="button" class="btn btn-success">
+        Register
+        </button>
+    </a>
 </div>
 
-<h2>Users</h2>
-<ul>
-    <li ng-repeat="user in users.objects">
-        {{user.username}}
-    </li>
-</ul>
+
+<!-- TODO:
+    [] get data and bind it
+-->
+<aside>
+    <h2>Most popular:</h2>
+    <ul>
+        <li ng-repeat="popular in topMusic.objects">
+            {{popular.title}}
+        </li>
+    </ul>
+</aside>
+
+
+<section>
+    <article ng-repeat="file in files.objects">
+        <header>{{ file.title }}</header>
+        <p>{{ file.description }}</p>
+    </article>
+</section>
+
+
+

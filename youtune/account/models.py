@@ -7,13 +7,13 @@ from youtune.account import fields
 USERNAME_REGEX = r'[\w.@+-]+'
 CONFIRMATION_TOKEN_VALIDITY = 5 # days
 
-class UserProfile(django_models.Model):
+class UserProfile(auth_models.User):
     """ 
     Class used for storing additional information about user.
     """
 
-    user = django_models.OneToOneField(auth_models.User)
-
+    objects = auth_models.UserManager()
+    
     # Custom fields
     birthdate = django_models.DateField(blank=True, null=True)
     gender = django_models.CharField(max_length=6, blank=True)
@@ -22,7 +22,7 @@ class UserProfile(django_models.Model):
     language = fields.LanguageField(verbose_name=u'language')
     
     def __unicode__(self):
-        return u'%s' % (self.user)
+        return u'%s' % (self)
     
     def get_full_name(self):
         """Returns the users first and last names, separated by a space.

@@ -7,7 +7,7 @@
 
 
     <span  class="textField">
-    Name:
+    Username:
     </span>
     <input class="inputField" type="text" ng-model="registerUser.name" name="uName" username required /><br />
     <span ng-show="registerForm.uName.$error.username">This is not a valid username.<br /></span>
@@ -35,6 +35,55 @@
     </span>
       <input class="inputField" type="password" ng-model="registerUser.pw2" name="uPassword2" repeat-password="uPassword" required/><br />
       <span ng-show="registerForm.uPassword2.$error.repeat">Passwords do not match.<br /></span>
+
+
+    <span  class="textField">
+    First name:
+    </span>
+    <input class="inputField" type="text" name="fName" username required /><br />
+
+
+
+    <span  class="textField">
+    Last name:
+    </span>
+    <input class="inputField" type="text" name="lName" username required /><br />
+
+
+    <!-- TODO:
+          [] add choice in dropdownlist
+    -->
+    <span  class="textField">
+    Birth date:
+    </span>
+    <div class="btn-group">
+        <button class="btn">Month</button>
+        <button class="btn dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <!-- dropdown menu links -->
+
+        </ul>
+
+        <button class="btn">Day</button>
+        <button class="btn dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <!-- dropdown menu links -->
+
+        </ul>
+
+        <button class="btn">Year</button>
+        <button class="btn dropdown-toggle date" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <!-- dropdown menu links -->
+
+        </ul>
+    </div>
 
 
     <span class="textField">

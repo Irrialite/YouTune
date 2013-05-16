@@ -12,7 +12,7 @@ angular.module('youtuneServices', ['ngResource'])
         );
         
      return apiCall;
-})
+    })
     .service('userAccount', ['$rootScope', 'apiCall', '$timeout', function($rootScope, apiCall, $timeout) {
         this.accName = undefined;
         this.loggedIn = undefined;
@@ -59,9 +59,7 @@ angular.module('youtuneServices', ['ngResource'])
                 email: registerUser.email,
                 first_name: registerUser.firstname,
                 last_name: registerUser.lastname,
-                // TODO:
-                // Fix birthdate field
-                //birthdate: '',
+                birthdate: registerUser.birthdate,
                 gender: registerUser.gender,
                 id: null,
             }, function(data) {
@@ -86,7 +84,7 @@ angular.module('youtuneServices', ['ngResource'])
         this.getLoggedIn = function() {
             apiCall.get({
                 type: 'userprofile',
-                id: 'loggedin',
+                id: 'loggedin'
             }, function(data) {
                 if (data.success == true)
                     this.loggedIn = true;
@@ -94,4 +92,10 @@ angular.module('youtuneServices', ['ngResource'])
                     this.loggedIn = false;
             });
         };
-    }]);
+    }])
+
+
+//TODO: [] create function/service that returns number of days in applied month
+
+
+

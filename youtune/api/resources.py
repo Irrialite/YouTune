@@ -24,14 +24,10 @@ class UserProfileResource(resources.ModelResource):
         # Add custom Authorization (important)
         authentication = Authentication()
         authorization = Authorization()
-<<<<<<< HEAD
         #excludes = ['email', 'is_staff', 'is_superuser']
         
     def dehydrate_password(self, bundle):
         return ''
-=======
-        #excludes = ['email', 'password', 'is_staff', 'is_superuser']
->>>>>>> remotes/WorkingRepo/master
         
     def dehydrate(self, bundle):
         if bundle.request.user.pk == bundle.obj.pk:

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from django.contrib.auth import authenticate, login, logout, models as auth_models
 from django.contrib.auth.hashers import make_password
@@ -24,7 +24,10 @@ class UserProfileResource(resources.ModelResource):
         # Add custom Authorization (important)
         authentication = Authentication()
         authorization = Authorization()
-        excludes = ['email', 'password', 'is_staff', 'is_superuser']
+        #excludes = ['email', 'is_staff', 'is_superuser']
+        
+    def dehydrate_password(self, bundle):
+        return ''
         
     def dehydrate(self, bundle):
         if bundle.request.user.pk == bundle.obj.pk:
@@ -57,6 +60,8 @@ class UserProfileResource(resources.ModelResource):
 
         username = data.get('username', '')
         password = data.get('password', '')
+        print username
+        print password
 
         user = authenticate(username=username, password=password)
         if user:
@@ -87,6 +92,10 @@ class UserProfileResource(resources.ModelResource):
     def hydrate(self, bundle):
         # About to do some ninja skills
         bundle.data['password'] = make_password(bundle.data['password'])
+        if bundle.data['birthdate']:
+            birthdate = bundle.data['birthdate'].split("-")
+            birthdate = date(year=int(birthdate[0]), month=int(birthdate[1]), day=int(birthdate[2]))
+            bundle.data['birthdate'] = birthdate
         return bundle        
         
     def loggedin(self, request, **kwargs):

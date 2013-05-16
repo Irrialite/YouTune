@@ -12,11 +12,12 @@ angular.module('youtuneServices', ['ngResource'])
         );
         
      return apiCall;
-})
-    .service('userAccount', ['$rootScope', 'apiCall', function($rootScope, apiCall) {
-        var accName = undefined;
-        var loggedIn = undefined;
-
+    })
+    .service('userAccount', ['$rootScope', 'apiCall', '$timeout', function($rootScope, apiCall, $timeout) {
+        this.accName = undefined;
+        this.loggedIn = undefined;
+        this.incorrectLoginInfo = false;
+        
         this.setAccName = function(name) {
             this.accName = name;
         }
@@ -25,22 +26,30 @@ angular.module('youtuneServices', ['ngResource'])
                 type: 'userprofile',
                 id: 'login',
                 username: user.name,
-                password: user.pw
+                password: user.pw,
             }, function(data) {
-                if (data.success == true)
-                {
-                    this.accName = user.name;
-                    this.loggedIn = true;
-                }
+                this.accName = user.name;
+                this.loggedIn = true;
+                this.incorrectLoginInfo = false;
+                $rootScope.$broadcast('userAccount::failedLogin', this.incorrectLoginInfo);
+                $rootScope.$broadcast('userAccount::successLogin', this.loggedIn);
+            }, function(data) { 
+                this.incorrectLoginInfo = true;
+                $rootScope.$broadcast('userAccount::failedLogin', this.incorrectLoginInfo);
+                $timeout(function() {
+                    this.incorrectLoginInfo = false;
+                    $rootScope.$broadcast('userAccount::failedLogin', this.incorrectLoginInfo);
+                }, 5000); 
             });
         };
         this.logOut = function() {
             apiCall.get({
                 type: 'userprofile',
-                id: 'logout'
+                id: 'logout',
             });
             this.setAccName(undefined);
             this.loggedIn = false;
+            $rootScope.$broadcast('userAccount::successLogin', this.loggedIn);
         };
         this.register = function(registerUser) {
             apiCall.post({
@@ -48,10 +57,28 @@ angular.module('youtuneServices', ['ngResource'])
                 username: registerUser.name,
                 password: registerUser.pw,
                 email: registerUser.email,
-                first_name: 'Pwn',
-                last_name: 'Master',
-                //birthdate: '',
+                first_name: registerUser.firstname,
+                last_name: registerUser.lastname,
+                birthdate: registerUser.birthdate,
                 gender: registerUser.gender,
+                id: null,
+            }, function(data) {
+                // Whyyyyyy won't this work
+                //this.logIn({name: registerUser.name, pw: registerUser.pw});
+                // Login and redirect
+                apiCall.post({
+                    type: 'userprofile',
+                    id: 'login',
+                    username: registerUser.name,
+                    password: registerUser.pw,
+                }, function(data) {
+                    this.accName = registerUser.name;
+                    this.loggedIn = true;
+                    this.incorrectLoginInfo = false;
+                    $rootScope.$broadcast('userAccount::failedLogin', this.incorrectLoginInfo);
+                    $rootScope.$broadcast('userAccount::successLogin', this.loggedIn);
+                });
+            }, function(data) {
                 id: null
             });
         };

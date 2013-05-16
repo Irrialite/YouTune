@@ -23,28 +23,44 @@ function YouTuneCtrl($scope, apiCall, userAccount) {
         userAccount.getLoggedIn();
     }
     
-    $scope.userAccount = userAccount;
 }
 
-function YouTuneRegisterCtrl($scope, userAccount, apiCall) {
+function YouTuneRegisterCtrl($scope, $location, userAccount, apiCall) {
     $scope.registerUser = {};    
     $scope.dupename = false;
+    $scope.registerUser.birthdate = null;
     
     $scope.register = function(registerUser) {
+        tempDate = new Date(year, month - 1, day);
+        $scope.registerUser.birthdate = tempDate.getFullYear() + "-" + (tempDate.getMonth() + 1) + "-" + tempDate.getDate();
         var users = apiCall.post({
             type: 'userprofile',
             id: 'checkfordupe',
             username: registerUser.name
         }, function(data) {
-            console.log(data);
             if (data.success == true)
                 userAccount.register(registerUser);
             else
                 $scope.dupename = true;
         });               
     };
+    
+    $scope.$on('userAccount::successLogin', function(event, state) {
+        $scope.loggedIn = state;
+        $location.path('channel/test');
+    });
 }
 
+
+function YouTuneLoginWindowCtrl($scope, $location) {
+    $scope.$on('userAccount::failedLogin', function(event, state) {
+        $scope.incorrectLoginInfo = state;
+    });
+    $scope.$on('userAccount::successLogin', function(event, state) {
+        $scope.loggedIn = state;
+        $location.path('channel/test');
+    });
+}
 
 
 
@@ -67,6 +83,7 @@ function ShowCtrl($scope) {
 
 var year=0;
 var month=0;
+var day=0;
 var days = [];
 
 function yearCtrl($scope) {
@@ -115,13 +132,6 @@ function monthsCtrl($scope) {
 
 function updateDay(){
 
-    //check if number of days still ok after month change
-    var pickedValue = $("#dayBtn").text();
-    var newMax = days.length;
-    if( pickedValue > newMax ){
-        $("#dayBtn").text(newMax);
-    }
-
     //actual days update
     if(month!=0 && year!=0){
         var daysNum = new Date(year, month, 0).getDate();
@@ -130,6 +140,14 @@ function updateDay(){
             days[i] = i+1;
         }
     }
+    
+    //check if number of days still ok after month change
+    var pickedValue = $("#dayBtn").text();
+    var newMax = days.length;
+    if( pickedValue > newMax ){
+        day = newMax;
+        $("#dayBtn").text(newMax);
+    }
 }
 
 
@@ -137,6 +155,7 @@ function daysCtrl($scope) {
     $scope.days = days;
 
     $scope.updateChoice = function(msg){
+        day = msg;
         $("#dayBtn").text(msg);
     }
 

@@ -6,9 +6,8 @@ app.config(['$routeProvider', function($routeProvider) {
             .when('/details', {templateUrl: '/static/api/templates/details.html',   controller: YouTuneCtrl})
             .when('/register', {templateUrl: '/static/api/templates/registration.html',   controller: YouTuneCtrl})
 
-            // TODO:
-            // [] fix /chanel/test to a regexp path
-            .when('/channel/test', {templateUrl: '/static/api/templates/channel.html',   controller: YouTuneCtrl})
+            // TODO: [ ] fix /chanel/test to a regexp path
+            .when('/user/test', {templateUrl: '/static/api/templates/channel.html',   controller: YouTuneCtrl})
 
             .otherwise({redirectTo: '/'});
     }]);

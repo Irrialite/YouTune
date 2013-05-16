@@ -49,51 +49,78 @@
     <input class="inputField" type="text" name="lName" username required /><br />
 
 
-    <!-- TODO:
-          [] add choice in dropdownlist
+    <!--
+    TODO: [x] add choice in dropdownlist
     -->
     <span  class="textField">
     Birth date:
     </span>
-    <div class="btn-group">
-        <button class="btn">Month</button>
-        <button class="btn dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <!-- dropdown menu links -->
 
+    <!-- YEAR -->
+    <br/>
+    <div class="btn-group dropdown" data-dropdown="dropdown"  ng-controller="yearCtrl">
+        <a class="btn dropdown-toggle" id="yearBtn" role="button" data-toggle="dropdown" >
+            Year
+            <span class="caret"></span>
+        </a>
+
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li ng-repeat="year in years" >
+                <a tabindex="-1"  ng-click="updateChoice(year)">
+                    {{ year }}
+                </a>
+            </li>
         </ul>
+    </div>
 
-        <button class="btn">Day</button>
-        <button class="btn dropdown-toggle" data-toggle="dropdown">
+    <!-- MONTH -->
+    <div class="btn-group dropdown" data-dropdown="dropdown"  ng-controller="monthsCtrl">
+        <a class="btn dropdown-toggle" id="monthBtn" role="button" data-toggle="dropdown"   >
+            Month
             <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <!-- dropdown menu links -->
+        </a>
 
+         <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li ng-repeat="month in months" >
+                <a tabindex="-1"  ng-click="updateChoice(month.text)">
+                    {{ month.text }}
+                </a>
+            </li>
         </ul>
+    </div>
 
-        <button class="btn">Year</button>
-        <button class="btn dropdown-toggle date" data-toggle="dropdown">
+    <!-- DAY -->
+    <div class="btn-group dropdown" data-dropdown="dropdown" ng-app='myApp' ng-controller="daysCtrl">
+        <a class="btn dropdown-toggle" id="dayBtn" role="button" data-toggle="dropdown">
+            Day
             <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <!-- dropdown menu links -->
+        </a>
 
+        <div id="dayWarning">Please choose year and month
+        </div>
+
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li ng-repeat="day in days">
+                <a tabindex="-1" ng-click="updateChoice(day)" >
+                   {{ day }}
+                </a>
+            </li>
         </ul>
     </div>
 
 
+    <br/>
+    <br/>
     <span class="textField">
     Gender:
     </span>
-    <div class="choice">
-        <input type="radio" ng-model="user.gender" value="male" />male
-        <input type="radio" ng-model="user.gender" value="female" />female<br />
+    <br/>
+    <div class="choice"> <!--TODO: [x] or choice, you cant be both male and female...difficult :) -->
+        <input name="group1" type="radio" ng-model="user.gender" value="male" />male
+        <input name="group1" type="radio" ng-model="user.gender" value="female" />female<br />
     </div>
 
-
+    <br/>
     <p>
         SUPPLIER’S DELIVERY. Supplier shall ensure its delivery of Ads (“Delivery”) is at a rate that is within 10% of the Target Rate. Supplier’s over-delivery of Ads shall not relieve Supplier of such obligation, nor obligate Avenue A to pay more than the Total Spend. In any event, Supplier is still obligated to deliver evenly, or at the most recent Target Rate communicated by Avenue A.
     </p>
@@ -109,8 +136,7 @@
     <button class="btn"
             ng-click="goBack()">BACK</button>
 
-    <!-- TODO:
-        [] fix register button onclick action
+    <!-- TODO: [x] fix register button onclick action
     -->
     <button class="btn btn-success"
             ng-click="register(user)"

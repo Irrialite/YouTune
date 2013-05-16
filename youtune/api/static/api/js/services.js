@@ -12,7 +12,11 @@ angular.module('youtuneServices', ['ngResource'])
         );
         
      return apiCall;
+<<<<<<< HEAD
     })
+=======
+})
+>>>>>>> remotes/WorkingRepo/master
     .service('userAccount', ['$rootScope', 'apiCall', '$timeout', function($rootScope, apiCall, $timeout) {
         this.accName = undefined;
         this.loggedIn = undefined;
@@ -59,7 +63,13 @@ angular.module('youtuneServices', ['ngResource'])
                 email: registerUser.email,
                 first_name: registerUser.firstname,
                 last_name: registerUser.lastname,
+<<<<<<< HEAD
                 birthdate: registerUser.birthdate,
+=======
+                // TODO:
+                // Fix birthdate field
+                //birthdate: '',
+>>>>>>> remotes/WorkingRepo/master
                 gender: registerUser.gender,
                 id: null,
             }, function(data) {
@@ -79,7 +89,10 @@ angular.module('youtuneServices', ['ngResource'])
                     $rootScope.$broadcast('userAccount::successLogin', this.loggedIn);
                 });
             }, function(data) {
+<<<<<<< HEAD
                 id: null
+=======
+>>>>>>> remotes/WorkingRepo/master
             });
         };
         this.getLoggedIn = function() {

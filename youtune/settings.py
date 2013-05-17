@@ -14,14 +14,14 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',# sqlite3 zato ker generira samo 1 file, na pc  | # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': database_file,                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',  # sqlite3 ker generira 1 file
+        'NAME': database_file,                   # Path to file if sqlite3.
 
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
+        'HOST': '',       # '127.0.0.1' for localhost through TCP.
+        'PORT': '',       # Set to empty string for default.
     }
 }
 
@@ -39,7 +39,8 @@ TIME_ZONE = 'Europe/Ljubljana'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-# Dummy function, so that "makemessages" can find strings which should be translated.
+# Dummy function, so that "makemessages" can find strings which should be
+# translated.
 _ = lambda s: s
 
 LANGUAGES = (
@@ -91,7 +92,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -101,7 +102,7 @@ SECRET_KEY = '=-_-5j!d@4l#_5hbyox9r4cf+xgqoqv=@ezx4^kv5#hab5$jss'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    #     'django.template.loaders.eggs.Loader',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -132,7 +133,7 @@ ROOT_URLCONF = 'youtune.urls'
 WSGI_APPLICATION = 'youtune.wsgi.application'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Put strings here, like "/home/html/django_templates"
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(settings_dir, 'templates'),
@@ -142,11 +143,11 @@ TEMPLATE_DIRS = (
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 INSTALLED_APPS = (
-		'youtune.frontend',
-		'youtune.account',
-		'youtune.admin',
-		'youtune.polls',
-        'youtune.api',
+    'youtune.frontend',
+    'youtune.account',
+    'youtune.admin',
+    'youtune.polls',
+    'youtune.api',
 
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -156,7 +157,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
-    
+
     'tastypie',
 )
 
@@ -203,8 +204,8 @@ AUTHENTICATION_BACKENDS = (
 # Site URL for Facebook app is set to http://127.0.0.1:8000/
 # so run your development server on port 8000
 # and access your site by local ip 127.0.0.1:8000 in your browser.
-FACEBOOK_APP_ID = '' # Add your app ID/API key
-FACEBOOK_APP_SECRET = '' # Add your app secret key
-FACEBOOK_SCOPE = 'email' # You may add additional parameters
-FACEBOOK_LOGIN_REDIRECT = '/' # Redirects here after login
-FACEBOOK_ERROR_REDIRECT = '/' # Redirects here if user is not connected with Facebook
+FACEBOOK_APP_ID = ''  # Add your app ID/API key
+FACEBOOK_APP_SECRET = ''  # Add your app secret key
+FACEBOOK_SCOPE = 'email'  # You may add additional parameters
+FACEBOOK_LOGIN_REDIRECT = '/'  # Redirects here after login
+FACEBOOK_ERROR_REDIRECT = '/'  # Redirects here if user is not connected

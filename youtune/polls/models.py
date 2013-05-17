@@ -4,11 +4,8 @@ from django.db import models
 from django.utils import timezone
 
 
-
-
-#vsak model je svoja tabela v bazi
-
-#ta ma 3 stolpce, question, pub_date, id
+# vsak model je svoja tabela v bazi
+# ta ma 3 stolpce, question, pub_date, id
 class Poll(models.Model):
     question = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
@@ -22,11 +19,13 @@ class Poll(models.Model):
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
 
-#ta ma 4 stolpce, poll, choice_text, votes, id
+# ta ma 4 stolpce, poll, choice_text, votes, id
+
+
 class Choice(models.Model):
     poll = models.ForeignKey(Poll)
     choice_text = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)
 
-    def __unicode__(self): #vedno ko izpisujes na screen se klice unicode, isto ko .toString
+    def __unicode__(self):  # vedno ko izpisujes na screen se klice unicode, isto ko .toString
         return self.choice_text

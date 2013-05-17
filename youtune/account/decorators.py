@@ -4,6 +4,7 @@ from django.utils import functional
 
 from youtune.account import utils
 
+
 def facebook_required(view):
     """
     Facebook login required decorator.
@@ -13,7 +14,7 @@ def facebook_required(view):
     of protection for Facebook-dependent pages. The user remains authenticated
     until logging out.
     """
-  
+
     @functional.wraps(view)
     def inner(request, *args, **kwargs):
         url = getattr(settings, 'FACEBOOK_ERROR_REDIRECT', '/')
@@ -25,5 +26,5 @@ def facebook_required(view):
         else:
             return http.HttpResponseRedirect(url)
         return view(request, *args, **kwargs)
-    
+
     return inner

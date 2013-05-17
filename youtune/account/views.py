@@ -1,4 +1,5 @@
-import urllib, pdb
+import urllib
+import pdb
 
 from django import shortcuts
 from django.conf import settings
@@ -11,7 +12,9 @@ from django.utils import crypto
 
 from youtune.account import forms, models
 
+
 class RegistrationView(generic_views.FormView):
+
     """
     This view checks if form data are valid, saves new user.
     New user is authenticated, logged in and redirected to home page.
@@ -29,13 +32,16 @@ class RegistrationView(generic_views.FormView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated():
-            return simple.redirect_to(request, url=self.get_success_url(), permanent=False)
+            return simple.redirect_to(request, url=self.get_success_url(),
+                                      permanent=False)
         return super(RegistrationView, self).dispatch(request, *args, **kwargs)
 
 
 class AccountChangeView(edit_views.FormView):
+
     """
-    This view displays form for updating user account. It checks if all fields are valid and updates it.
+    This view displays form for updating user account.
+    It checks if all fields are valid and updates it.
     """
 
     template_name = 'profile/account.html'
@@ -53,10 +59,12 @@ class AccountChangeView(edit_views.FormView):
         return super(AccountChangeView, self).form_valid(form)
 
     def dispatch(self, request, *args, **kwargs):
-        # TODO: With lazy user support, we want users to be able to change their account even if not authenticated
+        # TODO: With lazy user support, we want users to be able to change
+        # their account even if not authenticated
         if not request.user.is_authenticated():
             return shortcuts.redirect('login')
-        return super(AccountChangeView, self).dispatch(request, *args, **kwargs)
+        return super(AccountChangeView,
+                     self).dispatch(request, *args, **kwargs)
 
     def get_form(self, form_class):
         return form_class(self.request.user, **self.get_form_kwargs())
@@ -70,7 +78,9 @@ class AccountChangeView(edit_views.FormView):
             'birthdate': self.request.user.birthdate,
         }
 
+
 class PasswordChangeView(edit_views.FormView):
+
     """
     This view displays form for changing password.
     """
@@ -84,13 +94,17 @@ class PasswordChangeView(edit_views.FormView):
         return super(PasswordChangeView, self).form_valid(form)
 
     def dispatch(self, request, *args, **kwargs):
-        # TODO: Is this really the correct check? What is user is logged through third-party authentication, but still does not have current password - is not then changing password the same as registration?
+        # TODO: Is this really the correct check? What is user is logged
+        # through third-party authentication, but still does not have current
+        # password - is not then changing password the same as registration?
         if not request.user.is_authenticated():
             return shortcuts.redirect('login')
-        return super(PasswordChangeView, self).dispatch(request, *args, **kwargs)
+        return super(PasswordChangeView,
+                     self).dispatch(request, *args, **kwargs)
 
     def get_form(self, form_class):
         return form_class(self.request.user, **self.get_form_kwargs())
+
 
 class EmailConfirmationSendToken(edit_views.FormView):
     template_name = 'user/email_confirmation_send_token.html'
@@ -111,20 +125,25 @@ class EmailConfirmationSendToken(edit_views.FormView):
             'user': user,
         }
 
-        subject = loader.render_to_string('user/confirmation_email_subject.txt', context)
+        subject = loader.render_to_string(
+            'user/confirmation_email_subject.txt', context)
         # Email subject *must not* contain newlines
         subject = ''.join(subject.splitlines())
         email = loader.render_to_string('user/confirmation_email.txt', context)
 
-        user.email_confirmation_token = models.EmailConfirmationToken(value=confirmation_token)
+        user.email_confirmation_token = models.EmailConfirmationToken(
+            value=confirmation_token)
         user.save()
         user.email_user(subject, email)
 
         return super(EmailConfirmationSendToken, self).form_valid(form)
 
     def dispatch(self, request, *args, **kwargs):
-        # TODO: Allow e-mail address confirmation only if user has e-mail address defined
-        return super(EmailConfirmationSendToken, self).dispatch(request, *args, **kwargs)
+        # TODO: Allow e-mail address confirmation only if user has e-mail
+        # address defined
+        return super(EmailConfirmationSendToken,
+                     self).dispatch(request, *args, **kwargs)
+
 
 class EmailConfirmationProcessToken(generic_views.FormView):
     template_name = 'user/email_confirmation_process_token.html'
@@ -143,16 +162,20 @@ class EmailConfirmationProcessToken(generic_views.FormView):
         }
 
     def dispatch(self, request, *args, **kwargs):
-        # TODO: Allow e-mail address confirmation only if user has e-mail address defined
-        # TODO: Check if currently logged in user is the same as the user requested the confirmation
-        return super(EmailConfirmationProcessToken, self).dispatch(request, *args, **kwargs)
+        # TODO: Allow e-mail address confirmation only if user has e-mail
+        # TODO: Check if currently logged in user is the same as the user
+        # requested the confirmation
+        return super(EmailConfirmationProcessToken,
+                     self).dispatch(request, *args, **kwargs)
 
     def get_form(self, form_class):
         return form_class(self.request.user, **self.get_form_kwargs())
-    
+
+
 class FacebookLoginView(generic_views.RedirectView):
-    """ 
-    This view authenticates the user via Facebook. 
+
+    """
+    This view authenticates the user via Facebook.
     """
 
     permanent = False
@@ -161,13 +184,17 @@ class FacebookLoginView(generic_views.RedirectView):
         args = {
             'client_id': settings.FACEBOOK_APP_ID,
             'scope': settings.FACEBOOK_SCOPE,
-            'redirect_uri': self.request.build_absolute_uri(urlresolvers.reverse('facebook_callback')),
+            'redirect_uri': self.request.build_absolute_uri(
+            urlresolvers.reverse('facebook_callback')),
         }
-        return "https://www.facebook.com/dialog/oauth?%(args)s" % {'args': urllib.urlencode(args)}
+        return ("https://www.facebook.com/dialog/oauth?%(args)s"
+                % {'args': urllib.urlencode(args)})
+
 
 class FacebookCallbackView(generic_views.RedirectView):
-    """ 
-    Authentication callback. Redirects user to LOGIN_REDIRECT_URL. 
+
+    """
+    Authentication callback. Redirects user to LOGIN_REDIRECT_URL.
     """
 
     permanent = False
@@ -175,12 +202,19 @@ class FacebookCallbackView(generic_views.RedirectView):
 
     def get(self, request, *args, **kwargs):
         if 'code' in request.GET:
-            # TODO: Add security measures to prevent attackers from sending a redirect to this url with a forged 'code'
-            user = auth.authenticate(token=request.GET['code'], request=request)
+            # TODO: Add security measures to prevent attackers from sending a
+            # redirect to this url with a forged 'code'
+            user = auth.authenticate(
+                token=request.GET['code'], request=request)
             auth.login(request, user)
-            # TODO: Message user that they have been logged in (maybe this will already be in auth.login once we move to MongoDB)
-            return super(FacebookCallbackView, self).get(request, *args, **kwargs)
+            # TODO: Message user that they have been logged in (maybe this will
+            # already be in auth.login once we move to MongoDB)
+            return super(FacebookCallbackView,
+                         self).get(request, *args, **kwargs)
         else:
-            # TODO: Message user that they have not been logged in because they cancelled the facebook app
-            # TODO: Use information provided from facebook as to why the login was not successful
-            return super(FacebookCallbackView, self).get(request, *args, **kwargs)
+            # TODO: Message user that they have not been logged
+            #       in because they cancelled the facebook app
+            # TODO: Use information provided from facebook as to why the login
+            # was not successful
+            return super(FacebookCallbackView,
+                         self).get(request, *args, **kwargs)

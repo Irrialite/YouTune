@@ -14,29 +14,30 @@ from youtune.account import models, forms
 from youtune.api.helpers import FieldsValidation
 from youtune.api.authorization import UserObjectsOnlyAuthorization
 
+
 class UserProfileResource(resources.ModelResource):
     id = fields.IntegerField(attribute="id", null=True)
-     
+
     class Meta:
         queryset = models.UserProfile.objects.all()
         resource_name = 'userprofile'
-        # TODO: 
+        # TODO:
         # Add custom Authorization (important)
         authentication = Authentication()
         authorization = Authorization()
-        #excludes = ['email', 'is_staff', 'is_superuser']
-        
+        # excludes = ['email', 'is_staff', 'is_superuser']
+
     def dehydrate_password(self, bundle):
         return ''
-        
+
     def dehydrate(self, bundle):
         if bundle.request.user.pk == bundle.obj.pk:
             bundle.data['email'] = bundle.obj.email
             bundle.data['is_staff'] = bundle.obj.is_staff
             bundle.data['is_superuser'] = bundle.obj.is_superuser
-            
+
         return bundle
-    
+
     def override_urls(self):
         return [
             url(r"^(?P<resource_name>%s)/login%s$" %
@@ -50,13 +51,14 @@ class UserProfileResource(resources.ModelResource):
                 self.wrap_view('loggedin'), name='api_loggedin'),
             url(r'^(?P<resource_name>%s)/checkfordupe%s$' %
                 (self._meta.resource_name, trailing_slash()),
-                self.wrap_view('checkfordupe'), name='api_checkfordupe'),       
+                self.wrap_view('checkfordupe'), name='api_checkfordupe'),
         ]
 
     def login(self, request, **kwargs):
         self.method_check(request, allowed=['post'])
 
-        data = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        data = self.deserialize(request, request.raw_post_data,
+                                format=request.META.get('CONTENT_TYPE', 'application/json'))
 
         username = data.get('username', '')
         password = data.get('password', '')
@@ -74,30 +76,31 @@ class UserProfileResource(resources.ModelResource):
                 return self.create_response(request, {
                     'success': False,
                     'reason': 'disabled',
-                    }, HttpForbidden )
+                }, HttpForbidden)
         else:
             return self.create_response(request, {
                 'success': False,
                 'reason': 'incorrect',
-                }, HttpUnauthorized )
+            }, HttpUnauthorized)
 
     def logout(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
         if request.user and request.user.is_authenticated():
             logout(request)
-            return self.create_response(request, { 'success': True })
+            return self.create_response(request, {'success': True})
         else:
-            return self.create_response(request, { 'success': False }, HttpUnauthorized)
+            return self.create_response(request, {'success': False}, HttpUnauthorized)
 
     def hydrate(self, bundle):
         # About to do some ninja skills
         bundle.data['password'] = make_password(bundle.data['password'])
         if bundle.data['birthdate']:
             birthdate = bundle.data['birthdate'].split("-")
-            birthdate = date(year=int(birthdate[0]), month=int(birthdate[1]), day=int(birthdate[2]))
+            birthdate = date(year=int(birthdate[0]), month=int(
+                birthdate[1]), day=int(birthdate[2]))
             bundle.data['birthdate'] = birthdate
-        return bundle        
-        
+        return bundle
+
     def loggedin(self, request, **kwargs):
         if request.user.is_authenticated():
             return self.create_response(request, {
@@ -107,11 +110,12 @@ class UserProfileResource(resources.ModelResource):
             return self.create_response(request, {
                 'success': False
             })
-            
+
     def checkfordupe(self, request, **kwargs):
         self.method_check(request, allowed=['post'])
-        data = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
-        
+        data = self.deserialize(request, request.raw_post_data,
+                                format=request.META.get('CONTENT_TYPE', 'application/json'))
+
         username = data.get('username', '')
         try:
             models.UserProfile.objects.get(username__iexact=username)
@@ -124,14 +128,17 @@ class UserProfileResource(resources.ModelResource):
                 'success': False,
             })
 
+
 class UserValidation(FieldsValidation):
 
     def __init__(self):
-        super(UserValidation, self).__init__( required=['username','first_name','last_name'],
-                                              validated=['username'],
-                                              required_post = ['email', 'password'],
-                                              validated_post = ['password'],
-                                            )
+        super(
+            UserValidation, self).__init__(required=['username', 'first_name', 'last_name'],
+                                           validated=['username'],
+                                           required_post=[
+                                           'email', 'password'],
+                                           validated_post=['password'],
+                                           )
 
     @staticmethod
     def password_is_valid(password, bundle):
@@ -145,7 +152,7 @@ class UserValidation(FieldsValidation):
             user = User.objects.get(username=username)
             print bundle.data
 
-            if user is not None and str(user.id) != str(bundle.data.get('id',0)):
+            if user is not None and str(user.id) != str(bundle.data.get('id', 0)):
                 return False, "The username is already taken."
 
         except User.DoesNotExist:

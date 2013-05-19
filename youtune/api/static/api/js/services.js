@@ -97,8 +97,8 @@ angular.module('youtuneServices', ['ngResource'])
         var properties = {};
         properties.visible = false;
         this.display = function() {
-        properties.visible ? $(".loginForm").fadeOut("slow") : $(".loginForm").css('visibility', 'visible').hide().fadeIn("slow");
-        properties.visible = !properties.visible;
+            properties.visible ? $(".loginForm").fadeOut("slow") : $(".loginForm").css('visibility', 'visible').hide().fadeIn("slow");
+            properties.visible = !properties.visible;
         }
     }])
 

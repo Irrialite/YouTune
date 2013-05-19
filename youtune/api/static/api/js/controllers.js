@@ -52,7 +52,7 @@ function YouTuneRegisterCtrl($scope, $location, userAccount, apiCall) {
 }
 
 
-function YouTuneLoginWindowCtrl($scope, $location) {
+function YouTuneLoginWindowCtrl($scope, $location, loginBoxService) {
     $scope.$on('userAccount::failedLogin', function(event, state) {
         $scope.incorrectLoginInfo = state;
     });
@@ -60,16 +60,13 @@ function YouTuneLoginWindowCtrl($scope, $location) {
         $scope.loggedIn = state;
         $location.path('channel/test');
     });
+    $scope.displayLoginBox = loginBoxService.display;
 }
 
 
 
-function ShowCtrl($scope) {
-    var visible=false;
-    $scope.action = function() {
-        visible ? $(".loginForm").fadeOut("slow") : $(".loginForm").css('visibility', 'visible').hide().fadeIn("slow");
-        visible=!visible;
-    }
+function SearchBarCtrl($scope, loginBoxService) {
+    $scope.displayLoginBox = loginBoxService.display;
 }
 
 

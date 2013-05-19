@@ -1,10 +1,23 @@
-<div id="searchBar">
+<div id="searchBar" ng-controller="SearchBarCtrl">
     <div id="mainLogo"></div>
 
     <form>
-        <input id="searchField">
+        <input id="searchField" title="Find your music">
         <button class="btn doSearch">♥</button>
     </form>
 
-    <button class="btn btn-primary login">Login</button>
+    <button class="btn btn-primary login" ng-click="displayLoginBox()"> Login </button>
+</div>
+
+<div name="loginForm" class="form-actions loginForm" ng-controller="YouTuneLoginWindowCtrl">
+    <input type="text" ng-model="user.name" placeholder="Username" required>
+    <input type="password" ng-model="user.pw" placeholder="Password" required>
+    <button class="btn btn-primary" ng-click="login(user)">Login</button>
+    <a href="/#/register" target="_self">
+        <button type="button" class="btn btn-success" ng-click="displayLoginBox()">
+        Register
+        </button>
+    </a> <br />
+    <span ng-show="incorrectLoginInfo">Invalid credentials.</span>
+    <span ng-show="loggedIn">Successfully logged in.</span>
 </div>

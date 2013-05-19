@@ -1,32 +1,5 @@
 ﻿
 
-<div id="searchBar" ng-controller="ShowCtrl">
-    <div id="mainLogo"></div>
-
-    <form>
-        <input id="searchField" title="Find your music">
-        <button class="btn doSearch">♥</button>
-    </form>
-
-    <button class="btn btn-primary login" ng-click="action()"> Login </button>
-</div>
-
-<div name="loginForm" class="form-actions loginForm" ng-controller="YouTuneLoginWindowCtrl">
-    <input type="text" ng-model="user.name" placeholder="Username" required>
-    <input type="password" ng-model="user.pw" placeholder="Password" required>
-    <button class="btn btn-primary" ng-click="login(user)">Login</button>
-    <a href="/#/register" target="_self">
-        <button type="button" class="btn btn-success">
-        Register
-        </button>
-    </a> <br />
-    <span ng-show="incorrectLoginInfo">Invalid credentials.</span>
-    <span ng-show="loggedIn">Successfully logged in.</span>
-</div>
-
-
-
-
 <!--
  #TODO: [] get data and bind it
  #this is the search results area

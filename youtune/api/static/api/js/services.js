@@ -93,6 +93,14 @@ angular.module('youtuneServices', ['ngResource'])
             });
         };
     }])
+    .service('loginBoxService', ['$rootScope', function($rootScope) {
+        var properties = {};
+        properties.visible = false;
+        this.display = function() {
+        properties.visible ? $(".loginForm").fadeOut("slow") : $(".loginForm").css('visibility', 'visible').hide().fadeIn("slow");
+        properties.visible = !properties.visible;
+        }
+    }])
 
 
 //TODO: [] create function/service that returns number of days in applied month

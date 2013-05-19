@@ -5,10 +5,10 @@
 
 
 {% block body %}
+    {% include "api/header.html" %}
     <div ng-view>
-        {% include "api/header.html" %}
         {% block content %}
         {% endblock %}
-        {% include "api/footer.html" %}
     </div>
+    {% include "api/footer.html" %}
 {% endblock %}

@@ -62,8 +62,6 @@ class UserProfileResource(resources.ModelResource):
 
         username = data.get('username', '')
         password = data.get('password', '')
-        print username
-        print password
 
         user = authenticate(username=username, password=password)
         if user:

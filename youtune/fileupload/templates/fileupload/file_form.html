@@ -2,38 +2,46 @@
 {% load upload_tags %}
 
 {% block content %}
-<div class="container">
-    <div class="page-header">
-        <h1>Django Jquery file upload demo</h1>
-    </div>
+
+<div class="box">
+
+    <h1>Share your masterpiece</h1>
+
     <form id="fileupload" method="post" action="." enctype="multipart/form-data">{% csrf_token %}
         <div class="row fileupload-buttonbar">
             <div class="span7">
+
                 <span class="btn btn-primary fileinput-button">
                     <i class="icon-plus icon-white"></i>
                     <span>Add files...</span>
                     <input type="file" name="file" multiple>
                 </span>
+                <br /><br /><br />
                 <button type="submit" class="btn btn-success start">
                     <i class="icon-upload icon-white"></i>
                     <span>Start upload</span>
                 </button>
+                <br />
                 <button type="reset" class="btn btn-warning cancel">
                     <i class="icon-ban-circle icon-white"></i>
                     <span>Cancel upload</span>
                 </button>
+                <br /><br />
                 <button type="button" class="btn btn-danger delete">
                     <i class="icon-trash icon-white"></i>
                     <span>Delete files</span>
                 </button>
                 <input type="checkbox" class="toggle">
+
             </div>
+
             <div class="span5 fileupload-progress fade">
                 <div class="progress progress-success progres-striped active">
                     <div class="bar" style="width:0%"></div>
                 </div>
                 <div class="progress-extended">&nbsp;</div>
             </div>
+
         </div>
         <div class="fileupload-loading"></div>
         <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
@@ -57,15 +65,18 @@
                     <a class="btn btn-danger" href="{{ "#/upload/delete/"|add_string:file.id }}">
                         <i class="icon-trash icon-white"></i>
                         <span>Delete</span>
-                    </button>
+                    </a>
+                        <!-- </button> -->
                 </td>
             </tr>
             {% endfor %}
         </table>
         {% endif %}
     </div>
+
 </div>
-<!-- modal-gallery is the modal dialog used for the image gallery -->
+
+    <!-- modal-gallery is the modal dialog used for the image gallery -->
 <div id="modal-gallery" class="modal modal-gallery hide fade" data-filter=":odd">
     <div class="modal-header">
         <a class="close" data-dismiss="modal">&times;</a>

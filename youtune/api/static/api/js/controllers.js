@@ -13,14 +13,11 @@ function YouTuneCtrl($scope, apiCall, userAccount, logBoxService) {
 
     $scope.login = function(user) {
         userAccount.logIn(user);
-
-        setChange(logBoxService);
     };
     
     $scope.logout = function() {
         userAccount.logOut();
-
-        setChange(logBoxService);
+        logBoxService.toggleLogin();
     };
     
     $scope.isLoggedInCheck = function() {
@@ -51,20 +48,20 @@ function YouTuneRegisterCtrl($scope, $location, userAccount, apiCall) {
     
     $scope.$on('userAccount::successLogin', function(event, state) {
         $scope.loggedIn = state;
-        $location.path('channel/test');
+        $location.path('user/test');
     });
 }
 
 
-function YouTuneLoginWindowCtrl($scope, $location, loginBoxService) {
+function YouTuneLoginWindowCtrl($scope, $location, logBoxService) {
     $scope.$on('userAccount::failedLogin', function(event, state) {
         $scope.incorrectLoginInfo = state;
     });
     $scope.$on('userAccount::successLogin', function(event, state) {
         $scope.loggedIn = state;
-        $location.path('channel/test');
+        $location.path('user/test');
     });
-    $scope.displayLoginBox = loginBoxService.display;
+    $scope.displayLogBox = logBoxService.display;
 
 }
 
@@ -76,13 +73,6 @@ function YouTuneUploadDelete($scope, $routeParams) {
 function SearchBarCtrl($scope, logBoxService) {
     $scope.displayLogBox = logBoxService.display;
 }
-
-
-function setChange(logBoxService){
-    logBoxService.toggleLogin();
-    logBoxService.display();
-}
-
 
 
 

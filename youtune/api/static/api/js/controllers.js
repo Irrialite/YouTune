@@ -99,10 +99,10 @@ var days = [];
 function yearCtrl($scope) {
     $scope.years = new Array (108);
 
-    var startYear = 1900;
+    var startYear = 2007;
     for (var i = 0; i < $scope.years.length; i++){
         $scope.years[i] = startYear;
-        startYear++;
+        startYear--;
     }
 
     $scope.updateChoice = function(msg){

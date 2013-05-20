@@ -33,8 +33,8 @@
     <span class="textField">
     Repeat Password:
     </span>
-      <input class="inputField" type="password" ng-model="registerUser.pw2" name="uPassword2" repeat-password="uPassword" required/><br />
-      <span ng-show="registerForm.uPassword2.$error.repeat">Passwords do not match.<br /></span>
+    <input class="inputField" type="password" ng-model="registerUser.pw2" name="uPassword2" repeat-password="uPassword" required/><br />
+    <span ng-show="registerForm.uPassword2.$error.repeat">Passwords do not match.<br /></span>
 
 
     <span  class="textField">
@@ -61,19 +61,11 @@
     <!-- YEAR -->
     <br/>
     <div class="btn-group dropdown" data-dropdown="dropdown"  ng-controller="yearCtrl">
-        <a class="btn dropdown-toggle" id="yearBtn" role="button" data-toggle="dropdown" >
-            Year
-            <span class="caret"></span>
-        </a>
-
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-            <li ng-repeat="year in years" >
-                <a tabindex="-1"  ng-click="updateChoice(year)">
-                    {{ year }}
-                </a>
-            </li>
-        </ul>
+        <select multiple="multiple">
+            <option ng-repeat="year in years" ng-click="updateChoice(year)">{{ year }}</option>
+        </select>
     </div>
+    <br/>
 
     <!-- MONTH -->
     <div class="btn-group dropdown" data-dropdown="dropdown"  ng-controller="monthsCtrl">
@@ -115,8 +107,7 @@
     <br/>
     <span class="textField">
     Gender:
-    </span>
-
+    </span><br/>
     <div class="choice"> <!--TODO: [x] or choice, you cant be both male and female...difficult :) -->
         <input name="group1" type="radio" ng-model="registerUser.gender" value="male" />male
         <input name="group1" type="radio" ng-model="registerUser.gender" value="female" />female<br />

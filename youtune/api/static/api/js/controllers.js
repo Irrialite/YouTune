@@ -1,22 +1,26 @@
 app = angular.module('youtune', ['youtuneServices']);
 
-function YouTuneCtrl($scope, apiCall, userAccount) {
+function YouTuneCtrl($scope, apiCall, userAccount, logBoxService) {
     $scope.users = apiCall.get({
         type: 'userprofile'
         });
 
     $scope.goBack = function() {
         window.history.back();
-    }
+    };
     
     $scope.user = {};
 
     $scope.login = function(user) {
         userAccount.logIn(user);
+
+        setChange(logBoxService);
     };
     
     $scope.logout = function() {
         userAccount.logOut();
+
+        setChange(logBoxService);
     };
     
     $scope.isLoggedInCheck = function() {
@@ -61,17 +65,23 @@ function YouTuneLoginWindowCtrl($scope, $location, loginBoxService) {
         $location.path('channel/test');
     });
     $scope.displayLoginBox = loginBoxService.display;
+
 }
 
-function YouTuneUploadDelete($scope, $route, $routeParams) {
+function YouTuneUploadDelete($scope, $routeParams) {
     $scope.page = 'upload/delete/' + $routeParams.id;
 }
 
 
-function SearchBarCtrl($scope, loginBoxService) {
-    $scope.displayLoginBox = loginBoxService.display;
+function SearchBarCtrl($scope, logBoxService) {
+    $scope.displayLogBox = logBoxService.display;
 }
 
+
+function setChange(logBoxService){
+    logBoxService.toggleLogin();
+    logBoxService.display();
+}
 
 
 

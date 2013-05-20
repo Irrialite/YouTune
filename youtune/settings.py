@@ -148,6 +148,7 @@ INSTALLED_APPS = (
     'youtune.admin',
     'youtune.polls',
     'youtune.api',
+    'youtune.fileupload',
 
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -63,6 +63,9 @@ function YouTuneLoginWindowCtrl($scope, $location, loginBoxService) {
     $scope.displayLoginBox = loginBoxService.display;
 }
 
+function YouTuneUploadDelete($scope, $route, $routeParams) {
+    $scope.page = 'upload/delete/' + $routeParams.id;
+}
 
 
 function SearchBarCtrl($scope, loginBoxService) {

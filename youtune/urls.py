@@ -21,6 +21,9 @@ urlpatterns = patterns(
     '',
     # Switch to API-based JS views
     url(r'^$', views.index, name='index'),
+    
+    # Upload view
+    url(r'^upload/', include('youtune.fileupload.urls')),
 
     # API
     url(r'^api/', include(v1_api.urls)),

@@ -11,7 +11,7 @@
 }
 #mainLogo{
     position: absolute;
-    background-image: url("../Images/logo.png");
+    background-image: url("../img/logo.png");
     top: 8px;
     left: 10px;
     width: 90px;
@@ -57,7 +57,7 @@
     margin-bottom: 0px;
 }
 .channelAvatar{
-    background-image: url("../Images/avatar.jpg");
+    background-image: url("../img/avatar.jpg");
     height: 90px;
     width: 90px;
     float: left;

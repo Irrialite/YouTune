@@ -13,7 +13,7 @@ angular.module('youtuneServices', ['ngResource'])
         
      return apiCall;
     })
-    .service('userAccount', ['$rootScope', 'apiCall', '$timeout', function($rootScope, apiCall, $timeout) {
+    .service('userAccount', ['$rootScope', 'apiCall', 'logBoxService', '$timeout', function($rootScope, apiCall, logBoxService, $timeout) {
         this.accName = undefined;
         this.loggedIn = undefined;
         this.incorrectLoginInfo = false;
@@ -33,8 +33,12 @@ angular.module('youtuneServices', ['ngResource'])
                 this.incorrectLoginInfo = false;
                 $rootScope.$broadcast('userAccount::failedLogin', this.incorrectLoginInfo);
                 $rootScope.$broadcast('userAccount::successLogin', this.loggedIn);
+                user.name = '';
+                user.pw = '';
+                logBoxService.toggleLogin();
             }, function(data) { 
                 this.incorrectLoginInfo = true;
+                user.pw = '';
                 $rootScope.$broadcast('userAccount::failedLogin', this.incorrectLoginInfo);
                 $timeout(function() {
                     this.incorrectLoginInfo = false;
@@ -107,6 +111,7 @@ angular.module('youtuneServices', ['ngResource'])
         var properties = {};
         properties.toAnimate = ".loginForm";
         properties.logged = false;
+        properties.visible = false;
 
         this.toggleLogin = function(){
             this.display();

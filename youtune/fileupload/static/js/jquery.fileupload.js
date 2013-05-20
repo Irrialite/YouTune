@@ -631,7 +631,6 @@
         },
 
         _onSend: function (e, data) {
-            console.log(this._getAJAXSettings(data));
             var that = this,
                 jqXHR,
                 slot,

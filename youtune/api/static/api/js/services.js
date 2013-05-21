@@ -7,7 +7,8 @@ angular.module('youtuneServices', ['ngResource'])
             {
                 get: {method: 'GET'},
                 post: {method: 'POST', headers: {'Content-Type': 'application/json'}},
-                del: {method: 'DELETE', headers: {'Content-Type': 'application/json'}}
+                del: {method: 'DELETE', headers: {'Content-Type': 'application/json'}},
+                update: {method: 'PATCH', headers: {'Content-Type': 'application/json'}, params: {type: "@type", id: "@id"}}
             }
         );
         
@@ -65,6 +66,7 @@ angular.module('youtuneServices', ['ngResource'])
                 last_name: registerUser.lastname,
                 birthdate: registerUser.birthdate,
                 gender: registerUser.gender,
+                avatar: 'default/avatar.jpg',
                 id: null,
             }, function(data) {
                 // Whyyyyyy won't this work

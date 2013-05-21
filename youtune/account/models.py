@@ -23,6 +23,7 @@ class UserProfile(auth_models.User):
         verbose_name=u'Facebook ID', null=True, blank=True)
     token = django_models.CharField(max_length=150)
     language = fields.LanguageField(verbose_name=u'language')
+    avatar = django_models.CharField(max_length=200);
 
     def __unicode__(self):
         return u'%s' % (self)

@@ -27,8 +27,8 @@ class UserProfileResource(resources.ModelResource):
         authorization = Authorization()
         # excludes = ['email', 'is_staff', 'is_superuser']
 
-    def dehydrate_password(self, bundle):
-        return ''
+    #def dehydrate_password(self, bundle):
+        #return ''
 
     def dehydrate(self, bundle):
         if bundle.request.user.pk == bundle.obj.pk:
@@ -91,7 +91,10 @@ class UserProfileResource(resources.ModelResource):
 
     def hydrate(self, bundle):
         # About to do some ninja skills
-        bundle.data['password'] = make_password(bundle.data['password'])
+        if bundle.request.method == 'PATCH':
+            bundle.data['password'] = models.UserProfile.objects.get(pk=int(bundle.data['id'])).password
+        else:
+            bundle.data['password'] = make_password(bundle.data['password'])
         if bundle.data['birthdate']:
             birthdate = bundle.data['birthdate'].split("-")
             birthdate = date(year=int(birthdate[0]), month=int(

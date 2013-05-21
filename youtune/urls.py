@@ -79,4 +79,7 @@ if settings.DEBUG:
     urlpatterns += patterns('',
                             url(r'^500/$', handler500, name='500'),
                             url(r'^404/$', handler404, name='404'),
+                            url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+                                'document_root': settings.MEDIA_ROOT,
+                                })
                             )

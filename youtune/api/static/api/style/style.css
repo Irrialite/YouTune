@@ -61,10 +61,9 @@
     margin-bottom: 0em;
 }
 .channelAvatar{
-    background-image: url("../img/avatar.jpg");
     top: 0em;
-    height: 9em;
-    width: 9em;
+    height: 128px;
+    width: 128px;
     float: left;
     margin: 1em;
     padding: 0em;
@@ -76,7 +75,7 @@
 #channelTitle{
     padding-top: 1em;
 }
-#chanel{
+#channel{
     position: absolute;
     top: 0em;
     width: 100%;
@@ -160,4 +159,55 @@ a:hover{
 
 .tunes{
     background-color: #0077b3;
+}
+
+/* CLEANUP */
+body {
+    background:#e3e2e2;
+}
+.options {
+    background:#e3e2e2;
+    min-height: 190px;
+}
+.options a {
+    display:block;
+    color: #9f9f9f;
+    padding:12px 10px;
+    background:#e3e2e2;
+    border-bottom:1px solid #cac9c9;
+    position:relative;
+    cursor:pointer;
+}
+.options a:hover {
+    color: #8e8e8e;
+    background:#f4f4f4;
+    -webkit-transition:0.1s linear background;
+    -moz-transition:0.1s linear background;
+    transition:0.1s linear background;
+}
+.options a.selected {
+    color: #6f6f6f;
+    background:#fff;
+}
+.options a.selected:hover {
+    background:#f4f4f4;
+}
+.options a.selected:after {
+    content:"\2713";
+    position:absolute;
+    right:10px;
+    top:50%;
+    font-size:20px;
+    margin-top:-10px;
+}
+.options a.no-border {
+    border:none;
+}
+textarea {
+    height: 175px;
+    width: 100%;
+    resize: none;
+}
+.padtop {
+    padding-top: 5px;
 }

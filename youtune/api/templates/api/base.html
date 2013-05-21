@@ -1,4 +1,6 @@
-{% load staticfiles %}<!DOCTYPE html>
+{% load staticfiles %}
+{% load api_extras %}
+<!DOCTYPE html>
 <html lang="en" {% block html_attributes %}{% endblock %}>
 <head>
     <meta charset="utf-8">
@@ -20,6 +22,7 @@
 
     <script src="{% static 'api/lib/angular.js' %}"></script>
     <script src="{% static 'api/lib/angular_resource.js' %}"></script>
+    <script src="{% static 'api/lib/angular_cookies.js' %}"></script>
     <script src="{% static 'api/js/services.js' %}"></script>
     <script src="{% static 'api/js/controllers.js' %}"></script>
     <script src="{% static 'api/js/app.js' %}"></script>

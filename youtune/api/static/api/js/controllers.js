@@ -1,10 +1,24 @@
-app = angular.module('youtune', ['youtuneServices']);
+app = angular.module('youtune', ['youtuneServices', 'ngCookies']);
 
-function YouTuneCtrl($scope, apiCall, userAccount, logBoxService) {
-    $scope.users = apiCall.get({
-        type: 'userprofile'
+function YouTuneCtrl($scope, $http, $cookies, apiCall, userAccount, logBoxService) {
+    $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
+    $http.defaults.headers.put['X-CSRFToken'] = $cookies.csrftoken;
+    $http.defaults.headers.patch = $http.defaults.headers.post;
+    $http.defaults.headers.patch['X-CSRFToken'] = $cookies.csrftoken;
+
+    /* 
+     * How to update objects
+     
+    $scope.user1 = apiCall.get({
+        type: 'userprofile',
+        id: '4'
+        }, function(obj) {
+            obj.avatar = 'xa';
+            obj.$update({type: 'userprofile', id: '4'});
+            console.log(obj);
         });
-
+    */
+    
     $scope.goBack = function() {
         window.history.back();
     };
@@ -24,6 +38,20 @@ function YouTuneCtrl($scope, apiCall, userAccount, logBoxService) {
         userAccount.getLoggedIn();
     }
     
+    $scope.thing = {};
+    $scope.thing.style = { "background-image" : "url('../../../../media/default/avatar.jpg')" };
+    $scope.selectThing = function(thing) {
+        thing.style = { "background-color" : "red" };
+    }
+    $scope.style = function(thing) {
+        return thing.style || {};
+    }   
+    
+    $scope.testS = function(item) {
+        console.log(item);
+        console.log("{ background-image: url('../../.." + item + "'); }");
+        return "{ background-image: url('../../../../media/" + item + "'); }"
+    }
 }
 
 function YouTuneRegisterCtrl($scope, $location, userAccount, apiCall) {

@@ -1,64 +1,43 @@
-
-
 /* ------TOP AREA-------- */
 #searchBar{
-    position: absolute;
+    position: relative;
     background:#e3e3e3;
-    top: 0em;
     width: 100%;
     height: 4em;
-    z-index: 1;
+    z-index: 2;
+
 }
 #mainLogo{
-    position: absolute;
+    display: inline-block;
+    vertical-align: middle;
+
     background-image: url("../img/logo.png");
     background-repeat: no-repeat;
     height: 3em;
-    margin-top: 1em;
     margin-left: 1em;
+    margin-top: 1em;
     width: 10%;
 }
-/*
-#searchInput{
-    position: absolute;
-    top: 1em;
-    left: 10em;
-    width:30em;
-}
-#btn{
-    position: absolute;
-    top: 1em;
-    left: 41em;
-    width: 3em;
-}
-.login{
-    position: absolute;
-    top: 1em;
-    right: 2em;
-    width: 10em;
-}
-*/
 #searchArea{
-    position: absolute;
-    left: 10%;
-    width:70%;
+    text-align: center;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    width:80%;
 }
 #btn{
-    position: absolute;
-    left: 0em;
-    width: 5em;
+    width: 3em;
+    margin-right: 3em;
 }
 #searchInput{
-    position: absolute;
-    left: 5em;
-    width:25em;
+     width:28em;
 }
 
 .login{
     position: absolute;
     top: 1em;
     right: 2em;
-    width: 10em;
+    width: 10%;
 }
 
 .loginForm{
@@ -68,8 +47,9 @@
     right: 0em;
     top: 2em;
     visibility: hidden;
-    z-index: 0;
+    z-index: 1;
 }
+
 
 
 /* ------CHANNEL CONTENT-------- */
@@ -96,7 +76,12 @@
 #channelTitle{
     padding-top: 1em;
 }
-
+#chanel{
+    position: absolute;
+    top: 0em;
+    width: 100%;
+    z-index: -1;
+}
 
 
 
@@ -113,7 +98,7 @@
     margin-left: auto;
     margin-right: auto;
     text-align: left;
-    padding: 5em 1em 1em 2em;
+    padding: 1em 1em 1em 2em;
     font: 1em Arial, Helvetica, sans-serif;
 }
 .textField{
@@ -152,12 +137,27 @@ a:hover{
 
 /* ------UPLOAD PAGE-------- */
 .box{
-    padding: 3em;
-    padding-top: 4em;
-
-
-    margin-right: auto;
+    background-color: #0077b3;
+    color: #ffffff;
+    width: 40em;
+    height: auto;
     margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    padding: 1em 1em 1em 2em;
+    font: 1em Arial, Helvetica, sans-serif;
 
+}
 
+.row{
+    text-align: left;
+    margin-top: 3em;
+
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.tunes{
+    background-color: #0077b3;
 }

@@ -1,36 +1,4 @@
-<div id="searchBar" ng-controller="SearchBarCtrl">
-    <div id="mainLogo"></div>
-    <form>
-        <input id="searchInput" title="Find your music">
-        <button id="btn">♥</button>
-    </form>
-    <button class="btn btn-primary login" ng-click="displayLogBox()"> Login </button>
-</div>
-
-
-<div name="loginForm" class="form-actions loginForm" ng-controller="YouTuneLoginWindowCtrl">
-    <input type="text" ng-model="user.name" placeholder="Username" required>
-    <input type="password" ng-model="user.pw" placeholder="Password" required>
-    <button class="btn btn-primary" ng-click="login(user)">Login</button>
-    <a href="/#/register" target="_self">
-        <button type="button" class="btn btn-success" ng-click="displayLoginBox()">
-            Register
-        </button>
-    </a> <br />
-    <span ng-show="incorrectLoginInfo">Invalid credentials.</span>
-</div>
-
-
-<div ng-show="loggedIn" name="loggedForm" class="form-actions loggedForm" ng-controller="YouTuneLoginWindowCtrl">
-    <a>Upload</a> <br/>
-    <a>Channel</a> <br/>
-    <a>Settings</a> <br/>
-    <a ng-click="logout()">Logout</a> <br/>
-</div>
-
-
-
-<article class="info">
+<article id="chanel">
     <header class="page-header img-rounded channelHeader">
         <img class="thumbnail channelAvatar" >
         <h1 id="channelTitle">Test Channel </h1>

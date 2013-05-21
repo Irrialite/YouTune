@@ -14,37 +14,49 @@ angular.module('youtuneServices', ['ngResource'])
         
      return apiCall;
     })
-    .service('userAccount', ['$rootScope', 'apiCall', 'logBoxService', '$timeout', function($rootScope, apiCall, logBoxService, $timeout) {
-        this.accName = undefined;
-        this.loggedIn = undefined;
-        this.incorrectLoginInfo = false;
+    .service('userAccount', ['$rootScope', 'apiCall', '$timeout', '$cookies', '$location', function($rootScope, apiCall, $timeout, $cookies, $location) {
+        this.properties = {};
+        this.properties.resource = undefined;
+        this.properties.sessionid = undefined;
+        this.properties.loggedIn = false;
+        this.properties.incorrectLoginInfo = false;
         
-        this.setAccName = function(name) {
-            this.accName = name;
-        }
         this.logIn = function(user) {
+            parentObj = this;
             apiCall.post({
                 type: 'userprofile',
                 id: 'login',
                 username: user.name,
                 password: user.pw,
             }, function(data) {
-                this.accName = user.name;
-                this.loggedIn = true;
-                this.incorrectLoginInfo = false;
-                $rootScope.$broadcast('userAccount::failedLogin', this.incorrectLoginInfo);
-                $rootScope.$broadcast('userAccount::successLogin', this.loggedIn);
+                apiCall.post({
+                    type: 'userprofile',
+                    id: 'checkfordupe',
+                    username: user.name
+                }, function(data) {
+                    if (data.success == false)
+                    {
+                        apiCall.get({
+                            type: 'userprofile',
+                            id: data.id
+                        }, function(success) {
+                            parentObj.properties.resource = success;
+                            $location.path('user/' + success.username); 
+                        });
+                    }
+                });              
+                parentObj.properties.sessionid = $cookies.sessionid;
+                parentObj.properties.loggedIn = true;
+                parentObj.properties.incorrectLoginInfo = false;
+                $rootScope.$broadcast('userAccount::successLogin', parentObj.properties.loggedIn);
                 user.name = '';
                 user.pw = '';
-                logBoxService.toggleLogin();
             }, function(data) { 
-                this.incorrectLoginInfo = true;
+                parentObj.properties.incorrectLoginInfo = true;
                 user.pw = '';
-                $rootScope.$broadcast('userAccount::failedLogin', this.incorrectLoginInfo);
                 $timeout(function() {
-                    this.incorrectLoginInfo = false;
-                    $rootScope.$broadcast('userAccount::failedLogin', this.incorrectLoginInfo);
-                }, 5000); 
+                    parentObj.properties.incorrectLoginInfo = false;
+                }, 3000); 
             });
         };
         this.logOut = function() {
@@ -52,11 +64,14 @@ angular.module('youtuneServices', ['ngResource'])
                 type: 'userprofile',
                 id: 'logout',
             });
-            this.setAccName(undefined);
-            this.loggedIn = false;
-            $rootScope.$broadcast('userAccount::successLogin', this.loggedIn);
+            this.properties.loggedIn = false;
+            this.properties.sessionid = undefined;
+            this.properties.resource = undefined;
+            $location.path('');
+            $rootScope.$broadcast('userAccount::successLogin', this.properties.loggedIn);
         };
         this.register = function(registerUser) {
+            parentObj = this;
             apiCall.post({
                 type: 'userprofile',
                 username: registerUser.name,
@@ -66,68 +81,46 @@ angular.module('youtuneServices', ['ngResource'])
                 last_name: registerUser.lastname,
                 birthdate: registerUser.birthdate,
                 gender: registerUser.gender,
-                avatar: 'default/avatar.jpg',
+                avatar: 'http://gravatar.com/avatar/14c12d6119e8e84cbc980af600b3586a?s=128',
                 id: null,
             }, function(data) {
-                // Whyyyyyy won't this work
-                //this.logIn({name: registerUser.name, pw: registerUser.pw});
-                // Login and redirect
-                apiCall.post({
-                    type: 'userprofile',
-                    id: 'login',
-                    username: registerUser.name,
-                    password: registerUser.pw,
-                }, function(data) {
-                    this.accName = registerUser.name;
-                    this.loggedIn = true;
-                    this.incorrectLoginInfo = false;
-                    $rootScope.$broadcast('userAccount::failedLogin', this.incorrectLoginInfo);
-                    $rootScope.$broadcast('userAccount::successLogin', this.loggedIn);
-                });
+                parentObj.logIn({name: registerUser.name, pw: registerUser.pw});
             }, function(data) {
             });
         };
-        this.getLoggedIn = function() {
-            apiCall.get({
-                type: 'userprofile',
-                id: 'loggedin'
-            }, function(data) {
-                if (data.success == true)
-                    this.loggedIn = true;
-                else
-                    this.loggedIn = false;
-            });
-        };
-    }])
-    .service('loginBoxService', ['$rootScope', function($rootScope) {
-        var properties = {};
-        properties.visible = false;
-
-        this.display = function() {
-            properties.visible ? $(".loginForm").fadeOut("slow") : $(".loginForm").css('visibility', 'visible').hide().fadeIn("slow");
-            properties.visible = !properties.visible;
-
+             
+        this.simpleSessionCheck = function() {
+            if (this.properties.sessionid != $cookies.sessionid)
+                return true;
+            return false;
         }
+        
+        this.wasAlreadyLoggedIn = function(resource)
+        {
+            this.properties.loggedIn = true;
+            this.properties.resource = resource;
+            this.properties.sessionid = $cookies.sessionid;
+        }
+        
+        this.getAvatarStyle = function() {
+            if (this.properties.resource != undefined)
+                return { "background-image" : "url('" + this.properties.resource.avatar + "')" };
+            return { "background-image" : "url('" + "')" };
+        }
+        
     }])
-    .service('logBoxService', ['$rootScope', function($rootScope) {
+    .service('logBoxService', ['$rootScope', 'userAccount', function($rootScope, userAccount) {
         var properties = {};
         properties.toAnimate = ".loginForm";
-        properties.logged = false;
         properties.visible = false;
 
-        this.toggleLogin = function(){
-            this.display();
-            properties.logged=!properties.logged;
-        }
-
-
-        this.display = function() {
+        this.display = function(arg, arg2) {
             //animate appropriate window
             properties.visible ? $(properties.toAnimate).fadeOut("slow") : $(properties.toAnimate).css('visibility', 'visible').hide().fadeIn("slow");
             properties.visible = !properties.visible;
 
             //hide/show appropriate window
-            if(properties.logged){
+            if(userAccount.properties.loggedIn || arg){
                 //alert("loged in");
                 $(".loggedForm").css('visibility','visible');
                 $(".loginForm").css('visibility','hidden');
@@ -144,7 +137,26 @@ angular.module('youtuneServices', ['ngResource'])
 
         }
     }])
+    .service('userSettings', ['$rootScope', 'apiCall', function($rootScope, apiCall) {
+        this.settings = {};
+        this.settings.general = {
+            name: "General",
+            template: "/static/api/templates/partial/settings_general.html",
+        };
+        this.settings.avatar = {
+            name: "Avatar",
+            template: "/static/api/templates/partial/settings_avatar.html",
+        };
+        this.settings.groups = [this.settings.general, this.settings.avatar];
+        this.settings.selectedGroup = undefined;
+        this.settings.changes = {};
+        this.settings.changes.general = {};
+        this.settings.changes.avatar = {};
 
-
-
+        this.setSelectedGroup = function(setting) {
+            if (this.settings.groups.indexOf(setting) > -1) {
+                this.settings.selectedGroup = setting;
+            }
+        };
+    }])
 

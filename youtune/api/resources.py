@@ -27,8 +27,8 @@ class UserProfileResource(resources.ModelResource):
         authorization = Authorization()
         # excludes = ['email', 'is_staff', 'is_superuser']
 
-    #def dehydrate_password(self, bundle):
-        #return ''
+    def dehydrate_password(self, bundle):
+        return ''
 
     def dehydrate(self, bundle):
         if bundle.request.user.pk == bundle.obj.pk:
@@ -105,7 +105,8 @@ class UserProfileResource(resources.ModelResource):
     def loggedin(self, request, **kwargs):
         if request.user.is_authenticated():
             return self.create_response(request, {
-                'success': True
+                'success': True,
+                'id': request.user.id,
             })
         else:
             return self.create_response(request, {
@@ -118,8 +119,9 @@ class UserProfileResource(resources.ModelResource):
                                 format=request.META.get('CONTENT_TYPE', 'application/json'))
 
         username = data.get('username', '')
+        user = None;
         try:
-            models.UserProfile.objects.get(username__iexact=username)
+            user = models.UserProfile.objects.get(username__iexact=username)
         except models.UserProfile.DoesNotExist:
             return self.create_response(request, {
                 'success': True,
@@ -127,6 +129,7 @@ class UserProfileResource(resources.ModelResource):
         else:
             return self.create_response(request, {
                 'success': False,
+                'id': user.id,
             })
 
 

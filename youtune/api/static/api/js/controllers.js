@@ -1,10 +1,16 @@
-app = angular.module('youtune', ['youtuneServices', 'ngCookies']);
+var app = angular.module('youtune', ['youtuneServices', 'ngCookies']);
 
-function YouTuneCtrl($scope, $http, $cookies, apiCall, userAccount, logBoxService) {
+function YouTuneCtrl($scope, $http, $cookies, apiCall, userAccount, userSettings, logBoxService) {
     $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
     $http.defaults.headers.put['X-CSRFToken'] = $cookies.csrftoken;
     $http.defaults.headers.patch = $http.defaults.headers.post;
     $http.defaults.headers.patch['X-CSRFToken'] = $cookies.csrftoken;
+    
+    $scope.userAccount = userAccount;
+    $scope.userSettings = userSettings;
+
+    //if (res)
+      //  userAccount.wasAlreadyLoggedIn(res);
 
     /* 
      * How to update objects
@@ -31,27 +37,16 @@ function YouTuneCtrl($scope, $http, $cookies, apiCall, userAccount, logBoxServic
     
     $scope.logout = function() {
         userAccount.logOut();
-        logBoxService.toggleLogin();
+        logBoxService.display();
     };
     
     $scope.isLoggedInCheck = function() {
         userAccount.getLoggedIn();
     }
     
-    $scope.thing = {};
-    $scope.thing.style = { "background-image" : "url('../../../../media/default/avatar.jpg')" };
-    $scope.selectThing = function(thing) {
-        thing.style = { "background-color" : "red" };
-    }
-    $scope.style = function(thing) {
-        return thing.style || {};
+    $scope.avatarStyle = function() {
+        return userAccount.getAvatarStyle();
     }   
-    
-    $scope.testS = function(item) {
-        console.log(item);
-        console.log("{ background-image: url('../../.." + item + "'); }");
-        return "{ background-image: url('../../../../media/" + item + "'); }"
-    }
 }
 
 function YouTuneRegisterCtrl($scope, $location, userAccount, apiCall) {
@@ -75,22 +70,29 @@ function YouTuneRegisterCtrl($scope, $location, userAccount, apiCall) {
     };
     
     $scope.$on('userAccount::successLogin', function(event, state) {
-        $scope.loggedIn = state;
-        $location.path('user/test');
+        //logBoxService.display();
+        //$location.path('user/test');
     });
 }
 
 
 function YouTuneLoginWindowCtrl($scope, $location, logBoxService) {
-    $scope.$on('userAccount::failedLogin', function(event, state) {
-        $scope.incorrectLoginInfo = state;
-    });
     $scope.$on('userAccount::successLogin', function(event, state) {
-        $scope.loggedIn = state;
-        $location.path('user/test');
+        logBoxService.display("arg");
     });
     $scope.displayLogBox = logBoxService.display;
-
+    
+    $scope.goChannel = function() {
+        $location.path("user/" + ($scope.userAccount.properties.loggedIn ? $scope.userAccount.properties.resource.username:""));
+    }
+    
+    $scope.goUpload = function() {
+        $location.path("upload");
+    }
+    
+    $scope.goSettings = function() {
+        $location.path("user/" + ($scope.userAccount.properties.loggedIn ? $scope.userAccount.properties.resource.username:"") + "/settings");
+    }
 }
 
 function YouTuneUploadDelete($scope, $routeParams) {
@@ -102,7 +104,19 @@ function SearchBarCtrl($scope, logBoxService) {
     $scope.displayLogBox = logBoxService.display;
 }
 
-
+function SettingsCtrl($scope, userSettings) {
+    $scope.isSelected = function(setting) {
+        return setting === userSettings.settings.selectedGroup;
+    };
+    
+    $scope.selectGroup = function(setting) {
+        userSettings.setSelectedGroup(setting);
+    };
+    
+    $scope.saveChanges = function() {
+        // iterate over changes in userSetings service then clear them
+    }
+}
 
 //TODO: [x] create function/service that returns number of days in applied month
 // fix: [x] yearCtrl, daysCtrl

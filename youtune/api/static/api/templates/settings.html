@@ -1,0 +1,9 @@
+ <div class = "row options"> 
+            <div class="large-2 columns options"> 
+                 <a ng-repeat="setting in userSettings.settings.groups" ng-click="selectGroup(setting)" class="{{isSelected(setting) && 'selected' || ''}}">{{setting.name}}</a>
+            </div>
+            <!-- ADD BUTTON HERE FOR SAVE YOUTUBE STYLE THEN TEMPLATE UNDER IT -->
+            <!-- MENU SHOULD BE TO THE LEFT OF THE INCLUDED TEMPLATE -->
+            <div ng-include src="userSettings.settings.selectedGroup.template" ></div>
+      
+        </div >

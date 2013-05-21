@@ -162,9 +162,7 @@ a:hover{
 }
 
 /* CLEANUP */
-body {
-    background:#e3e2e2;
-}
+/* remove the tick as well and add some other indicator */
 .options {
     background:#e3e2e2;
     min-height: 190px;

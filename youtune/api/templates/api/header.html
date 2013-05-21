@@ -17,13 +17,13 @@
         Register
         </button>
     </a> <br />
-    <span ng-show="incorrectLoginInfo">Invalid credentials.</span>
+    <span ng-show="userAccount.properties.incorrectLoginInfo">Invalid credentials.</span>
 </div>
 
 
-<div ng-show="loggedIn" name="loggedForm" class="form-actions loggedForm" ng-controller="YouTuneLoginWindowCtrl">
-    <a>Upload</a> <br/>
-    <a>Channel</a> <br/>
-    <a>Settings</a> <br/>
+<div ng-show="userAccount.properties.loggedIn" name="loggedForm" class="form-actions loggedForm" ng-controller="YouTuneLoginWindowCtrl">
+    <a ng-click="goUpload()">Upload</a> <br/>
+    <a ng-click="goChannel()">Channel</a> <br/>
+    <a ng-click="goSettings()">Settings</a> <br/>
     <a ng-click="logout()">Logout</a> <br/>
 </div>

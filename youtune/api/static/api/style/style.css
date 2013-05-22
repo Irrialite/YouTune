@@ -147,7 +147,6 @@ a:hover{
     font: 1em Arial, Helvetica, sans-serif;
 
 }
-
 .row{
     text-align: left;
     margin-top: 3em;
@@ -156,56 +155,89 @@ a:hover{
     margin-right: auto;
 
 }
-
 .tunes{
     background-color: #0077b3;
 }
 
+
+/* ------SETTINGS PAGE-------- */
 /* CLEANUP */
-/* remove the tick as well and add some other indicator */
+/* [x] remove the tick as well and add some other indicator */
+
 .options {
-    background:#e3e2e2;
-    min-height: 190px;
+    display: inline-block;
+    background:#0077b3;
+    text-emphasis-color: #ffffff;
+    color: #ffffff;
+    width: 25%;
+    height: 100%;
 }
+
+
 .options a {
     display:block;
-    color: #9f9f9f;
-    padding:12px 10px;
-    background:#e3e2e2;
+    color: #ffffff;
+    padding: 1em;
+    background:#0077b3;
     border-bottom:1px solid #cac9c9;
-    position:relative;
     cursor:pointer;
 }
 .options a:hover {
-    color: #8e8e8e;
-    background:#f4f4f4;
-    -webkit-transition:0.1s linear background;
-    -moz-transition:0.1s linear background;
-    transition:0.1s linear background;
+    color: #ffffff;
 }
 .options a.selected {
-    color: #6f6f6f;
-    background:#fff;
+    color: #ffffff;
+    background:#002a80;
 }
 .options a.selected:hover {
-    background:#f4f4f4;
+    /*background:#f4f4f4;*/
 }
 .options a.selected:after {
-    content:"\2713";
-    position:absolute;
-    right:10px;
-    top:50%;
-    font-size:20px;
-    margin-top:-10px;
 }
 .options a.no-border {
     border:none;
+}
+.padtop {
+   padding-top: 5px;
 }
 textarea {
     height: 175px;
     width: 100%;
     resize: none;
 }
-.padtop {
-    padding-top: 5px;
+.stuff{
+    background-color: #ffffff;
+    height: 100%;
+    position: absolute;
+    top: 11em;
+    margin-left: 25%;
+    z-index: -1;
+    padding: 1em;
+    padding-top: 2em;
+    width: 75%;
+}
+.basicPic{
+    height: 128px;
+    width: 128px;
+}
+.title{
+    color: #ffffff;
+    position: absolute;
+    background-color: #002a80;
+    top: 4em;
+    left: 25%;
+    width: 75%;
+    height: 5em;
+    padding: 1em;
+    z-index: -2;
+}
+.save{
+    position: absolute;
+    right: 5%;
+    top: 6em;
+    z-index: -1;
+}
+body{
+    overflow-y: scroll;
+    overflow-x: hidden;
 }

@@ -96,6 +96,13 @@ function YouTuneLoginWindowCtrl($scope, $location, logBoxService) {
         $location.path("user/" + ($scope.userAccount.properties.loggedIn ? $scope.userAccount.properties.resource.username:"") + "/settings");
         logBoxService.display();
     }
+    
+    $(document).click(function() {
+        if(logBoxService.properties.visible){
+            logBoxService.display();
+            //$("#settings").stopPropagation(); //maybe ?
+        }
+    });
 }
 
 function YouTuneUploadDelete($scope, $routeParams) {
@@ -139,6 +146,25 @@ ChannelCtrl.resolve = {
         
         return deferred.promise;
     }
+}
+
+function PlaybackCtrl($scope, $routeParams)
+{
+    $(document).ready(function(){
+        $("#jquery_jplayer_1").jPlayer({
+            ready: function () {
+                $(this).jPlayer("setMedia", {
+                    mp3: "http://127.0.0.1:8000/media/files/Emancipator_-_With_Rainy_Eyes_MP3WRAP.mp3",
+                });
+            },
+            swfPath: "static/api/swf/",
+            supplied: "mp3"
+        });
+    });
+}
+
+PlaybackCtrl.resolve = {
+    
 }
 
 function YouTuneFileCtrl($scope) {

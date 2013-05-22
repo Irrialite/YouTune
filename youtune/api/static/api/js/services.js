@@ -143,27 +143,28 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
         }         
     }])
     .service('logBoxService', ['$rootScope', 'userAccount', function($rootScope, userAccount) {
-        var properties = {};
-        properties.toAnimate = ".loginForm";
-        properties.visible = false;
+        parentObj = this;
+        this.properties = {};
+        this.properties.toAnimate = ".loginForm";
+        this.properties.visible = false;
 
         this.display = function(arg, arg2) {
             //animate appropriate window
-            properties.visible ? $(properties.toAnimate).fadeOut("slow") : $(properties.toAnimate).css('visibility', 'visible').hide().fadeIn("slow");
-            properties.visible = !properties.visible;
+            parentObj.properties.visible ? $(parentObj.properties.toAnimate).fadeOut("slow") : $(parentObj.properties.toAnimate).css('visibility', 'visible').hide().fadeIn("slow");
+            parentObj.properties.visible = !parentObj.properties.visible;
 
             //hide/show appropriate window
             if(userAccount.properties.loggedIn || arg){
                 //alert("loged in");
                 $(".loggedForm").css('visibility','visible');
                 $(".loginForm").css('visibility','hidden');
-                properties.toAnimate=".loggedForm";
+                parentObj.properties.toAnimate=".loggedForm";
             }
             else{
                 //alert("loged out");
                 $(".loggedForm").css('visibility','hidden');
                 $(".loginForm").css('visibility','visible');
-                properties.toAnimate=".loginForm";
+                parentObj.properties.toAnimate=".loginForm";
             }
 
 

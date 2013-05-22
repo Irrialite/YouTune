@@ -27,6 +27,11 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
                 controller: ChannelCtrl,
                 resolve: ChannelCtrl.resolve
             })
+            .when('/listen/:id', {
+                templateUrl: '/static/api/templates/playback.html',
+                controller: PlaybackCtrl,
+                //resolve:
+            })
             .otherwise({redirectTo: '/'});
     }]);
 

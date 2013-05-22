@@ -210,3 +210,5 @@ FACEBOOK_APP_SECRET = ''  # Add your app secret key
 FACEBOOK_SCOPE = 'email'  # You may add additional parameters
 FACEBOOK_LOGIN_REDIRECT = '/'  # Redirects here after login
 FACEBOOK_ERROR_REDIRECT = '/'  # Redirects here if user is not connected
+
+SWF_FILES = os.path.join(settings_dir, 'api', 'static', 'api', 'swf')

@@ -8,6 +8,7 @@ function YouTuneCtrl($scope, $http, $cookies, apiCall, userAccount, userSettings
     
     $scope.userAccount = userAccount;
     $scope.userSettings = userSettings;
+    $scope.logBoxService = logBoxService;
 
     //if (res)
       //  userAccount.wasAlreadyLoggedIn(res);
@@ -93,8 +94,19 @@ function YouTuneLoginWindowCtrl($scope, $location, logBoxService) {
     
     $scope.goSettings = function() {
         $location.path("user/" + ($scope.userAccount.properties.loggedIn ? $scope.userAccount.properties.resource.username:"") + "/settings");
-        logBoxService.display("arg"); //temp
+        //logBoxService.display("arg"); //temp
     }
+
+    //todo: [] $scope.logBoxService.properties not found
+    $(document).click(function(){
+        /*
+        if($scope.userAccount.properties.loggedIn && $scope.logBoxService.properties.visible){
+            logBoxService.display();
+            //$("#settings").stopPropagation(); //maybe ?
+        }
+        */
+    });
+
 }
 
 function YouTuneUploadDelete($scope, $routeParams) {
@@ -125,12 +137,7 @@ function SettingsCtrl($scope, userSettings) {
 
 function YouTuneFileCtrl($scope) {
     //todo:[] do magic
-
 }
-
-
-
-
 
 
 

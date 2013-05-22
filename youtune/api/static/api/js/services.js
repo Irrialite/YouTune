@@ -110,28 +110,30 @@ angular.module('youtuneServices', ['ngResource'])
         }
         
     }])
+    //todo: [] used to be var properties, now I want to access them from controller,
     .service('logBoxService', ['$rootScope', 'userAccount', function($rootScope, userAccount) {
-        var properties = {};
-        properties.toAnimate = ".loginForm";
-        properties.visible = false;
+        this.properties = {};
+        this.properties.toAnimate = ".loginForm";
+        this.properties.visible = false;
 
         this.display = function(arg, arg2) {
             //animate appropriate window
-            properties.visible ? $(properties.toAnimate).fadeOut("slow") : $(properties.toAnimate).css('visibility', 'visible').hide().fadeIn("slow");
-            properties.visible = !properties.visible;
+            console.log(this); //test
+            this.properties.visible ? $(this.properties.toAnimate).fadeOut("slow") : $(this.properties.toAnimate).css('visibility', 'visible').hide().fadeIn("slow");
+            this.properties.visible = !(this.properties.visible);
 
             //hide/show appropriate window
             if(userAccount.properties.loggedIn || arg){
                 //alert("loged in");
                 $(".loggedForm").css('visibility','visible');
                 $(".loginForm").css('visibility','hidden');
-                properties.toAnimate=".loggedForm";
+                this.properties.toAnimate=".loggedForm";
             }
             else{
                 //alert("loged out");
                 $(".loggedForm").css('visibility','hidden');
                 $(".loginForm").css('visibility','visible');
-                properties.toAnimate=".loginForm";
+                this.properties.toAnimate=".loginForm";
             }
 
 

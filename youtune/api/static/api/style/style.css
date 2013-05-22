@@ -219,6 +219,7 @@ textarea {
 .basicPic{
     height: 128px;
     width: 128px;
+    float: left;
 }
 .title{
     color: #ffffff;

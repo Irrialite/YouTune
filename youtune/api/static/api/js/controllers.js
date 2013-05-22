@@ -84,16 +84,17 @@ function YouTuneLoginWindowCtrl($scope, $location, logBoxService) {
     
     $scope.goChannel = function() {
         $location.path("user/" + ($scope.userAccount.properties.loggedIn ? $scope.userAccount.properties.resource.username:""));
-        //logBoxService.display("arg"); //temp
+        logBoxService.display();
     }
     
     $scope.goUpload = function() {
         $location.path("upload");
+        logBoxService.display();
     }
     
     $scope.goSettings = function() {
         $location.path("user/" + ($scope.userAccount.properties.loggedIn ? $scope.userAccount.properties.resource.username:"") + "/settings");
-        logBoxService.display("arg"); //temp
+        logBoxService.display();
     }
 }
 
@@ -116,7 +117,7 @@ function SettingsCtrl($scope, userSettings) {
     };
     
     $scope.saveChanges = function() {
-        // iterate over changes in userSetings service then clear them
+        // iterate over changes in userSettings service then clear them
     }
 }
 

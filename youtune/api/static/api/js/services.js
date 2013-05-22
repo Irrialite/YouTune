@@ -184,11 +184,8 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
             name: "Avatar",
             template: "/static/api/templates/partial/settings_avatar.html",
         };
-        this.settings.test = {
-            name: "Ulalala",
-            template: "/static/api/templates/partial/settings_avatar.html",
-        };
-        this.settings.groups = [this.settings.general, this.settings.avatar, this.settings.test];
+
+        this.settings.groups = [this.settings.general, this.settings.avatar];
         this.settings.selectedGroup = this.settings.general;
         this.settings.changes = {};
         this.settings.changes.general = {};

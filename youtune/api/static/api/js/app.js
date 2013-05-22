@@ -4,7 +4,6 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
         $routeProvider
             .when('/', {
                 templateUrl: '/static/api/templates/index.html',
-                controller: YouTuneLoginWindowCtrl, 
                 resolve: {
                     res: function ($q, $route, $timeout, apiCall) {
                         var deferred = $q.defer();

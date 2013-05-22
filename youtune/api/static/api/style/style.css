@@ -228,8 +228,9 @@ textarea {
     left: 25%;
     width: 75%;
     height: 5em;
-    padding: 1em;
+    padding: 0.98em;
     z-index: -2;
+    border-bottom:1px solid #cac9c9;
 }
 .save{
     position: absolute;

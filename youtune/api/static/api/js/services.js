@@ -103,7 +103,6 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
         }
         
         this.getAvatarStyle = function() {
-            console.log(arguments.length);
             if (arguments.length == 1)
             {
                 if (this.properties.resource != undefined)
@@ -190,7 +189,7 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
             template: "/static/api/templates/partial/settings_avatar.html",
         };
         this.settings.groups = [this.settings.general, this.settings.avatar, this.settings.test];
-        this.settings.selectedGroup = undefined;
+        this.settings.selectedGroup = this.settings.general;
         this.settings.changes = {};
         this.settings.changes.general = {};
         this.settings.changes.avatar = {};

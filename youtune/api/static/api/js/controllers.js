@@ -120,7 +120,6 @@ function SettingsCtrl($scope, userSettings) {
     }
 }
 
-<<<<<<< HEAD
 function ChannelCtrl($scope, $routeParams, userRes)
 {
     $scope.user = userRes;
@@ -141,24 +140,11 @@ ChannelCtrl.resolve = {
     }
 }
 
-=======
-
-
-
 function YouTuneFileCtrl($scope) {
     //todo:[] do magic
 
 }
 
-
-
-
-
-
-
-
-
->>>>>>> remotes/WorkingRepo/master
 //TODO: [x] create function/service that returns number of days in applied month
 // fix: [x] yearCtrl, daysCtrl
 // fix: [x] update choice in month,year

@@ -57,6 +57,7 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
                     parentObj.properties.incorrectLoginInfo = false;
                 }, 3000); 
             });
+
         };
         this.logOut = function() {
             apiCall.get({
@@ -184,7 +185,11 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
             name: "Avatar",
             template: "/static/api/templates/partial/settings_avatar.html",
         };
-        this.settings.groups = [this.settings.general, this.settings.avatar];
+        this.settings.test = {
+            name: "Ulalala",
+            template: "/static/api/templates/partial/settings_avatar.html",
+        };
+        this.settings.groups = [this.settings.general, this.settings.avatar, this.settings.test];
         this.settings.selectedGroup = undefined;
         this.settings.changes = {};
         this.settings.changes.general = {};

@@ -84,6 +84,7 @@ function YouTuneLoginWindowCtrl($scope, $location, logBoxService) {
     
     $scope.goChannel = function() {
         $location.path("user/" + ($scope.userAccount.properties.loggedIn ? $scope.userAccount.properties.resource.username:""));
+        //logBoxService.display("arg"); //temp
     }
     
     $scope.goUpload = function() {
@@ -92,6 +93,7 @@ function YouTuneLoginWindowCtrl($scope, $location, logBoxService) {
     
     $scope.goSettings = function() {
         $location.path("user/" + ($scope.userAccount.properties.loggedIn ? $scope.userAccount.properties.resource.username:"") + "/settings");
+        logBoxService.display("arg"); //temp
     }
 }
 
@@ -118,6 +120,7 @@ function SettingsCtrl($scope, userSettings) {
     }
 }
 
+<<<<<<< HEAD
 function ChannelCtrl($scope, $routeParams, userRes)
 {
     $scope.user = userRes;
@@ -138,11 +141,27 @@ ChannelCtrl.resolve = {
     }
 }
 
+=======
+
+
+
+function YouTuneFileCtrl($scope) {
+    //todo:[] do magic
+
+}
+
+
+
+
+
+
+
+
+
+>>>>>>> remotes/WorkingRepo/master
 //TODO: [x] create function/service that returns number of days in applied month
 // fix: [x] yearCtrl, daysCtrl
 // fix: [x] update choice in month,year
-
-
 var year=0;
 var month=0;
 var day=0;

@@ -118,6 +118,26 @@ function SettingsCtrl($scope, userSettings) {
     }
 }
 
+function ChannelCtrl($scope, $routeParams, userRes)
+{
+    $scope.user = userRes;
+}
+
+ChannelCtrl.resolve = {
+    userRes: function ($q, $route, $timeout, apiCall) {
+        var deferred = $q.defer();
+        var successCb = function(result) {
+            deferred.resolve(result.objects[0]);
+        };
+        apiCall.get({
+            type: 'userprofile',
+            username: $route.current.params.name,
+        }, successCb);
+        
+        return deferred.promise;
+    }
+}
+
 //TODO: [x] create function/service that returns number of days in applied month
 // fix: [x] yearCtrl, daysCtrl
 // fix: [x] update choice in month,year

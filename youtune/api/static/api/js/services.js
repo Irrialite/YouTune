@@ -1,4 +1,4 @@
-angular.module('youtuneServices', ['ngResource'])
+angular.module('youtuneServices', ['ngResource', 'ngCookies'])
     .factory('apiCall', function($http, $resource) {
         delete $http.defaults.headers.common['X-Requested-With'];
         
@@ -29,12 +29,11 @@ angular.module('youtuneServices', ['ngResource'])
                 username: user.name,
                 password: user.pw,
             }, function(data) {
-                apiCall.post({
+                apiCall.get({
                     type: 'userprofile',
-                    id: 'checkfordupe',
-                    username: user.name
+                    id: 'loggedin',
                 }, function(data) {
-                    if (data.success == false)
+                    if (data.success == true)
                     {
                         apiCall.get({
                             type: 'userprofile',
@@ -68,7 +67,6 @@ angular.module('youtuneServices', ['ngResource'])
             this.properties.sessionid = undefined;
             this.properties.resource = undefined;
             $location.path('');
-            $rootScope.$broadcast('userAccount::successLogin', this.properties.loggedIn);
         };
         this.register = function(registerUser) {
             parentObj = this;
@@ -81,7 +79,6 @@ angular.module('youtuneServices', ['ngResource'])
                 last_name: registerUser.lastname,
                 birthdate: registerUser.birthdate,
                 gender: registerUser.gender,
-                avatar: 'http://gravatar.com/avatar/14c12d6119e8e84cbc980af600b3586a?s=128',
                 id: null,
             }, function(data) {
                 parentObj.logIn({name: registerUser.name, pw: registerUser.pw});
@@ -89,7 +86,9 @@ angular.module('youtuneServices', ['ngResource'])
             });
         };
              
-        this.simpleSessionCheck = function() {
+        this.simpleSessionCheck = function(scope) {
+            console.log(this.properties.sessionid);
+            console.log(scope);
             if (this.properties.sessionid != $cookies.sessionid)
                 return true;
             return false;
@@ -103,10 +102,48 @@ angular.module('youtuneServices', ['ngResource'])
         }
         
         this.getAvatarStyle = function() {
-            if (this.properties.resource != undefined)
-                return { "background-image" : "url('" + this.properties.resource.avatar + "')" };
+            console.log(arguments.length);
+            if (arguments.length == 1)
+            {
+                if (this.properties.resource != undefined)
+                    return { "background-image" : "url('" + this.properties.resource.avatar + "?s=" + arguments[0] + "')" };
+            }
+            else if (arguments.length == 2)
+                return { "background-image" : "url('" + arguments[1] + "?s=" + arguments[0] + "')" };
             return { "background-image" : "url('" + "')" };
         }
+        
+        /*
+        this.initUser = function (scope) {
+            console.log('aaa');
+            if (this.simpleSessionCheck(scope))
+            {
+                console.log('aaa2');
+                apiCall.get({
+                    type: 'userprofile',
+                    id: 'loggedin',
+                }, function (data) {
+                    if (data.success == true) {
+                        apiCall.get({
+                            type: 'userprofile',
+                            id: data.id
+                        }, function(success) {
+                            parentObj.properties.sessionid = $cookies.sessionid;
+                            parentObj.properties.loggedIn = true;
+                            parentObj.properties.incorrectLoginInfo = false;
+                            parentObj.properties.resource = success;
+                        });
+                    }
+                    else {
+                        this.properties.loggedIn = false;
+                        this.properties.sessionid = undefined;
+                        this.properties.resource = undefined;
+                        $location.path('');
+                    }
+                });
+            }
+        } 
+        */
         
     }])
     .service('logBoxService', ['$rootScope', 'userAccount', function($rootScope, userAccount) {

@@ -1,4 +1,5 @@
 from datetime import date, datetime
+import hashlib
 
 from django.contrib.auth import authenticate, login, logout, models as auth_models
 from django.contrib.auth.hashers import make_password
@@ -7,6 +8,7 @@ from django.conf.urls import url
 from tastypie import resources, fields
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
+from tastypie.constants import ALL
 from tastypie.utils import trailing_slash
 from tastypie.http import HttpUnauthorized, HttpForbidden
 
@@ -26,6 +28,9 @@ class UserProfileResource(resources.ModelResource):
         authentication = Authentication()
         authorization = Authorization()
         # excludes = ['email', 'is_staff', 'is_superuser']
+        filtering = {
+            'username': ALL
+        }
 
     def dehydrate_password(self, bundle):
         return ''
@@ -100,9 +105,11 @@ class UserProfileResource(resources.ModelResource):
             birthdate = date(year=int(birthdate[0]), month=int(
                 birthdate[1]), day=int(birthdate[2]))
             bundle.data['birthdate'] = birthdate
+        bundle.data['avatar'] = "http://www.gravatar.com/avatar/" + hashlib.md5(bundle.data['email'].lower()).hexdigest();
         return bundle
 
     def loggedin(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
         if request.user.is_authenticated():
             return self.create_response(request, {
                 'success': True,

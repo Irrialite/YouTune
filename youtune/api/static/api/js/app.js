@@ -27,14 +27,34 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
                     }
                 }
             })
-            .when('/details', {templateUrl: '/static/api/templates/details.html'})
-            .when('/register', {templateUrl: '/static/api/templates/registration.html'})
-            .when('/upload', {templateUrl: '/static/api/templates/upload.html'})
-            .when('/upload/delete/:id', {templateUrl: '/static/api/templates/upload_delete.html', controller: YouTuneUploadDelete})
-            .when('/user/:name/settings', {templateUrl: '/static/api/templates/settings.html', controller: SettingsCtrl})
-
-            // TODO: [ ] fix /chanel/test to a regexp path
-            .when('/user/:name', {templateUrl: '/static/api/templates/channel.html'})
-
+            .when('/details', {
+                templateUrl: '/static/api/templates/details.html'
+            })
+            .when('/register', {
+                templateUrl: '/static/api/templates/registration.html'
+            })
+            .when('/upload', {
+                templateUrl: '/static/api/templates/upload.html'
+            })
+            .when('/upload/delete/:id', {
+                templateUrl: '/static/api/templates/upload_delete.html', 
+                controller: YouTuneUploadDelete
+            })
+            .when('/user/:name/settings', {
+                templateUrl: '/static/api/templates/settings.html', 
+                controller: SettingsCtrl
+            })
+            .when('/user/:name', {
+                templateUrl: '/static/api/templates/channel.html', 
+                controller: ChannelCtrl,
+                resolve: ChannelCtrl.resolve
+            })
             .otherwise({redirectTo: '/'});
     }]);
+/*
+app.run(function($rootScope, userAccount) {
+    $rootScope.$on('$routeChangeSuccess', function () {
+        userAccount.initUser($rootScope);
+    });
+})
+*/

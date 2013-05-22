@@ -113,12 +113,10 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
             return { "background-image" : "url('" + "')" };
         }
         
-        /*
-        this.initUser = function (scope) {
-            console.log('aaa');
-            if (this.simpleSessionCheck(scope))
+        this.initUser = function () {
+            parentObj = this;
+            if (!this.properties.loggedIn)
             {
-                console.log('aaa2');
                 apiCall.get({
                     type: 'userprofile',
                     id: 'loggedin',
@@ -135,16 +133,14 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
                         });
                     }
                     else {
-                        this.properties.loggedIn = false;
-                        this.properties.sessionid = undefined;
-                        this.properties.resource = undefined;
+                        parentObj.properties.loggedIn = false;
+                        parentObj.properties.sessionid = undefined;
+                        parentObj.properties.resource = undefined;
                         $location.path('');
                     }
                 });
             }
-        } 
-        */
-        
+        }         
     }])
     .service('logBoxService', ['$rootScope', 'userAccount', function($rootScope, userAccount) {
         var properties = {};

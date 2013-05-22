@@ -4,27 +4,6 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
         $routeProvider
             .when('/', {
                 templateUrl: '/static/api/templates/index.html',
-                resolve: {
-                    res: function ($q, $route, $timeout, apiCall) {
-                        var deferred = $q.defer();
-                        var successCb = function(result) {
-                            if (angular.equals(result, [])) {
-                                deferred.reject("test");
-                            }
-                            else {
-                                deferred.resolve(result);
-                            }
-                        };
-                        $timeout(function () {
-                            apiCall.get({
-                                type: 'userprofile',
-                                id: 'loggedin',
-                            }, successCb);
-                        }, 2000);
-                        
-                        return deferred.promise;
-                    }
-                }
             })
             .when('/details', {
                 templateUrl: '/static/api/templates/details.html'
@@ -50,10 +29,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
             })
             .otherwise({redirectTo: '/'});
     }]);
-/*
+
 app.run(function($rootScope, userAccount) {
-    $rootScope.$on('$routeChangeSuccess', function () {
-        userAccount.initUser($rootScope);
-    });
+    userAccount.initUser();
 })
-*/

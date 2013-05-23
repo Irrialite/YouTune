@@ -1,3 +1,16 @@
+
+/* ------OVERALL-------- */
+body{
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+textarea {
+    height: 175px;
+    width: 100%;
+    resize: none;
+}
+
+
 /* ------TOP AREA-------- */
 #searchBar{
     position: relative;
@@ -200,11 +213,6 @@ a:hover{
 .padtop {
    padding-top: 5px;
 }
-textarea {
-    height: 175px;
-    width: 100%;
-    resize: none;
-}
 .stuff{
     background-color: #ffffff;
     height: 100%;
@@ -239,7 +247,47 @@ textarea {
     top: 6em;
     z-index: -1;
 }
-body{
-    overflow-y: scroll;
-    overflow-x: hidden;
+#introduction{
+   /* background-color: tomato;*/
 }
+
+/* ------MAIN PAGE-------- */
+.module{
+    background-color: #0077b3;
+    text-align: center;
+}
+.topFive{
+    display: inline-block;
+    margin-right: 10em;
+}
+.songList{
+    display: inline-block;
+
+}
+.mainTxt{
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+
+/* ------PLAYBACK PAGE-------- */
+.center{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+.suggest{
+    display: inline-block;
+    right: 3em;
+    top: 6em;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+}
+.likeBtn{
+    padding-right: 13em;
+}
+
+
+
+

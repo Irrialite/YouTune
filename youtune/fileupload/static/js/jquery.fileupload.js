@@ -442,7 +442,8 @@
                 options.url = options.form.prop('action') || location.href;
             }
             // Django fix
-            options.url = location.origin + '/upload/new/';
+            options.url = "http://" + location.host + '/upload/new/';
+            console.log(options.url);
             // The HTTP request method must be "POST" or "PUT":
             options.type = (options.type || options.form.prop('method') || '')
                 .toUpperCase();

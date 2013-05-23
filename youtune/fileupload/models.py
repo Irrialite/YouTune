@@ -36,10 +36,8 @@ class File(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.upload_date:
-            print "ok"
             self.upload_date = timezone.now()
         if not self.slug:
-            print "ok2"
             self.slug = self.file.name
         super(File, self).save(*args, **kwargs)
 

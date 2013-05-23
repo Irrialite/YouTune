@@ -5,20 +5,24 @@
     <ul class="topFive">
         <h3>Top 5</h3>
         <li ng-repeat="track in tracks" class="mainList">
-            <img />
-            <a href="#/listen/{{track.base64id}}" class="a mainTxt">{{track.artist}} - {{track.title}}</a>
+            <p class="fieldLimit">
+                <img />
+                <a href="#/listen/{{track.base64id}}" class="a mainTxt">{{track.artist}} - {{track.title}}</a>
+            </p>
         </li>
     </ul>
 
     <ul class="songList">
         <h3>Popular 5</h3>
         <li ng-repeat="track in tracks">
-            <img />
-            <a href="#/listen/{{track.base64id}}" class="a mainTxt">{{track.artist}} - {{track.title}}</a>
+            <p class="fieldLimit">
+                <img />
+                <a href="#/listen/{{track.base64id}}" class="a mainTxt">{{track.artist}} - {{track.title}}</a>
+            </p>
         </li>
     </ul>
 
-    <button ng-show="hasMore" ng-click="loadMore()">Load More</button>
+    <button ng-show="hasMore" ng-click="loadMore()" class="loadMore">Load More</button>
 
 
 </div>

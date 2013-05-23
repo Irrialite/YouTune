@@ -1,5 +1,9 @@
-﻿
-
+﻿<ul>
+    <li ng-repeat="track in tracks">
+        <a href="#/listen/{{track.base64id}}">{{track.artist}} - {{track.title}}</a>
+    </li>
+<ul>          
+<button ng-show="hasMore" ng-click="loadMore()">Load More</button>
 <!--
  #TODO: [] get data and bind it
  #this is the search results area

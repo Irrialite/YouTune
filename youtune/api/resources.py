@@ -1,5 +1,5 @@
 from datetime import date, datetime
-import hashlib
+import hashlib, inspect
 
 from django.contrib.auth import authenticate, login, logout, models as auth_models
 from django.contrib.auth.hashers import make_password
@@ -15,6 +15,7 @@ from tastypie.http import HttpUnauthorized, HttpForbidden
 from youtune.account import models, forms
 from youtune.api.helpers import FieldsValidation
 from youtune.api.authorization import UserObjectsOnlyAuthorization
+from youtune.fileupload import models as file_models
 
 
 class UserProfileResource(resources.ModelResource):
@@ -138,7 +139,64 @@ class UserProfileResource(resources.ModelResource):
                 'success': False,
                 'id': user.id,
             })
+            
+class FileResource(resources.ModelResource):
 
+    class Meta:
+        allowed_methods = ['get']
+        queryset = file_models.File.objects.all()
+        resource_name = 'music'
+        filtering = {
+            'base64id': ALL,
+            'upload_date': ALL
+        }
+        
+    def override_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/vote%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('vote'), name="api_vote"),
+        ]    
+
+    # to sort by descending insert '-' (i.e. '-title')
+    def apply_sorting(self, objects, options=None):
+        if options:
+            if 'sortby' in options:
+                return objects.order_by(options['sortby'])
+ 
+        return super(FileResource, self).apply_sorting(objects, options)
+        
+    def vote(self, request, **kwargs):
+        self.method_check(request, allowed=['post'])
+        data = self.deserialize(request, request.raw_post_data,
+                                format=request.META.get('CONTENT_TYPE', 'application/json'))
+
+        vote = data.get('vote', '')
+        base64id = data.get('base64id', '')
+        userid = data.get('userid', '')
+        track = None
+        try:
+            track = file_models.File.objects.get(base64id__exact=base64id)
+            user = models.UserProfile.objects.get(pk=userid)
+            if vote == "like":
+                track.likes.add(user)
+            track.votes.add(user)
+        except file_models.File.DoesNotExist, models.UserProfile.DoesNotExist:
+            return self.create_response(request, {
+                'success': False,
+            })
+        else:
+            return self.create_response(request, {
+                'success': True,
+                'dislikes': track.votes.count() - track.likes.count(),
+                'likes': track.likes.count(),
+            })
+            
+    def dehydrate(self, bundle):
+        track = file_models.File.objects.get(pk=bundle.data['id'])
+        bundle.data['likes'] = track.likes.count()        
+        bundle.data['dislikes'] = track.votes.count() - track.likes.count()
+        return bundle
 
 class UserValidation(FieldsValidation):
 

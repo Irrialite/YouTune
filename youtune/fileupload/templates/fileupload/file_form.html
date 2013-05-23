@@ -6,8 +6,11 @@
 <div class="box">
 
     <h1>Share your masterpiece</h1>
-
     <form id="fileupload" method="post" action="." enctype="multipart/form-data">{% csrf_token %}
+        {{form.title.label_tag}}
+        {{form.title}}
+        {{form.artist.label_tag}}
+        {{form.artist}}
         <div class="row fileupload-buttonbar">
             <div class="span7">
 
@@ -43,7 +46,6 @@
             </div>
 
         </div>
-        <div class="fileupload-loading">aalallalala</div>
 
 
         <table class="table tunes">

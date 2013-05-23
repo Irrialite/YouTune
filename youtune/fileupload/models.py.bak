@@ -1,0 +1,27 @@
+from django.db import models
+
+from youtune.account import models as account_models
+
+class File(models.Model):
+
+    file = models.FileField(upload_to="files")
+    slug = models.SlugField(max_length=50, blank=True)
+    base64id = models.CharField(max_length=100)
+    tags = models.TextField()
+    genres = models.TextField()
+    artist = models.TextField()
+    title = models.TextField()
+    album = models.TextField()
+    year = models.IntegerField()
+    owner = models.ForeignKey(account_models.UserProfile)
+
+    def __unicode__(self):
+        return self.file.name
+
+    def save(self, *args, **kwargs):
+        self.slug = self.file.name
+        super(File, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.file.delete(False)
+        super(File, self).delete(*args, **kwargs)

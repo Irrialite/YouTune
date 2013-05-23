@@ -25,8 +25,8 @@ class UserProfile(auth_models.User):
     language = fields.LanguageField(verbose_name=u'language')
     avatar = django_models.CharField(max_length=200);
 
-    def __unicode__(self):
-        return u'%s' % (self)
+    #def __unicode__(self):
+        #return u'%s' % (self)
 
     def get_full_name(self):
         """Returns the users first and last names, separated by a space.

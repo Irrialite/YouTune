@@ -4,6 +4,8 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
         $routeProvider
             .when('/', {
                 templateUrl: '/static/api/templates/index.html',
+                controller: IndexCtrl,
+                resolve: IndexCtrl.resolve
             })
             .when('/details', {
                 templateUrl: '/static/api/templates/details.html'
@@ -12,7 +14,8 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
                 templateUrl: '/static/api/templates/registration.html'
             })
             .when('/upload', {
-                templateUrl: '/static/api/templates/upload.html'
+                templateUrl: '/static/api/templates/upload.html',
+                controller: YouTuneUploadCtrl
             })
             .when('/upload/delete/:id', {
                 templateUrl: '/static/api/templates/upload_delete.html', 
@@ -30,7 +33,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
             .when('/listen/:id', {
                 templateUrl: '/static/api/templates/playback.html',
                 controller: PlaybackCtrl,
-                //resolve:
+                resolve: PlaybackCtrl.resolve
             })
             .otherwise({redirectTo: '/'});
     }]);

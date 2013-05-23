@@ -1,11 +1,16 @@
-from youtune.fileupload.models import File
-from django.views.generic import CreateView, DeleteView
+import base64
 
+from django.views.generic import CreateView, DeleteView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson
 from django.core.urlresolvers import reverse
-
 from django.conf import settings
+
+from youtune.fileupload.forms import FileForm
+from youtune.fileupload.models import File
+
+prime = 184487440737653
+prime2 = 186487440738019
 
 def response_mimetype(request):
     if "application/json" in request.META['HTTP_ACCEPT']:
@@ -15,9 +20,18 @@ def response_mimetype(request):
 
 class FileCreateView(CreateView):
     model = File
-
+    form_class = FileForm
+    
+    def get_form_kwargs(self, **kwargs):
+        # pass "user" keyword argument with the current user to your form
+        kwargs = super(FileCreateView, self).get_form_kwargs(**kwargs)
+        kwargs.update( {'owner' : self.request.user } )
+        return kwargs
+    
     def form_valid(self, form):
         self.object = form.save()
+        self.object.base64id = base64.b64encode(str(self.object.id * prime % prime2))
+        self.object.save(update_fields=['base64id'])
         f = self.request.FILES.get('file')
         data = [{'name': f.name, 'url': settings.MEDIA_URL + "files/" + f.name.replace(" ", "_"), 'thumbnail_url': settings.MEDIA_URL + "files/" + f.name.replace(" ", "_"), 'delete_url': reverse('upload-delete', args=[self.object.id]), 'delete_type': "DELETE"}]
         response = JSONResponse(data, {}, response_mimetype(self.request))

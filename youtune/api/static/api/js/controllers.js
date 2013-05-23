@@ -39,14 +39,6 @@ function YouTuneCtrl($scope, $http, $cookies, apiCall, userAccount, userSettings
         userAccount.logOut();
         logBoxService.display();
     };
-    
-    $scope.isLoggedInCheck = function() {
-        userAccount.getLoggedIn();
-    }
-    
-    $scope.avatarStyle = function() {
-        return userAccount.getAvatarStyle();
-    }   
 }
 
 function YouTuneRegisterCtrl($scope, $location, userAccount, apiCall) {
@@ -99,10 +91,14 @@ function YouTuneLoginWindowCtrl($scope, $location, logBoxService) {
     
     $(document).click(function() {
         if(logBoxService.properties.visible){
-            logBoxService.display();
+            //logBoxService.display();
             //$("#settings").stopPropagation(); //maybe ?
         }
     });
+}
+
+function YouTuneUploadCtrl($scope) {
+    
 }
 
 function YouTuneUploadDelete($scope, $routeParams) {
@@ -131,6 +127,8 @@ function SettingsCtrl($scope, userSettings) {
 function ChannelCtrl($scope, $routeParams, userRes)
 {
     $scope.user = userRes;
+    
+    // check here if userRes != null etc
 }
 
 ChannelCtrl.resolve = {
@@ -148,33 +146,106 @@ ChannelCtrl.resolve = {
     }
 }
 
-function PlaybackCtrl($scope, $routeParams)
+function IndexCtrl($scope, tracksRes, apiCall)
 {
+    $scope.increment = 1; // controls how many it will load per click
+    $scope.hasMore = false;
+    $scope.tracks = tracksRes;
+    $scope.offset = $scope.increment;
+    if (tracksRes.length > $scope.increment)
+    {
+        $scope.hasMore = true;
+        $scope.tracks = tracksRes.splice(0, $scope.increment);
+    }
+    
+    $scope.loadMore = function() {
+        apiCall.get({
+            type: 'music',
+            sortby: '-upload_date',
+            offset: $scope.offset,
+            limit: $scope.increment + 1,
+        }, function(success) {
+            if (success.objects.length > $scope.increment)
+                $scope.hasMore = true;
+            else
+                $scope.hasMore = false;
+            var extraTracks = success.objects.splice(0, $scope.increment)
+            for (var i = 0; i < extraTracks.length; i++ )
+                $scope.tracks.push(extraTracks[i]);
+            $scope.offset = $scope.offset + $scope.increment;
+        });
+    }
+    
+}
+
+IndexCtrl.resolve = {
+    tracksRes: function ($q, $route, $timeout, apiCall) {
+        var deferred = $q.defer();
+        var successCb = function(result) {
+            deferred.resolve(result.objects);
+        };
+        apiCall.get({
+            type: 'music',
+            sortby: '-upload_date',
+            limit: 2,
+        }, successCb);
+        
+        return deferred.promise;
+    }
+}
+
+function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount)
+{
+    $scope.track = trackRes;
+    $scope.track.fulltitle = trackRes.artist + " - " + trackRes.title;
+    
+    // check here if musicRes != null etc
+    
     $(document).ready(function(){
         $("#jquery_jplayer_1").jPlayer({
             ready: function () {
                 $(this).jPlayer("setMedia", {
-                    mp3: "http://127.0.0.1:8000/media/files/Emancipator_-_With_Rainy_Eyes_MP3WRAP.mp3",
-                });
+                    mp3: "http://127.0.0.1:8000" + trackRes.file,
+                }).jPlayer("play"); // Attempts to Auto-Play the media
             },
             swfPath: "static/api/swf/",
-            supplied: "mp3"
+            solution: "flash, html",
+            supplied: "mp3",
+            volume: 0.2
         });
     });
+    
+    $scope.vote = function(voteType) {
+        apiCall.post({
+            type: 'music',
+            id: 'vote',
+            base64id: $scope.track.base64id,
+            vote: voteType,
+            userid: userAccount.properties.resource.id,
+        }, function(data) {
+            if (data.success) {
+                $scope.track.likes = data.likes;
+                $scope.track.dislikes = data.dislikes;
+            }
+        });
+    }
 }
 
 PlaybackCtrl.resolve = {
-    
+    trackRes: function ($q, $route, $timeout, apiCall) {
+        var deferred = $q.defer();
+        var successCb = function(result) {
+            deferred.resolve(result.objects[0]);
+        };
+        apiCall.get({
+            type: 'music',
+            base64id: $route.current.params.id,
+        }, successCb);
+        
+        return deferred.promise;
+    }
 }
 
-function YouTuneFileCtrl($scope) {
-    //todo:[] do magic
-
-}
-
-//TODO: [x] create function/service that returns number of days in applied month
-// fix: [x] yearCtrl, daysCtrl
-// fix: [x] update choice in month,year
 var year=0;
 var month=0;
 var day=0;

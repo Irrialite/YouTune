@@ -197,6 +197,32 @@ class FileResource(resources.ModelResource):
         bundle.data['likes'] = track.likes.count()        
         bundle.data['dislikes'] = track.votes.count() - track.likes.count()
         return bundle
+        
+    def obj_get_list(self, bundle, **kwargs):
+        """
+        A ORM-specific implementation of ``obj_get_list``.
+
+        Takes an optional ``request`` object, whose ``GET`` dictionary can be
+        used to narrow the query.
+        """
+        filters = {}
+        if hasattr(bundle.request, 'GET'):
+            # Grab a mutable copy.
+            filters = bundle.request.GET.copy()
+
+        # Update with the provided kwargs.
+        filters.update(kwargs)
+        applicable_filters = self.build_filters(filters=filters)
+
+        try:
+            objects = self.apply_filters(bundle.request, applicable_filters)
+            if len(objects) == 1 and applicable_filters:
+                obj = objects[0]
+                obj.views = obj.views + 1
+                obj.save(update_fields=['views'])
+            return self.authorized_read_list(objects, bundle)
+        except ValueError:
+            raise BadRequest("Invalid resource lookup data provided (mismatched type).") 
 
 class UserValidation(FieldsValidation):
 

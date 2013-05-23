@@ -25,6 +25,7 @@ class File(models.Model):
     
     votes = models.ManyToManyField(account_models.UserProfile, blank=True, related_name='votes')
     likes = models.ManyToManyField(account_models.UserProfile, blank=True, related_name='likes')
+    views = models.BigIntegerField(blank=True)
     
     upload_date = models.DateTimeField(blank=True)
     
@@ -39,6 +40,8 @@ class File(models.Model):
             self.upload_date = timezone.now()
         if not self.slug:
             self.slug = self.file.name
+        if not self.views:
+            self.views = 0
         super(File, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):

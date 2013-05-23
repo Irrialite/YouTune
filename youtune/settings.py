@@ -212,3 +212,6 @@ FACEBOOK_LOGIN_REDIRECT = '/'  # Redirects here after login
 FACEBOOK_ERROR_REDIRECT = '/'  # Redirects here if user is not connected
 
 SWF_FILES = os.path.join(settings_dir, 'api', 'static', 'api', 'swf')
+
+LASTFM_API_KEY = '75b81d7dcc20ff4a64bfbd86300f14e2'
+LASTFM_API_URL = 'http://ws.audioscrobbler.com/2.0/'

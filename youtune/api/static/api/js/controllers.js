@@ -197,23 +197,28 @@ IndexCtrl.resolve = {
 function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount)
 {
     $scope.track = trackRes;
-    $scope.track.fulltitle = trackRes.artist + " - " + trackRes.title;
     
     // check here if musicRes != null etc
-    
-    $(document).ready(function(){
-        $("#jquery_jplayer_1").jPlayer({
-            ready: function () {
-                $(this).jPlayer("setMedia", {
-                    mp3: "http://127.0.0.1:8000" + trackRes.file,
-                }).jPlayer("play"); // Attempts to Auto-Play the media
-            },
-            swfPath: "static/api/swf/",
-            solution: "flash, html",
-            supplied: "mp3",
-            volume: 0.2
+    if ($scope.track)
+    {
+        $scope.track.fulltitle = trackRes.artist + " - " + trackRes.title;
+        $scope.playbackPage = '/static/api/templates/partial/playback.html'
+        $scope.$on('doneRender', function(){
+            $("#jquery_jplayer_1").jPlayer({
+                ready: function () {
+                    $(this).jPlayer("setMedia", {
+                        mp3: "http://127.0.0.1:8000" + trackRes.file,
+                    }).jPlayer("play"); // Attempts to Auto-Play the media
+                },
+                swfPath: "static/api/swf/",
+                solution: "flash, html",
+                supplied: "mp3",
+                volume: 0.2
+            });
         });
-    });
+    }
+    else
+        $scope.playbackPage = '/static/api/templates/partial/file_not_exist.html'
     
     $scope.vote = function(voteType) {
         apiCall.post({
@@ -235,6 +240,9 @@ PlaybackCtrl.resolve = {
     trackRes: function ($q, $route, $timeout, apiCall) {
         var deferred = $q.defer();
         var successCb = function(result) {
+            //if (result.objects.length != 1)
+                //console.log(result.status);
+                
             deferred.resolve(result.objects[0]);
         };
         apiCall.get({

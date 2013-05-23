@@ -166,9 +166,6 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
                 $(".loginForm").css('visibility','visible');
                 logBoxServiceObj.properties.toAnimate=".loginForm";
             }
-
-
-
         }
     }])
     .service('userSettings', ['$rootScope', 'apiCall', function($rootScope, apiCall) {

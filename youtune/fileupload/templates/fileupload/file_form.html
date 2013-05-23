@@ -66,9 +66,9 @@
             {% for file in files %}
             <tr>
                 <td class="preview">
-                    <img src="{{ file.file.url }}">
+                    <a href="#/listen/{{ file.base64id }}"><img src="http://userserve-ak.last.fm/serve/126/39644123.jpg" /></>
                 </td>
-                <td class="name">{{ file.slug }}</td>
+                <td class="name"><a href="#/listen/{{ file.base64id }}">{{ file.slug }}</a></td>
                 <td class="delete">
                     <a class="btn btn-danger" href="{{ "#/upload/delete/"|add_string:file.id }}">
                         <i class="icon-trash icon-white"></i>

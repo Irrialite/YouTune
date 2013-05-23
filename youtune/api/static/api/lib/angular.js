@@ -8095,6 +8095,7 @@ function $RootScopeProvider(){
           clearPhase();
           try {
             $rootScope.$digest();
+            $rootScope.$broadcast("doneRender");
           } catch (e) {
             $exceptionHandler(e);
             throw e;

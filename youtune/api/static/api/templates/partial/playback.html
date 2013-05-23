@@ -1,5 +1,16 @@
 <div ng-include="'/static/api/templates/partial/player.html'"></div>
-<button ng-click="vote('like')">Like</button>
-<button ng-click="vote('dislike')">Dislike</button>
+<span class="likeBtn">
+    <button ng-click="vote('like')">Like</button>
+    <button ng-click="vote('dislike')">Dislike</button>
+</span>
 Likes: {{track.likes}}, Dislikes: {{track.dislikes}} <br />
 Views: {{track.views}}
+<aside class="suggest">
+    <h3>Suggestion:</h3>
+    <ul class="songList">
+        <li ng-repeat="track in tracks">
+            <img /><!--todo []add apropriate avatar for this song-->
+            <a href="#/listen/{{track.base64id}}" class="a mainTxt">{{track.artist}} - {{track.title}}</a><!--todo []change this to suggestion audio -->
+        </li>
+    </ul>
+</aside>

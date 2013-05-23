@@ -1,30 +1,25 @@
-﻿<ul>
-    <li ng-repeat="track in tracks">
-        <a href="#/listen/{{track.base64id}}">{{track.artist}} - {{track.title}}</a>
-    </li>
-<ul>          
-<button ng-show="hasMore" ng-click="loadMore()">Load More</button>
-<!--
- #TODO: [] get data and bind it
- #this is the search results area
--->
-<!--
-<aside>
-    <h2>Most popular:</h2>
-    <ul>
-        <li ng-repeat="popular in topMusic.objects">
-            {{popular.title}}
+﻿
+
+<div class="register-form">
+
+    <ul class="topFive">
+        <h3>Top 5</h3>
+        <li ng-repeat="track in tracks" class="mainList">
+            <img />
+            <a href="#/listen/{{track.base64id}}" class="a mainTxt">{{track.artist}} - {{track.title}}</a>
         </li>
     </ul>
-</aside>
+
+    <ul class="songList">
+        <h3>Popular 5</h3>
+        <li ng-repeat="track in tracks">
+            <img />
+            <a href="#/listen/{{track.base64id}}" class="a mainTxt">{{track.artist}} - {{track.title}}</a>
+        </li>
+    </ul>
+
+    <button ng-show="hasMore" ng-click="loadMore()">Load More</button>
 
 
-<section>
-    <article ng-repeat="file in files.objects">
-        <header>{{ file.title }}</header>
-        <p>{{ file.description }}</p>
-    </article>
-</section>
--->
-
+</div>
 

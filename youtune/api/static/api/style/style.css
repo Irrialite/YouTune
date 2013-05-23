@@ -1,3 +1,16 @@
+
+/* ------OVERALL-------- */
+body{
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+textarea {
+    height: 175px;
+    width: 100%;
+    resize: none;
+}
+
+
 /* ------TOP AREA-------- */
 #searchBar{
     position: relative;
@@ -127,7 +140,7 @@
     top: 2em;
     visibility: hidden;
     text-align: center;
-    z-index: 0;
+    z-index: 5;
 }
 a:hover{
     cursor:default;
@@ -200,11 +213,6 @@ a:hover{
 .padtop {
    padding-top: 5px;
 }
-textarea {
-    height: 175px;
-    width: 100%;
-    resize: none;
-}
 .stuff{
     background-color: #ffffff;
     height: 100%;
@@ -237,9 +245,56 @@ textarea {
     position: absolute;
     right: 5%;
     top: 6em;
+    z-index: 0;
+}
+#introduction{
+   /* background-color: tomato;*/
+}
+
+/* ------MAIN PAGE-------- */
+.module{
+    background-color: #0077b3;
+    text-align: center;
+}
+.topFive{
+    display: inline-block;
+    margin-right: 8em;
+}
+.songList{
+    display: inline-block;
+
+}
+.mainTxt{
+    color: #ffffff;
+    text-decoration: underline;
+}
+.fieldLimit{
+    width: 8em;
+}
+
+/* ------PLAYBACK PAGE-------- */
+.center{ /*used globaly, dont change*/
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+.suggest{
+    display: inline-block;
+    right: 0em;
+    top: 4em;
+    position: absolute;
     z-index: -1;
+    background-color: #0077b3;
+    width: 25%;
+    height: 100%;
+    color: #ffffff;
 }
-body{
-    overflow-y: scroll;
-    overflow-x: hidden;
+.likeBtn{
+    padding-right: 13em;
 }
+
+.loadMore{
+    margin-left: 11em;
+}
+
+

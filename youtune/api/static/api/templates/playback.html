@@ -1,5 +1,6 @@
+
   <div id="jquery_jplayer_1" class="jp-jplayer"></div>
-  <div id="jp_container_1" class="jp-audio">
+  <div id="jp_container_1" class="jp-audio center">
     <div class="jp-type-single">
       <div class="jp-gui jp-interface">
         <ul class="jp-controls">
@@ -37,7 +38,22 @@
         To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
       </div>
     </div>
+
+    <button ng-click="vote('like')">Like</button>
+    <button ng-click="vote('dislike')">Dislike</button>
+    Likes: {{track.likes}}, Dislikes: {{track.dislikes}}
+    <p>
+        <h3>Description:</h3>
+      An example is a "pull quote" from a longer article. A pull quote (also known as a lift-out quote or a call-out) is a quotation or edited excerpt from an article that is placed in a larger typeface on the same page, serving to lead readers into an article and to highlight a key topic
+    </p>
   </div>
-  <button ng-click="vote('like')">Like</button>
-  <button ng-click="vote('dislike')">Dislike</button>
-  Likes: {{track.likes}}, Dislikes: {{track.dislikes}}
+
+  <aside class="suggest">
+      <h3>Suggestions:</h3>
+      <ul class="songList">
+          <li ng-repeat="track in tracks" class="mainList">
+              <img src="http://i799.photobucket.com/albums/yy278/hugohe1/Smiley_Face_Avatar_100x100.jpg" />
+              <a href="#/listen/{{track.base64id}}" class="a mainTxt">{{track.artist}} - {{track.title}}</a>
+          </li>
+      </ul>
+  </aside>

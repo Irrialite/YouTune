@@ -88,8 +88,6 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
         };
              
         this.simpleSessionCheck = function(scope) {
-            console.log(this.properties.sessionid);
-            console.log(scope);
             if (this.properties.sessionid != $cookies.sessionid)
                 return true;
             return false;
@@ -113,7 +111,7 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
             return { "background-image" : "url('" + "')" };
         }
         
-        this.initUser = function () {
+        this.initUser = function (callback) {
             parentObj = this;
             if (!this.properties.loggedIn)
             {
@@ -126,6 +124,8 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
                             type: 'userprofile',
                             id: data.id
                         }, function(success) {
+                            if (callback)
+                                callback();
                             parentObj.properties.sessionid = $cookies.sessionid;
                             parentObj.properties.loggedIn = true;
                             parentObj.properties.incorrectLoginInfo = false;
@@ -133,12 +133,19 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
                         });
                     }
                     else {
+                        if (callback)
+                                callback();
                         parentObj.properties.loggedIn = false;
                         parentObj.properties.sessionid = undefined;
                         parentObj.properties.resource = undefined;
                         $location.path('');
                     }
                 });
+            }
+            else
+            {
+                if (callback)
+                    callback();
             }
         }         
     }])
@@ -168,7 +175,8 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
             }
         }
     }])
-    .service('userSettings', ['$rootScope', 'apiCall', function($rootScope, apiCall) {
+    .service('userSettings', ['$rootScope', 'userAccount', 'apiCall', function($rootScope, userAccount, apiCall) {
+        userSettingsObj = this;
         this.settings = {};
         this.settings.general = {
             name: "General",
@@ -178,19 +186,35 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
             name: "Avatar",
             template: "/static/api/templates/partial/settings_avatar.html",
         };
-        this.settings.test = {
-            name: "Ulalala",
-            template: "/static/api/templates/partial/settings_avatar.html",
+        this.settings.channel = {
+            name: "Channel",
+            template: "/static/api/templates/partial/settings_channel.html",
         };
-        this.settings.groups = [this.settings.general, this.settings.avatar, this.settings.test];
+        this.settings.groups = [this.settings.general, this.settings.avatar, this.settings.channel];
         this.settings.selectedGroup = this.settings.general;
         this.settings.changes = {};
         this.settings.changes.general = {};
         this.settings.changes.avatar = {};
+        this.settings.changes.channel = {};
 
         this.setSelectedGroup = function(setting) {
             if (this.settings.groups.indexOf(setting) > -1) {
                 this.settings.selectedGroup = setting;
+            }
+        };
+        
+        this.saveChanges = function(setting) {
+            if (setting == userSettingsObj.settings.channel.name)
+            {
+                if (userSettingsObj.settings.changes.channel.description != userAccount.properties.resource.channel.description)
+                {
+                    apiCall.post({
+                        type: 'channel',
+                        id: 'update',
+                        description: userSettingsObj.settings.changes.channel.description,
+                    });
+                    userAccount.properties.resource.channel.description = userSettingsObj.settings.changes.channel.description;
+                }
             }
         };
     }])

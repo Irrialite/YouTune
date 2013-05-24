@@ -42,6 +42,11 @@ class UserProfileResource(resources.ModelResource):
             bundle.data['is_staff'] = bundle.obj.is_staff
             bundle.data['is_superuser'] = bundle.obj.is_superuser
 
+        model = bundle.obj.channel
+        ret = {}
+        for f in sorted(model._meta.fields + model._meta.many_to_many):
+            ret[f.name] = getattr(model, f.name)
+        bundle.data['channel'] = ret
         return bundle
 
     def override_urls(self):
@@ -140,6 +145,13 @@ class UserProfileResource(resources.ModelResource):
                 'id': user.id,
             })
             
+    def save(self, bundle, skip_errors=False):
+        bundle = super(UserProfileResource, self).save(bundle, skip_errors)
+        desc = bundle.obj.username + "'s channel description."
+        channel = models.Channel(description=desc, owner=bundle.obj)
+        channel.save()
+        return bundle
+            
 class FileResource(resources.ModelResource):
 
     class Meta:
@@ -224,6 +236,46 @@ class FileResource(resources.ModelResource):
         except ValueError:
             raise BadRequest("Invalid resource lookup data provided (mismatched type).") 
 
+class ChannelResource(resources.ModelResource):
+    class Meta:
+        allowed_methods = []
+        queryset = models.Channel.objects.all()
+        resource_name = 'channel'
+    
+    def override_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/update%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('update'), name="api_update"),
+        ]      
+        
+    def update(self, request, **kwargs):
+        self.method_check(request, allowed=['post'])
+
+        data = self.deserialize(request, request.raw_post_data,
+                                format=request.META.get('CONTENT_TYPE', 'application/json'))
+
+        desc = data.get('description', '')
+
+        if request.user:
+            if request.user.is_authenticated():
+                channel = request.user.channel;
+                channel.description = desc;
+                channel.save(update_fields=['description'])
+                return self.create_response(request, {
+                    'success': True
+                })
+            else:
+                return self.create_response(request, {
+                    'success': False,
+                }, HttpForbidden)
+        else:
+            return self.create_response(request, {
+                'success': False,
+                'reason': 'incorrect',
+            }, HttpUnauthorized)
+        
+
 class UserValidation(FieldsValidation):
 
     def __init__(self):
@@ -245,7 +297,6 @@ class UserValidation(FieldsValidation):
     def username_is_valid(username, bundle):
         try:
             user = User.objects.get(username=username)
-            print bundle.data
 
             if user is not None and str(user.id) != str(bundle.data.get('id', 0)):
                 return False, "The username is already taken."

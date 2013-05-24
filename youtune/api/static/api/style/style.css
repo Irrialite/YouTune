@@ -127,7 +127,7 @@
     top: 2em;
     visibility: hidden;
     text-align: center;
-    z-index: 0;
+    z-index: 5;
 }
 a:hover{
     cursor:default;
@@ -237,7 +237,7 @@ textarea {
     position: absolute;
     right: 5%;
     top: 6em;
-    z-index: -1;
+    z-index: 0;
 }
 body{
     overflow-y: scroll;

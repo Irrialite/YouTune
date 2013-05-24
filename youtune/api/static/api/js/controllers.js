@@ -110,7 +110,7 @@ function SearchBarCtrl($scope, logBoxService) {
     $scope.displayLogBox = logBoxService.display;
 }
 
-function SettingsCtrl($scope, userSettings) {
+function SettingsCtrl($scope, userSettings, userAccount) {
     $scope.isSelected = function(setting) {
         return setting === userSettings.settings.selectedGroup;
     };
@@ -119,16 +119,34 @@ function SettingsCtrl($scope, userSettings) {
         userSettings.setSelectedGroup(setting);
     };
     
-    $scope.saveChanges = function() {
-        // iterate over changes in userSettings service then clear them
+    $scope.saveChanges = userSettings.saveChanges;
+    
+    userSettings.settings.changes.channel.description = userAccount.properties.resource.channel.description;
+}
+
+SettingsCtrl.resolve = {
+    userResolve: function ($q, $route, $timeout, userAccount) {
+        var deferred = $q.defer();
+        var successCb = function() {
+            deferred.resolve("woot");
+        };
+        
+        userAccount.initUser(successCb);
+        
+        return deferred.promise;
     }
 }
 
 function ChannelCtrl($scope, $routeParams, userRes)
 {
     $scope.user = userRes;
+    if (userRes)
+        $scope.channelPage = '/static/api/templates/partial/channel.html';
+    else
+        $scope.channelPage = '/static/api/templates/partial/user_not_exist.html';
     
     // check here if userRes != null etc
+    
 }
 
 ChannelCtrl.resolve = {

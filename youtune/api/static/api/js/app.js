@@ -23,7 +23,8 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
             })
             .when('/user/:name/settings', {
                 templateUrl: '/static/api/templates/settings.html', 
-                controller: SettingsCtrl
+                controller: SettingsCtrl,
+                resolve: SettingsCtrl.resolve,
             })
             .when('/user/:name', {
                 templateUrl: '/static/api/templates/channel.html', 

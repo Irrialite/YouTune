@@ -39,6 +39,7 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
                             type: 'userprofile',
                             id: data.id
                         }, function(success) {
+                            $('#loginButton').text(success.username);
                             parentObj.properties.resource = success;
                             $location.path('user/' + success.username); 
                         });
@@ -68,6 +69,7 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
             this.properties.sessionid = undefined;
             this.properties.resource = undefined;
             $location.path('');
+            $('#loginButton').text('Login');
         };
         this.register = function(registerUser) {
             parentObj = this;
@@ -130,11 +132,12 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
                             parentObj.properties.loggedIn = true;
                             parentObj.properties.incorrectLoginInfo = false;
                             parentObj.properties.resource = success;
+                            $('#loginButton').text(success.username);
                         });
                     }
                     else {
                         if (callback)
-                                callback();
+                            callback();
                         parentObj.properties.loggedIn = false;
                         parentObj.properties.sessionid = undefined;
                         parentObj.properties.resource = undefined;

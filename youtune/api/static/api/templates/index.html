@@ -3,21 +3,21 @@
 <div class="register-form">
 
     <ul class="topFive">
-        <h3>Top 5</h3>
-        <li ng-repeat="track in tracks" class="mainList">
+        <h3>Popular 5</h3>
+        <li ng-repeat="track1 in tracks1" class="mainList">
             <p class="fieldLimit">
                 <img />
-                <a href="#/listen/{{track.base64id}}" class="a mainTxt">{{track.artist}} - {{track.title}}</a>
+                <a href="#/listen/{{track1.base64id}}" class="a mainTxt">{{track1.artist}} - {{track.title}}</a>
             </p>
         </li>
     </ul>
 
     <ul class="songList">
-        <h3>Popular 5</h3>
-        <li ng-repeat="track in tracks">
+        <h3>Latest 5</h3>
+        <li ng-repeat="track2 in tracks2">
             <p class="fieldLimit">
                 <img />
-                <a href="#/listen/{{track.base64id}}" class="a mainTxt">{{track.artist}} - {{track.title}}</a>
+                <a href="#/listen/{{track2.base64id}}" class="a mainTxt">{{track2.artist}} - {{track.title}}</a>
             </p>
         </li>
     </ul>

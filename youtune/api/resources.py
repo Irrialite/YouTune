@@ -161,7 +161,8 @@ class FileResource(resources.ModelResource):
         filtering = {
             'base64id': ALL,
             'upload_date': ALL,
-            'owner': ALL
+            'owner': ALL,
+            'views': ALL
         }
         
     def override_urls(self):

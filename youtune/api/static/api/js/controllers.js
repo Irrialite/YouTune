@@ -164,16 +164,18 @@ ChannelCtrl.resolve = {
     }
 }
 
-function IndexCtrl($scope, tracksRes, apiCall)
+function IndexCtrl($scope, tracksRes, tracksRes2, apiCall)
 {
-    $scope.increment = 1; // controls how many it will load per click
+    $scope.increment = 5; // controls how many it will load per click
     $scope.hasMore = false;
-    $scope.tracks = tracksRes;
+    $scope.tracks1 = tracksRes;
+    $scope.tracks2 = tracksRes2;
     $scope.offset = $scope.increment;
     if (tracksRes.length > $scope.increment)
     {
         $scope.hasMore = true;
-        $scope.tracks = tracksRes.splice(0, $scope.increment);
+        $scope.tracks1 = tracksRes.splice(0, $scope.increment);
+        $scope.tracks2 = tracksRes2.splice(0, $scope.increment);
     }
     
     $scope.loadMore = function() {
@@ -189,7 +191,22 @@ function IndexCtrl($scope, tracksRes, apiCall)
                 $scope.hasMore = false;
             var extraTracks = success.objects.splice(0, $scope.increment)
             for (var i = 0; i < extraTracks.length; i++ )
-                $scope.tracks.push(extraTracks[i]);
+                $scope.tracks2.push(extraTracks[i]);
+            $scope.offset = $scope.offset + $scope.increment;
+        });
+        apiCall.get({
+            type: 'music',
+            sortby: 'views',
+            offset: $scope.offset,
+            limit: $scope.increment + 1,
+        }, function(success) {
+            if (success.objects.length > $scope.increment)
+                $scope.hasMore = true;
+            else
+                $scope.hasMore = false;
+            var extraTracks = success.objects.splice(0, $scope.increment)
+            for (var i = 0; i < extraTracks.length; i++ )
+                $scope.tracks1.push(extraTracks[i]);
             $scope.offset = $scope.offset + $scope.increment;
         });
     }
@@ -199,14 +216,28 @@ function IndexCtrl($scope, tracksRes, apiCall)
 IndexCtrl.resolve = {
     tracksRes: function ($q, $route, $timeout, apiCall) {
         var deferred = $q.defer();
-        var successCb = function(result) {
+        var successCb1 = function(result) {
+            deferred.resolve(result.objects);
+        };
+        apiCall.get({
+            type: 'music',
+            sortby: '-views',
+            limit: 5,
+        }, successCb1);
+        
+        return deferred.promise;
+    },
+    
+    tracksRes2: function ($q, $route, $timeout, apiCall) {
+        var deferred = $q.defer();
+        var successCb2 = function(result) {
             deferred.resolve(result.objects);
         };
         apiCall.get({
             type: 'music',
             sortby: '-upload_date',
-            limit: 2,
-        }, successCb);
+            limit: 5,
+        }, successCb2);
         
         return deferred.promise;
     }
@@ -215,7 +246,7 @@ IndexCtrl.resolve = {
 function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, commentService)
 {
     $scope.track = trackRes;
-    $scope.increment = 1; // controls how many it will load per click
+    $scope.increment = 2; // controls how many it will load per click
     $scope.hasMore = false;
     $scope.offset = 0;
     
@@ -267,6 +298,7 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
         apiCall.get({
             type: 'comment',
             sortby: '-post_date',
+            base64id: $scope.track.base64id,
             offset: $scope.offset,
             limit: $scope.increment + 1,
         }, function(success) {
@@ -275,20 +307,21 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
             else
                 $scope.hasMore = false;
             var extraComments = success.objects.splice(0, $scope.increment)
-            console.log(extraComments);
             for (var i = 0; i < extraComments.length; i++ )
                 $scope.comments.push(extraComments[i]);
-            $scope.offset = $scope.offset + $scope.increment;
+            $scope.offset = $scope.offset + extraComments.length;
         });
     }
     
     $scope.addComment = function() {
-        console.log(commentService.properties.text);
         apiCall.post({
             type: 'comment',
             id: 'post',
             fileid: $scope.track.id,
             commenttext: commentService.properties.text,
+        }, function(done) {
+            $scope.comments.splice(0,0,{owner:userAccount.properties.resource.username, body:commentService.properties.text});
+            $scope.offset += 1;
         });
     };
     $scope.commentService = commentService;

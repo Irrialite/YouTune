@@ -196,7 +196,7 @@ function IndexCtrl($scope, tracksRes, tracksRes2, apiCall)
         });
         apiCall.get({
             type: 'music',
-            sortby: 'views',
+            sortby: '-views',
             offset: $scope.offset,
             limit: $scope.increment + 1,
         }, function(success) {
@@ -222,7 +222,7 @@ IndexCtrl.resolve = {
         apiCall.get({
             type: 'music',
             sortby: '-views',
-            limit: 5,
+            limit: 6,
         }, successCb1);
         
         return deferred.promise;
@@ -236,7 +236,7 @@ IndexCtrl.resolve = {
         apiCall.get({
             type: 'music',
             sortby: '-upload_date',
-            limit: 5,
+            limit: 6,
         }, successCb2);
         
         return deferred.promise;
@@ -246,7 +246,7 @@ IndexCtrl.resolve = {
 function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, commentService)
 {
     $scope.track = trackRes;
-    $scope.increment = 2; // controls how many it will load per click
+    $scope.increment = 5; // controls how many it will load per click
     $scope.hasMore = false;
     $scope.offset = 0;
     
@@ -259,7 +259,7 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
             $("#jquery_jplayer_1").jPlayer({
                 ready: function () {
                     $(this).jPlayer("setMedia", {
-                        mp3: "http://127.0.0.1:8000" + trackRes.file,
+                        mp3: trackRes.file,
                     }).jPlayer("play"); // Attempts to Auto-Play the media
                 },
                 swfPath: "static/api/swf/",

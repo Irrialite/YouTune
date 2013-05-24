@@ -218,4 +218,7 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
             }
         };
     }])
+    .service('commentService', ['$rootScope', 'userAccount', 'apiCall', function($rootScope, userAccount, apiCall) {
+        this.properties = {};
+    }])
 

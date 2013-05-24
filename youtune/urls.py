@@ -13,6 +13,7 @@ v1_api = Api(api_name='v1')
 v1_api.register(resources.UserProfileResource())
 v1_api.register(resources.FileResource())
 v1_api.register(resources.ChannelResource())
+v1_api.register(resources.CommentResource())
 
 admin.autodiscover()
 

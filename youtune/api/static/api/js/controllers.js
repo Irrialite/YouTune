@@ -212,9 +212,12 @@ IndexCtrl.resolve = {
     }
 }
 
-function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount)
+function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, commentService)
 {
     $scope.track = trackRes;
+    $scope.increment = 1; // controls how many it will load per click
+    $scope.hasMore = true;
+    $scope.offset = 0;
     
     // check here if musicRes != null etc
     if ($scope.track)
@@ -259,6 +262,37 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount)
             // send msg that you can't vote if not logged in
         }
     }
+    
+    $scope.loadMore = function() {
+        apiCall.get({
+            type: 'comment',
+            sortby: '-post_date',
+            offset: $scope.offset,
+            limit: $scope.increment + 1,
+        }, function(success) {
+            if (success.objects.length > $scope.increment)
+                $scope.hasMore = true;
+            else
+                $scope.hasMore = false;
+            var extraComments = success.objects.splice(0, $scope.increment)
+            console.log(extraComments);
+            for (var i = 0; i < extraComments.length; i++ )
+                $scope.comments.push(extraComments[i]);
+            $scope.offset = $scope.offset + $scope.increment;
+        });
+    }
+    
+    $scope.addComment = function() {
+        console.log(commentService.properties.text);
+        apiCall.post({
+            type: 'comment',
+            id: 'post',
+            fileid: $scope.track.id,
+            commenttext: commentService.properties.text,
+        });
+    };
+    $scope.commentService = commentService;
+    $scope.comments = new Array();
 }
 
 PlaybackCtrl.resolve = {

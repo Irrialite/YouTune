@@ -275,8 +275,69 @@ class ChannelResource(resources.ModelResource):
                 'success': False,
                 'reason': 'incorrect',
             }, HttpUnauthorized)
-        
 
+class CommentResource(resources.ModelResource):
+    class Meta:
+        allowed_methods = ['get']
+        queryset = file_models.Comment.objects.all()
+        resource_name = 'comment'
+        filtering = {
+            'base64id': ALL,
+        }
+    
+    def override_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/post%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('post'), name="api_post"),
+        ]      
+        
+    def post(self, request, **kwargs):
+        self.method_check(request, allowed=['post'])
+
+        data = self.deserialize(request, request.raw_post_data,
+                                format=request.META.get('CONTENT_TYPE', 'application/json'))
+
+        body = data.get('commenttext', '')
+        fileid = data.get('fileid', '')
+
+        if request.user:
+            if request.user.is_authenticated():
+                try:
+                    file = file_models.File.objects.get(pk=fileid)
+                except file_models.File.DoesNotExist:
+                    return self.create_response(request, {
+                        'success': False,
+                    }, HttpForbidden)
+                else:
+                    comment = file_models.Comment(owner=request.user, body=body, file=file)
+                    comment.save()
+                    print comment.body
+                    file.comments.add(comment)
+                    return self.create_response(request, {
+                        'success': True,
+                    })
+            else:
+                return self.create_response(request, {
+                    'success': False,
+                }, HttpForbidden)
+        else:
+            return self.create_response(request, {
+                'success': False,
+                'reason': 'incorrect',
+            }, HttpUnauthorized)
+            
+    def apply_sorting(self, objects, options=None):
+        if options:
+            if 'sortby' in options:
+                return objects.order_by(options['sortby'])
+ 
+        return super(CommentResource, self).apply_sorting(objects, options)  
+
+    def dehydrate(self, bundle):
+        bundle.data['owner'] = bundle.obj.owner.username
+        return bundle
+    
 class UserValidation(FieldsValidation):
 
     def __init__(self):

@@ -190,6 +190,7 @@ a:hover{
     color: #ffffff;
     width: 25%;
     height: 100%;
+    margin-top: 7em;
 }
 
 
@@ -220,7 +221,8 @@ a:hover{
    padding-top: 5px;
 }
 .stuff{
-    background-color: #ffffff;
+    background-color: #0077b3;
+    color: #ffffff;
     height: 100%;
     position: absolute;
     top: 11em;
@@ -240,8 +242,8 @@ a:hover{
     position: absolute;
     background-color: #002a80;
     top: 4em;
-    left: 25%;
-    width: 75%;
+    /*left: 25%;*/
+    width: 100%;
     height: 5em;
     padding: 0.98em;
     z-index: -2;
@@ -251,6 +253,8 @@ a:hover{
     position: absolute;
     right: 5%;
     top: 6em;
+    width: 5em;
+    height: 3em;
     z-index: 0;
 }
 #introduction{
@@ -284,6 +288,7 @@ a:hover{
     margin-right: auto;
     text-align: center;
 }
+/*
 .suggest{
     display: inline-block;
     right: 0em;
@@ -292,15 +297,33 @@ a:hover{
     z-index: -1;
     background-color: #0077b3;
     width: 25%;
-    height: 100%;
+    height: auto;
     color: #ffffff;
 }
-.likeBtn{
-    padding-right: 13em;
+*/
+#likeBtn{
+    display: inline-block;
+    position: relative;
+    right: 3.8em;
+    padding-top: 1em;
+    margin-right: 7em;
+    text-align: left;
 }
-
+#likes{
+    display: inline-block;
+    position: relative;
+    left: 3em;
+    top: -1em;
+    text-align: right;
+}
 .loadMore{
     margin-left: 11em;
 }
-
-
+.description{
+    width: 29.8em;
+    border: #e3e3e3;
+    border-style: solid;
+}
+#tags{
+    display: inline-block;
+}

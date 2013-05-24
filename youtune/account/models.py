@@ -34,6 +34,9 @@ class UserProfile(auth_models.User):
         full_name = u'%s %s' % (self.first_name or '', self.last_name or '')
         return full_name.strip()
 
+class Channel(django_models.Model):
+    description = django_models.TextField(blank=True)
+    owner = django_models.OneToOneField(UserProfile, primary_key=True)
 
 class EmailConfirmationToken(django_models.Model):
     value = django_models.CharField(max_length=20)

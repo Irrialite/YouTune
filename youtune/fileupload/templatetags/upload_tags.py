@@ -25,7 +25,7 @@ def upload_js():
                 <div class="progress progress-success progress-striped active"><div class="bar" style="width:0%;"></div></div>
             </td>
             <td class="start">{% if (!o.options.autoUpload) { %}
-                <button class="btn btn-success">
+                <button class="btn btn-success" ng-disabled="disableUpload">
                     <i class="icon-upload icon-white"></i>
                     <span>{%=locale.fileupload.start%}</span>
                 </button>

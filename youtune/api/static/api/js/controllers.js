@@ -98,7 +98,7 @@ function YouTuneLoginWindowCtrl($scope, $location, logBoxService) {
 }
 
 function YouTuneUploadCtrl($scope) {
-    
+    $scope.disabled = true;
 }
 
 function YouTuneUploadDelete($scope, $routeParams) {

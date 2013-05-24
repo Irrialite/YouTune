@@ -20,6 +20,8 @@ class File(models.Model):
     slug = models.SlugField(max_length=50, blank=True)
     artist = models.CharField(max_length=50)
     title = models.CharField(max_length=100)
+    album = models.CharField(max_length=100, blank=True)
+    year = models.IntegerField(blank=True, null=True)
     owner = models.ForeignKey(account_models.UserProfile)
     base64id = models.CharField(max_length=100, blank=True)
     
@@ -27,12 +29,12 @@ class File(models.Model):
     likes = models.ManyToManyField(account_models.UserProfile, blank=True, related_name='likes')
     views = models.BigIntegerField(blank=True)
     
-    description = models.TextField()
+    description = models.TextField(blank=True)
+    tags = models.TextField(blank=True)
+    
+    artist_img = models.CharField(max_length=200, blank=True)
     
     upload_date = models.DateTimeField(blank=True)
-    
-    # TODO:
-    # genres, tags
     
     def __unicode__(self):
         return self.file.name

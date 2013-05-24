@@ -33,6 +33,7 @@ $(function () {
             var reader = new FileReader();
 
             reader.onload = function(e) {
+                var scope = angular.element('#id_artist').scope();
                 var dv = new jDataView(this.result);
 
                 // "TAG" starts at byte -128 from EOF.
@@ -56,17 +57,49 @@ $(function () {
                         }
                     })
 	                    .done(function(data) {
-	                    	var tags = [];
-	                    	$.each(data.artist.tags.tag, function (idx, val) {
-	                    		tags.push(val.name);
-	                    	});
-	                    	
-	                    	$('input[name="artist_image"]').val(data.artist.image[4]["#text"]);
-	                    	$('input[name="tags"]').val(tags.join(','));
+	                        if (!data.error)
+	                        {
+    	                    	var tags = [];
+    	                    	$.each(data.artist.tags.tag, function (idx, val) {
+    	                    		tags.push(val.name);
+    	                    	});
+    	                    	
+    	                    	if (data.artist.image)
+    	                    	    $('input#id_artist_img').val(data.artist.image[2]["#text"]);
+    	                    	$('input#id_tags').val(tags.join(', '));
+    	                    }
 	                    });
-
-                    $('input#id_title').val(info.title);
-                    $('input#id_artist').val(info.artist);
+	                    
+                    $.ajax({
+                        url : 'http://ws.audioscrobbler.com/2.0/',
+                        data : {
+                            method : 'track.getinfo',
+                            track : info.title,
+                            artist : info.artist,
+                            api_key : '75b81d7dcc20ff4a64bfbd86300f14e2',
+                            autocorrect : '1',
+                            format : 'json'
+                        }
+                    })
+	                    .done(function(data) {
+                            if (!data.error)
+                            {
+                                if (data.track.name)
+    	                    	   scope.title = data.track.name;
+    	                    	if (data.track.artist)
+    	                    	   scope.artist = data.track.artist.name;
+    	                    	if (data.track.album)
+    	                    	    $('input#id_album').val(data.track.album.title);
+    	                    	if (data.track.wiki)
+    	                    	    $('input#id_description').val(data.track.wiki.summary);
+    	                    	scope.$apply();
+    	                    }
+	                    });
+                    scope.title = info.title;
+                    scope.artist = info.artist;
+                    $('input#id_album').val(info.album);
+                    $('input#id_year').val(info.year);
+                    scope.$apply();
                 }
             };
 

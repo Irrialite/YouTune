@@ -32,8 +32,8 @@ class FileCreateView(CreateView):
         self.object = form.save()
         self.object.base64id = base64.b64encode(str(self.object.id * prime % prime2))
         self.object.save(update_fields=['base64id'])
-        self.request.user.files.add(self.object)
-        print self.request.user.files.count()
+        if not self.object.artist_img:
+            self.object.artist_img = self.request.user.avatar
         f = self.request.FILES.get('file')
         data = [{'name': f.name, 'url': settings.MEDIA_URL + "files/" + f.name.replace(" ", "_"), 'thumbnail_url': settings.MEDIA_URL + "files/" + f.name.replace(" ", "_"), 'delete_url': reverse('upload-delete', args=[self.object.id]), 'delete_type': "DELETE"}]
         response = JSONResponse(data, {}, response_mimetype(self.request))

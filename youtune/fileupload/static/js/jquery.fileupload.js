@@ -591,6 +591,13 @@
                     total: 1
                 }), options);
             }
+            $('input#id_title').val('');
+            $('input#id_artist').val('');
+            $('input#id_album').val('');
+            $('input#id_year').val('');
+            $('input#id_description').val('');
+            $('input#id_tags').val('');
+            $('input#id_artist_img').val('');
             options.result = result;
             options.textStatus = textStatus;
             options.jqXHR = jqXHR;
@@ -613,6 +620,10 @@
         _onAlways: function (jqXHRorResult, textStatus, jqXHRorError, options) {
             this._active -= 1;
             options.textStatus = textStatus;
+            var scope = angular.element('#id_artist').scope();
+            scope.$apply(function () {
+                scope.disabled = false;
+            });
             if (jqXHRorError && jqXHRorError.always) {
                 options.jqXHR = jqXHRorError;
                 options.result = jqXHRorResult;
@@ -632,6 +643,10 @@
         },
 
         _onSend: function (e, data) {
+            var scope = angular.element('#id_artist').scope();
+            scope.$apply(function () {
+                scope.disabled = true;
+            });
             var that = this,
                 jqXHR,
                 slot,
@@ -704,6 +719,10 @@
         },
 
         _onAdd: function (e, data) {
+            var scope = angular.element('#id_artist').scope();
+            scope.$apply(function () {
+                scope.disabled = false;
+            });
             var that = this,
                 result = true,
                 options = $.extend({}, this.options, data),

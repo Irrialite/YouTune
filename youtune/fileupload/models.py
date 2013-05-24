@@ -27,10 +27,12 @@ class File(models.Model):
     likes = models.ManyToManyField(account_models.UserProfile, blank=True, related_name='likes')
     views = models.BigIntegerField(blank=True)
     
+    description = models.TextField()
+    
     upload_date = models.DateTimeField(blank=True)
     
     # TODO:
-    # genres, tags, description
+    # genres, tags
     
     def __unicode__(self):
         return self.file.name

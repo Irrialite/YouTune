@@ -160,7 +160,8 @@ class FileResource(resources.ModelResource):
         resource_name = 'music'
         filtering = {
             'base64id': ALL,
-            'upload_date': ALL
+            'upload_date': ALL,
+            'owner': ALL
         }
         
     def override_urls(self):

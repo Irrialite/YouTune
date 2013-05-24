@@ -239,18 +239,25 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount)
         $scope.playbackPage = '/static/api/templates/partial/file_not_exist.html'
     
     $scope.vote = function(voteType) {
-        apiCall.post({
-            type: 'music',
-            id: 'vote',
-            base64id: $scope.track.base64id,
-            vote: voteType,
-            userid: userAccount.properties.resource.id,
-        }, function(data) {
-            if (data.success) {
-                $scope.track.likes = data.likes;
-                $scope.track.dislikes = data.dislikes;
-            }
-        });
+        if (userAccount.properties.resource)
+        {
+            apiCall.post({
+                type: 'music',
+                id: 'vote',
+                base64id: $scope.track.base64id,
+                vote: voteType,
+                userid: userAccount.properties.resource.id,
+            }, function(data) {
+                if (data.success) {
+                    $scope.track.likes = data.likes;
+                    $scope.track.dislikes = data.dislikes;
+                }
+            });
+        }
+        else
+        {
+            // send msg that you can't vote if not logged in
+        }
     }
 }
 

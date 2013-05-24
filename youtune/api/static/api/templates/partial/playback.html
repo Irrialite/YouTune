@@ -27,9 +27,10 @@
         <input ng-model="commentService.properties.text" id="commentInput" title="Add Comment">
         <button ng-disabled="!commentService.properties.text" id="addComment" ng-click="addComment()">Add Comment</button>
     </form>
-    <ul>
-        <li ng-repeat="comment in comments">
-            {{comment.owner}}|{{comment.body}}
-        </li>
-    </ul>
+
+    <div id="comments" ng-repeat="comment in comments">
+        {{comment.owner}}<br/>
+        {{comment.body}}
+
+    </div>
 </div>

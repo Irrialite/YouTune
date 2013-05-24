@@ -227,7 +227,7 @@ a:hover{
     position: absolute;
     top: 11em;
     margin-left: 25%;
-    z-index: -1;
+    z-index: 0;
     padding: 1em;
     padding-top: 2em;
     width: 75%;
@@ -326,4 +326,14 @@ a:hover{
 }
 #tags{
     display: inline-block;
+}
+
+
+/* ------SEARCH RESULTS PAGE-------- */
+#searchResults{
+    height: auto;
+}
+#comments{
+    width: 29.8em;
+    height: auto;
 }

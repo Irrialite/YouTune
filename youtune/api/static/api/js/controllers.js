@@ -216,7 +216,7 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
 {
     $scope.track = trackRes;
     $scope.increment = 1; // controls how many it will load per click
-    $scope.hasMore = true;
+    $scope.hasMore = false;
     $scope.offset = 0;
     
     // check here if musicRes != null etc
@@ -293,6 +293,7 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
     };
     $scope.commentService = commentService;
     $scope.comments = new Array();
+    $scope.loadMore();
 }
 
 PlaybackCtrl.resolve = {

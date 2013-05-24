@@ -1,16 +1,26 @@
 <div ng-include="'/static/api/templates/partial/player.html'"></div>
-<span class="likeBtn">
-    <button ng-click="vote('like')">Like</button>
-    <button ng-click="vote('dislike')">Dislike</button>
-</span>
-Likes: {{track.likes}}, Dislikes: {{track.dislikes}} <br />
-Views: {{track.views}}
-<div class="suggest">
-    <h3>Suggestions:</h3>
-    <ul class="songList">
-        <li ng-repeat="track in tracks">
-            <img /><!--todo []add apropriate avatar for this song-->
-            <a href="#/listen/{{track.base64id}}" class="a mainTxt">{{track.artist}} - {{track.title}}</a><!--todo []change this to suggestion audio -->
-        </li>
-    </ul>
+
+<div class="center description">
+    <span id="likeBtn">
+        <button class="btn"  ng-click="vote('like')">
+            <i class="icon-thumbs-up"></i> Like</button>
+        <br />
+        <button class="btn" ng-click="vote('dislike')">
+            <i class="icon-thumbs-down"></i> Dislike</button>
+    </span>
+
+    <span id="likes">
+        Likes: {{track.likes}}, Dislikes: {{track.dislikes}}
+        <br />
+        Views: {{track.views}}
+    </span>
+
+    <h5>Description:</h5>
+    <span id="tags">
+        <a> test </a><a> test </a><a> test </a><a> test </a><a> test </a><a> test </a>
+    </span>
+    <p>
+        Everything has minute particles of radioactive fallout in it. You can test to see if something was produced before 1943, by checking for distinctive gamma rays from the decay of cesium-137.
+    </p>
+    <button ng-show="hasMore" ng-click="loadMore()" class="loadMore">Load More</button>
 </div>

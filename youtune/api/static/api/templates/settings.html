@@ -1,11 +1,11 @@
 
-
 <div class="large-2 columns options">
      <a ng-repeat="setting in userSettings.settings.groups" ng-click="selectGroup(setting)" class="{{isSelected(setting) && 'selected' || ''}}">{{setting.name}}</a>
 </div>
-<div class="title"><h3>{{userSettings.settings.selectedGroup.name}}</h3></div>
-<div ng-include src="userSettings.settings.selectedGroup.template" class="stuff"></div>
 
+<div class="title"><h3>Settings</h3></div>
+
+<div ng-include src="userSettings.settings.selectedGroup.template" class="stuff"></div>
 <button class="btn btn-success save" ng-click="saveChanges(userSettings.settings.selectedGroup.name)">Save</button>
 
 

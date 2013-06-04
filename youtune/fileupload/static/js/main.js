@@ -108,6 +108,7 @@ $(function () {
     );
     
     // Load existing files:
+    /*
     $('#fileupload').each(function () {
         var that = this;
         $.getJSON(this.action, function (result) {
@@ -117,4 +118,5 @@ $(function () {
             }
         });
     });
+    */
 });

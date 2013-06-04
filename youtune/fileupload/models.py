@@ -1,4 +1,4 @@
-import os
+import os, datetime
 
 from django.db import models
 from django.utils import timezone
@@ -27,6 +27,7 @@ class File(models.Model):
     
     votes = models.ManyToManyField(account_models.UserProfile, blank=True, related_name='votes')
     likes = models.ManyToManyField(account_models.UserProfile, blank=True, related_name='likes')
+    dislikes = models.ManyToManyField(account_models.UserProfile, blank=True, related_name='dislikes')
     views = models.BigIntegerField(blank=True)
     
     description = models.TextField(blank=True)
@@ -35,6 +36,7 @@ class File(models.Model):
     artist_img = models.CharField(max_length=200, blank=True)
     
     upload_date = models.DateTimeField(blank=True)
+    lastview_date = models.DateTimeField(blank=True)
     
     comments = models.ManyToManyField('Comment', blank=True, related_name='file_comments')
     
@@ -48,6 +50,10 @@ class File(models.Model):
             self.slug = self.file.name
         if not self.views:
             self.views = 0
+        if not self.artist_img:
+            self.artist_img = self.owner.avatar
+        if not self.lastview_date:
+            self.lastview_date = datetime.date(2000,1,1)
         super(File, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):

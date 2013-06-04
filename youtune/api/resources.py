@@ -4,6 +4,7 @@ import hashlib, inspect
 from django.contrib.auth import authenticate, login, logout, models as auth_models
 from django.contrib.auth.hashers import make_password
 from django.conf.urls import url
+from django.utils import timezone
 
 from tastypie import resources, fields
 from tastypie.authentication import Authentication
@@ -153,6 +154,7 @@ class UserProfileResource(resources.ModelResource):
         return bundle
             
 class FileResource(resources.ModelResource):
+    objects_returned = 0
 
     class Meta:
         allowed_methods = ['get']
@@ -162,7 +164,8 @@ class FileResource(resources.ModelResource):
             'base64id': ALL,
             'upload_date': ALL,
             'owner': ALL,
-            'views': ALL
+            'views': ALL,
+            'lastview_date': ALL
         }
         
     def override_urls(self):
@@ -192,9 +195,20 @@ class FileResource(resources.ModelResource):
         try:
             track = file_models.File.objects.get(base64id__exact=base64id)
             user = models.UserProfile.objects.get(pk=userid)
+            exists = False
+            if user in track.votes.all():
+                exists = True
+            
             if vote == "like":
                 track.likes.add(user)
-            track.votes.add(user)
+                if exists:
+                    track.dislikes.remove(user)
+            else:
+                track.dislikes.add(user)
+                if exists:
+                    track.likes.remove(user)
+            if not exists:
+                track.votes.add(user)
         except file_models.File.DoesNotExist, models.UserProfile.DoesNotExist:
             return self.create_response(request, {
                 'success': False,
@@ -209,7 +223,17 @@ class FileResource(resources.ModelResource):
     def dehydrate(self, bundle):
         track = file_models.File.objects.get(pk=bundle.data['id'])
         bundle.data['likes'] = track.likes.count()        
-        bundle.data['dislikes'] = track.votes.count() - track.likes.count()
+        bundle.data['dislikes'] = track.dislikes.count()
+        if self.objects_returned == 1:
+            if bundle.request.user and bundle.request.user.is_authenticated():
+                if bundle.request.user in track.likes.all():
+                    bundle.data['voted'] = "like"
+                elif bundle.request.user in track.dislikes.all():
+                    bundle.data['voted'] = "dislike"
+                else:
+                    bundle.data['voted'] = "none"
+            else:
+                bundle.data['voted'] = "disallowed"
         return bundle
         
     def obj_get_list(self, bundle, **kwargs):
@@ -230,10 +254,12 @@ class FileResource(resources.ModelResource):
 
         try:
             objects = self.apply_filters(bundle.request, applicable_filters)
+            self.objects_returned = len(objects)
             if len(objects) == 1 and applicable_filters:
                 obj = objects[0]
                 obj.views = obj.views + 1
-                obj.save(update_fields=['views'])
+                obj.lastview_date = timezone.now()
+                obj.save(update_fields=['views', 'lastview_date'])
             return self.authorized_read_list(objects, bundle)
         except ValueError:
             raise BadRequest("Invalid resource lookup data provided (mismatched type).") 
@@ -313,7 +339,6 @@ class CommentResource(resources.ModelResource):
                 else:
                     comment = file_models.Comment(owner=request.user, body=body, file=file)
                     comment.save()
-                    print comment.body
                     file.comments.add(comment)
                     return self.create_response(request, {
                         'success': True,

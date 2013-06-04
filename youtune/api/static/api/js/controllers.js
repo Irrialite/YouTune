@@ -249,6 +249,9 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
     $scope.increment = 5; // controls how many it will load per click
     $scope.hasMore = false;
     $scope.offset = 0;
+    $scope.voteallowed = true;
+    $scope.votedlike = false;
+    $scope.voteddislike = false;
     
     // check here if musicRes != null etc
     if ($scope.track)
@@ -268,6 +271,51 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
                 volume: 0.2
             });
         });
+        $scope.loadMore = function() {
+            apiCall.get({
+                type: 'comment',
+                sortby: '-post_date',
+                base64id: $scope.track.base64id,
+                offset: $scope.offset,
+                limit: $scope.increment + 1,
+            }, function(success) {
+                if (success.objects.length > $scope.increment)
+                    $scope.hasMore = true;
+                else
+                    $scope.hasMore = false;
+                var extraComments = success.objects.splice(0, $scope.increment)
+                for (var i = 0; i < extraComments.length; i++ )
+                    $scope.comments.push(extraComments[i]);
+                $scope.offset = $scope.offset + extraComments.length;
+            });
+        }
+        
+        $scope.addComment = function() {
+            var text = commentService.properties.text;
+            commentService.properties.text = '';
+            apiCall.post({
+                type: 'comment',
+                id: 'post',
+                fileid: $scope.track.id,
+                commenttext: text,
+            }, function(done) {
+                $scope.comments.splice(0,0,{owner:userAccount.properties.resource.username, body:text});
+                $scope.offset += 1;
+            });
+        };
+        
+        if (trackRes.voted == "disallowed")
+            $scope.voteallowed = false;
+        else if (trackRes.voted == "like")
+            $scope.votedlike = true;
+        else if (trackRes.voted == "dislike")
+            $scope.voteddislike = true;
+    
+        if (!$scope.voteallowed)
+            commentService.properties.text = 'Please login to post comments.';
+        $scope.commentService = commentService;
+        $scope.comments = new Array();
+        $scope.loadMore();
     }
     else
         $scope.playbackPage = '/static/api/templates/partial/file_not_exist.html'
@@ -285,6 +333,16 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
                 if (data.success) {
                     $scope.track.likes = data.likes;
                     $scope.track.dislikes = data.dislikes;
+                    if (voteType == "like")
+                    {
+                        $scope.votedlike = true;
+                        $scope.voteddislike = false;
+                    }
+                    else
+                    {
+                        $scope.votedlike = false;
+                        $scope.voteddislike = true;
+                    }
                 }
             });
         }
@@ -293,40 +351,6 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
             // send msg that you can't vote if not logged in
         }
     }
-    
-    $scope.loadMore = function() {
-        apiCall.get({
-            type: 'comment',
-            sortby: '-post_date',
-            base64id: $scope.track.base64id,
-            offset: $scope.offset,
-            limit: $scope.increment + 1,
-        }, function(success) {
-            if (success.objects.length > $scope.increment)
-                $scope.hasMore = true;
-            else
-                $scope.hasMore = false;
-            var extraComments = success.objects.splice(0, $scope.increment)
-            for (var i = 0; i < extraComments.length; i++ )
-                $scope.comments.push(extraComments[i]);
-            $scope.offset = $scope.offset + extraComments.length;
-        });
-    }
-    
-    $scope.addComment = function() {
-        apiCall.post({
-            type: 'comment',
-            id: 'post',
-            fileid: $scope.track.id,
-            commenttext: commentService.properties.text,
-        }, function(done) {
-            $scope.comments.splice(0,0,{owner:userAccount.properties.resource.username, body:commentService.properties.text});
-            $scope.offset += 1;
-        });
-    };
-    $scope.commentService = commentService;
-    $scope.comments = new Array();
-    $scope.loadMore();
 }
 
 PlaybackCtrl.resolve = {

@@ -595,7 +595,7 @@
             $('input#id_artist').val('');
             $('input#id_album').val('');
             $('input#id_year').val('');
-            $('input#id_description').val('');
+            $('textarea#id_description').val('');
             $('input#id_tags').val('');
             $('input#id_artist_img').val('');
             options.result = result;

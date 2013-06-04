@@ -139,13 +139,11 @@
             done: function (e, data) {
                 var that = $(this).data('fileupload'),
                     template;
+                that._adjustMaxNumberOfFiles(1);
                 if (data.context) {
                     data.context.each(function (index) {
                         var file = ($.isArray(data.result) &&
                                 data.result[index]) || {error: 'emptyResult'};
-                        if (file.error) {
-                            that._adjustMaxNumberOfFiles(1);
-                        }
                         that._transition($(this)).done(
                             function () {
                                 var node = $(this);

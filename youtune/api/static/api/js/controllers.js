@@ -129,8 +129,12 @@ function SettingsCtrl($scope, $routeParams, userSettings, userAccount) {
         };
         
         $scope.saveChanges = userSettings.saveChanges;
-        
+      
         userSettings.settings.changes.channel.description = userAccount.properties.resource.channel.description;
+        userSettings.settings.changes.general.player_volume = userAccount.properties.resource.player_volume;
+        userSettings.settings.changes.general.player_autoplay = userAccount.properties.resource.player_autoplay ? "Yes":"No";
+        userSettings.settings.changes.general.player_repeat = userAccount.properties.resource.player_repeat ? "Yes":"No";
+        userSettings.settings.changes.general.player_format = userAccount.properties.resource.player_format == 0 ? "Flash":"HTML5";
     }
     else
     {
@@ -321,12 +325,15 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
                 ready: function () {
                     $(this).jPlayer("setMedia", {
                         mp3: trackRes.file,
-                    }).jPlayer("play"); // Attempts to Auto-Play the media
+                    });
+                    if (userAccount.properties.resource.player_autoplay)
+                        $(this).jPlayer("play"); // Attempts to Auto-Play the media
                 },
+                loop: userAccount.properties.resource.player_repeat,
                 swfPath: "static/api/swf/",
-                solution: "flash, html",
+                solution: userAccount.properties.resource.player_format == 0 ? "flash, html":"html, flash",
                 supplied: "mp3",
-                volume: 0.2
+                volume: userAccount.properties.resource.player_volume
             });
         });
         $scope.loadMore = function() {

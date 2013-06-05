@@ -65,6 +65,9 @@ class UserProfileResource(resources.ModelResource):
             url(r'^(?P<resource_name>%s)/checkfordupe%s$' %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('checkfordupe'), name='api_checkfordupe'),
+            url(r'^(?P<resource_name>%s)/update%s$' %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('update'), name='api_update'),
         ]
 
     def login(self, request, **kwargs):
@@ -146,6 +149,41 @@ class UserProfileResource(resources.ModelResource):
                 'success': False,
                 'id': user.id,
             })
+    
+    def update(self, request, **kwargs):
+        self.method_check(request, allowed=['post'])
+
+        data = self.deserialize(request, request.raw_post_data,
+                                format=request.META.get('CONTENT_TYPE', 'application/json'))
+
+        player_volume = data.get('player_volume', '')
+        player_autoplay = data.get('player_autoplay', '')
+        player_repeat = data.get('player_repeat', '')
+        player_format = data.get('player_format', '')
+
+        if request.user:
+            if request.user.is_authenticated():
+                user = request.user
+                user.player_volume = player_volume
+                user.player_autoplay = player_autoplay
+                user.player_repeat = player_repeat
+                user.player_format = player_format
+                user.save(update_fields=['player_volume', 
+                                         'player_autoplay', 
+                                         'player_repeat', 
+                                         'player_format'])
+                return self.create_response(request, {
+                    'success': True
+                })
+            else:
+                return self.create_response(request, {
+                    'success': False,
+                }, HttpForbidden)
+        else:
+            return self.create_response(request, {
+                'success': False,
+                'reason': 'incorrect',
+            }, HttpUnauthorized)
             
     def save(self, bundle, skip_errors=False):
         bundle = super(UserProfileResource, self).save(bundle, skip_errors)

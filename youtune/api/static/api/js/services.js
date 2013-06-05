@@ -188,6 +188,9 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
         this.settings.general = {
             name: "General",
             template: "/static/api/templates/partial/settings_general.html",
+            successAlert: '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Successfully saved general settings to the database.</div>',
+            poptions: ["Yes", "No"],
+            pformats: ["Flash", "HTML5"],
         };
         this.settings.avatar = {
             name: "Avatar",
@@ -196,6 +199,7 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
         this.settings.channel = {
             name: "Channel",
             template: "/static/api/templates/partial/settings_channel.html",
+            successAlert: '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Successfully saved channel settings to the database.</div>',
         };
         this.settings.groups = [this.settings.general, this.settings.avatar, this.settings.channel];
         this.settings.selectedGroup = this.settings.general;
@@ -219,8 +223,34 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
                         type: 'channel',
                         id: 'update',
                         description: userSettingsObj.settings.changes.channel.description,
+                    }, function (success) {
+                        $('#settings_top').append(userSettingsObj.settings.channel.successAlert);
                     });
                     userAccount.properties.resource.channel.description = userSettingsObj.settings.changes.channel.description;
+                }
+            }
+            else if (setting == userSettingsObj.settings.general.name)
+            {
+                if (userSettingsObj.settings.changes.general.length != 0)
+                {
+                    var vol = userSettingsObj.settings.changes.general.player_volume,
+                        ap = userSettingsObj.settings.changes.general.player_autoplay == "Yes" ? true:false,
+                        rep = userSettingsObj.settings.changes.general.player_repeat == "Yes" ? true:false,
+                        format = userSettingsObj.settings.changes.general.player_format == "Flash" ? 0:1;
+                    apiCall.post({
+                        type: 'userprofile',
+                        id: 'update',
+                        player_volume: vol,
+                        player_autoplay: ap,
+                        player_repeat: rep,
+                        player_format: format,
+                    }, function (success) {
+                        $('#settings_top').prepend(userSettingsObj.settings.general.successAlert);
+                    });
+                    userAccount.properties.resource.player_volume = vol;
+                    userAccount.properties.resource.player_autoplay = ap;
+                    userAccount.properties.resource.player_repeat = rep;
+                    userAccount.properties.resource.player_format = format;
                 }
             }
         };

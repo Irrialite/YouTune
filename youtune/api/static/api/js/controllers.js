@@ -370,7 +370,7 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
                 fileid: $scope.track.id,
                 commenttext: text,
             }, function(done) {
-                $scope.comments.splice(0,0,{owner:userAccount.properties.resource.username, body:text});
+                $scope.comments.splice(0,0,{owner:userAccount.properties.resource.username, body:text, avatar:userAccount.properties.resource.avatar});
                 $scope.offset += 1;
             });
         };
@@ -383,7 +383,10 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
             $scope.voteddislike = true;
     
         if (!$scope.voteallowed)
+        {
             commentService.properties.text = 'Please login to post comments.';
+            $scope.loginPlz = 'Login to vote.';
+        }
         $scope.commentService = commentService;
         $scope.comments = new Array();
         $scope.loadMore();

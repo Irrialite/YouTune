@@ -434,6 +434,7 @@ class CommentResource(resources.ModelResource):
 
     def dehydrate(self, bundle):
         bundle.data['owner'] = bundle.obj.owner.username
+        bundle.data['avatar'] = bundle.obj.owner.avatar + "?s=64"
         return bundle
     
 class UserValidation(FieldsValidation):

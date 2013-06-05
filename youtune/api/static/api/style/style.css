@@ -330,7 +330,22 @@ a:hover{
 #searchResults{
     height: auto;
 }
-#comments{
-    width: 29.8em;
-    height: auto;
+.comment{
+		width: 29.8em;
+		min-height: 70px;
+		height: auto;
+		text-align:left;
+		line-height: 1.2em;
+		margin-bottom: 1em;
+		word-wrap: break-word;
+}
+.comment author{
+		font-size:1.5em;
+		font-weight:bold;
+}
+.avatar{
+		float: left;
+		height: auto;
+		width: 64px;
+		margin-right: 0.5em;
 }

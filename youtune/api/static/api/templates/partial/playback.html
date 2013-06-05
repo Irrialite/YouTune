@@ -2,10 +2,10 @@
 
 <div class="center description">
     <span id="likeBtn">
-        <button class="btn"  ng-click="vote('like')">
+        <button class="btn" ng-disabled="!voteallowed || votedlike" ng-click="vote('like')">
             <i class="icon-thumbs-up"></i> Like</button>
         <br />
-        <button class="btn" ng-click="vote('dislike')">
+        <button class="btn" ng-disabled="!voteallowed || voteddislike" ng-click="vote('dislike')">
             <i class="icon-thumbs-down"></i> Dislike</button>
     </span>
 
@@ -23,8 +23,8 @@
         {{track.description}}
     </p>
     <form id="addComment">
-        <input ng-model="commentService.properties.text" id="commentInput" title="Add Comment">
-        <button ng-disabled="!commentService.properties.text" id="addComment" ng-click="addComment()">Add Comment</button>
+        <input ng-disabled="!voteallowed" ng-model="commentService.properties.text" id="commentInput" title="Add Comment">
+        <button ng-disabled="!commentService.properties.text || !voteallowed" id="addComment" ng-click="addComment()">Add Comment</button>
     </form>
 
     <div id="comments">

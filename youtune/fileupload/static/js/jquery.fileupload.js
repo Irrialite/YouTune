@@ -443,7 +443,6 @@
             }
             // Django fix
             options.url = "http://" + location.host + '/upload/new/';
-            console.log(options.url);
             // The HTTP request method must be "POST" or "PUT":
             options.type = (options.type || options.form.prop('method') || '')
                 .toUpperCase();
@@ -591,13 +590,18 @@
                     total: 1
                 }), options);
             }
-            $('input#id_title').val('');
-            $('input#id_artist').val('');
-            $('input#id_album').val('');
-            $('input#id_year').val('');
-            $('textarea#id_description').val('');
-            $('input#id_tags').val('');
-            $('input#id_artist_img').val('');
+            var scope = angular.element('#id_artist').scope();
+            scope.$apply(function () {
+                $('input#id_title').val('');
+                $('input#id_artist').val('');
+                $('input#id_album').val('');
+                $('input#id_year').val('');
+                $('textarea#id_description').val('');
+                $('input#id_tags').val('');
+                $('input#id_artist_img').val('');
+            });
+            scope.arist = '';
+            scope.title = '';
             options.result = result;
             options.textStatus = textStatus;
             options.jqXHR = jqXHR;

@@ -141,7 +141,7 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
                         parentObj.properties.loggedIn = false;
                         parentObj.properties.sessionid = undefined;
                         parentObj.properties.resource = undefined;
-                        $location.path('');
+                        //$location.path('');
                     }
                 });
             }

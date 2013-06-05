@@ -1,6 +1,7 @@
 from datetime import date, datetime
 import hashlib, inspect
 
+from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout, models as auth_models
 from django.contrib.auth.hashers import make_password
 from django.conf.urls import url
@@ -165,7 +166,8 @@ class FileResource(resources.ModelResource):
             'upload_date': ALL,
             'owner': ALL,
             'views': ALL,
-            'lastview_date': ALL
+            'lastview_date': ALL,
+            'query': ['icontains',],
         }
         
     def override_urls(self):
@@ -220,6 +222,33 @@ class FileResource(resources.ModelResource):
                 'likes': track.likes.count(),
             })
             
+    def build_filters(self, filters=None):
+        if filters is None:
+            filters = {}
+        orm_filters = super(FileResource, self).build_filters(filters)
+    
+        if('query' in filters):
+            query = filters['query']
+            query = query.split(' ')
+            qset = Q()
+            for q in query:
+                qset |= Q(title__icontains=q)
+                qset |= Q(tags__icontains=q)
+                qset |= Q(artist__icontains=q)
+            orm_filters.update({'custom': qset})
+    
+        return orm_filters
+    
+    def apply_filters(self, request, applicable_filters):
+        if 'custom' in applicable_filters:
+            custom = applicable_filters.pop('custom')
+        else:
+            custom = None
+    
+        semi_filtered = super(FileResource, self).apply_filters(request, applicable_filters)
+    
+        return semi_filtered.filter(custom) if custom else semi_filtered
+
     def dehydrate(self, bundle):
         track = file_models.File.objects.get(pk=bundle.data['id'])
         bundle.data['likes'] = track.likes.count()        

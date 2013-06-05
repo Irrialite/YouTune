@@ -36,6 +36,11 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
                 controller: PlaybackCtrl,
                 resolve: PlaybackCtrl.resolve
             })
+            .when('/search', {
+                templateUrl: '/static/api/templates/search.html',
+                controller: SearchCtrl,
+                resolve: SearchCtrl.resolve
+            })
             .otherwise({redirectTo: '/'});
     }]);
 

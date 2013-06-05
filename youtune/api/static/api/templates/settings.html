@@ -1,14 +1,18 @@
-<div class="title">
-	<h3 class="name">Settings</h3>
-	<button class="btn btn-success save"
-		ng-click="saveChanges(userSettings.settings.selectedGroup.name)">Save</button>
+<div ng-show="properUser">
+    <div class="title">
+    	<h3 class="name">Settings</h3>
+    	<button class="btn btn-success save"
+    		ng-click="saveChanges(userSettings.settings.selectedGroup.name)">Save</button>
+    </div>
+    
+    <div class="large-2 columns options">
+    	<a ng-repeat="setting in userSettings.settings.groups"
+    		ng-click="selectGroup(setting)"
+    		class="{{isSelected(setting) && 'selected' || ''}}">{{setting.name}}</a>
+    </div>
+    
+    <div ng-include src="userSettings.settings.selectedGroup.template"
+    	class="stuff"></div>
 </div>
-
-<div class="large-2 columns options">
-	<a ng-repeat="setting in userSettings.settings.groups"
-		ng-click="selectGroup(setting)"
-		class="{{isSelected(setting) && 'selected' || ''}}">{{setting.name}}</a>
+<div ng-include src="invalidUserURL" ng-show="!properUser">
 </div>
-
-<div ng-include src="userSettings.settings.selectedGroup.template"
-	class="stuff"></div>

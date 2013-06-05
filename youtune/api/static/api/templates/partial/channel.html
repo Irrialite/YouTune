@@ -8,14 +8,21 @@
         {{user.channel.description}}
     </section>
 
-    <section class="content" id="content">
-        asddasda
-    </section>
-
-    <section class="content" id="summary">
-    daaad
-    </section>
-
+    <table class="table table-striped">
+        <tr ng-repeat="upload in uploads">
+            <td class="preview">
+                <a href="#/listen/{{ upload.base64id }}"><img ng-src="{{ upload.artist_img }}" /></>
+            </td>
+            <td class="name"><a href="#/listen/{{ upload.base64id }}">{{ upload.artist }} - {{ upload.title }}</a></td>
+            <td class="delete" ng-show="owner">
+                <a class="btn btn-danger" href="#/upload/delete/{{ upload.id }}">
+                    <i class="icon-trash icon-white"></i>
+                    <span>Delete</span>
+                </a>
+            </td>
+        </tr>
+    </table>
+    <button ng-show="hasMore" ng-click="loadMore()" class="loadMore">Show More</button>
     <footer>
     </footer>
 </article>

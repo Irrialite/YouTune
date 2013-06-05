@@ -106,22 +106,37 @@ function YouTuneUploadDelete($scope, $routeParams) {
 }
 
 
-function SearchBarCtrl($scope, logBoxService) {
+function SearchBarCtrl($scope, $location, logBoxService) {
     $scope.displayLogBox = logBoxService.display;
+    $scope.search = '';
+    $scope.doSearch = function () {
+        $location.path('/search').search({q: $scope.search});
+    };
 }
 
-function SettingsCtrl($scope, userSettings, userAccount) {
-    $scope.isSelected = function(setting) {
-        return setting === userSettings.settings.selectedGroup;
-    };
-    
-    $scope.selectGroup = function(setting) {
-        userSettings.setSelectedGroup(setting);
-    };
-    
-    $scope.saveChanges = userSettings.saveChanges;
-    
-    userSettings.settings.changes.channel.description = userAccount.properties.resource.channel.description;
+function SettingsCtrl($scope, $routeParams, userSettings, userAccount) {
+    if (userAccount.properties.resource &&
+        userAccount.properties.resource.username.toLowerCase() == $routeParams.name.toLowerCase() )
+    {
+        $scope.properUser = true;
+        $scope.isSelected = function(setting) {
+            return setting === userSettings.settings.selectedGroup;
+        };
+        
+        $scope.selectGroup = function(setting) {
+            userSettings.setSelectedGroup(setting);
+        };
+        
+        $scope.saveChanges = userSettings.saveChanges;
+        
+        userSettings.settings.changes.channel.description = userAccount.properties.resource.channel.description;
+    }
+    else
+    {
+        $scope.properUser = false;
+        $scope.realUser = $routeParams.name;
+        $scope.invalidUserURL = '/static/api/templates/partial/login_required.html';
+    }
 }
 
 SettingsCtrl.resolve = {
@@ -137,11 +152,53 @@ SettingsCtrl.resolve = {
     }
 }
 
-function ChannelCtrl($scope, $routeParams, userRes)
+function ChannelCtrl($scope, $routeParams, apiCall, userRes)
 {
     $scope.user = userRes;
+    
+    $scope.increment = 5; // controls how many it will load per click
+    $scope.hasMore = false;
+    $scope.offset = 0;
+    
+    $scope.loadMore = function() {
+        apiCall.get({
+            type: 'music',
+            sortby: '-upload_date',
+            offset: $scope.offset,
+            limit: $scope.increment + 1,
+        }, function(success) {
+            if (success.objects.length > $scope.increment)
+                $scope.hasMore = true;
+            else
+                $scope.hasMore = false;
+            var extraTracks = success.objects.splice(0, $scope.increment)
+            for (var i = 0; i < extraTracks.length; i++ )
+                $scope.uploads.push(extraTracks[i]);
+            $scope.offset = $scope.offset + extraTracks.length;
+        });
+    }
+    
+        
     if (userRes)
+    {
         $scope.channelPage = '/static/api/templates/partial/channel.html';
+        
+        
+        apiCall.get({
+            type: 'music',
+            owner: userRes,
+            sortby: "-upload_date",
+            limit: $scope.increment + 1,
+        }, function (success) {
+            $scope.owner = $scope.userAccount.properties.resource && userRes.id == $scope.userAccount.properties.resource.id;
+            if (success.objects.length > $scope.increment)
+                $scope.hasMore = true;
+            else
+                $scope.hasMore = false;
+            $scope.uploads = success.objects.splice(0, $scope.increment);
+            $scope.offset += $scope.uploads.length;
+        });
+    }
     else
         $scope.channelPage = '/static/api/templates/partial/user_not_exist.html';
     
@@ -192,7 +249,7 @@ function IndexCtrl($scope, tracksRes, tracksRes2, apiCall)
             var extraTracks = success.objects.splice(0, $scope.increment)
             for (var i = 0; i < extraTracks.length; i++ )
                 $scope.tracks2.push(extraTracks[i]);
-            $scope.offset = $scope.offset + $scope.increment;
+            $scope.offset = $scope.offset + extraTracks.length;
         });
         apiCall.get({
             type: 'music',
@@ -207,7 +264,7 @@ function IndexCtrl($scope, tracksRes, tracksRes2, apiCall)
             var extraTracks = success.objects.splice(0, $scope.increment)
             for (var i = 0; i < extraTracks.length; i++ )
                 $scope.tracks1.push(extraTracks[i]);
-            $scope.offset = $scope.offset + $scope.increment;
+            $scope.offset = $scope.offset + extraTracks.length;
         });
     }
     
@@ -369,6 +426,58 @@ PlaybackCtrl.resolve = {
         
         return deferred.promise;
     }
+}
+
+function SearchCtrl($scope, $routeParams, apiCall, $timeout)
+{
+    $scope.increment = 10; // controls how many it will load per click
+    $scope.hasMore = false;
+    $scope.offset = 0;
+    
+    $scope.loading = '/static/api/img/loading.gif';
+    $timeout(function() {
+        apiCall.get({
+            type: 'music',
+            sortby: '-views',
+            query: $routeParams.q,
+            limit: 100,
+        }, function (success) {
+            $scope.allResults = success.objects;
+            var len = success.objects.length;
+            $scope.hasMore = len > $scope.increment;
+            $scope.offset = len > $scope.increment ? $scope.increment:len;
+            if (len == 0)
+                $scope.noResults = 'No matches found!';
+            else
+                $scope.results = (0, 0, $scope.allResults.splice(0, $scope.increment));
+            $scope.loading = undefined;
+        });
+
+    }, 3000); 
+    
+    $scope.loadMore = function () {
+        var objs = $scope.allResults.splice($scope.offset, $scope.increment)
+        if (objs.length <= $scope.increment)
+            hasMore = false;
+        $scope.results.splice(0, 0, objs);
+        $scope.offset += objs.length;
+    };
+}
+
+SearchCtrl.resolve = {
+    resultsRes: function ($q, $route, $timeout, apiCall) {
+        var deferred = $q.defer();
+        var successCb1 = function(result) {
+            deferred.resolve(result.objects);
+        };
+        apiCall.get({
+            type: 'music',
+            sortby: '-views',
+            limit: 100,
+        }, successCb1);
+        
+        return deferred.promise;
+    },
 }
 
 var year=0;

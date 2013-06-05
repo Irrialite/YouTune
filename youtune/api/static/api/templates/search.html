@@ -1,0 +1,13 @@
+<div id="center searchResults">
+    <img ng-show="loading" ng-src="{{loading}}" />
+    <h2 ng-show="noResults">{{noResults}}</h2>
+    <table class="table table-striped">
+        <tr ng-repeat="result in results">
+            <td class="preview">
+                <a href="#/listen/{{ result.base64id }}"><img ng-src="{{ result.artist_img }}" /></>
+            </td>
+            <td class="name"><a href="#/listen/{{ result.base64id }}">{{ result.artist }} - {{ result.title }}</a></td>
+        </tr>
+    </table>
+    <button ng-show="hasMore" ng-click="loadMore()" class="loadMore">Show More</button>
+</div>

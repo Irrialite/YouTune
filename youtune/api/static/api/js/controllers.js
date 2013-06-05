@@ -186,7 +186,7 @@ function ChannelCtrl($scope, $routeParams, apiCall, userRes)
         
         apiCall.get({
             type: 'music',
-            owner: userRes,
+            owner: userRes.id,
             sortby: "-upload_date",
             limit: $scope.increment + 1,
         }, function (success) {

@@ -326,14 +326,19 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
                     $(this).jPlayer("setMedia", {
                         mp3: trackRes.file,
                     });
-                    if (userAccount.properties.resource.player_autoplay)
+                    if (userAccount.properties.resource)
+                    {
+                        if (userAccount.properties.resource.player_autoplay)
+                            $(this).jPlayer("play"); // Attempts to Auto-Play the media
+                    }
+                    else
                         $(this).jPlayer("play"); // Attempts to Auto-Play the media
                 },
-                loop: userAccount.properties.resource.player_repeat,
+                loop: userAccount.properties.resource ? userAccount.properties.resource.player_repeat:false,
                 swfPath: "static/api/swf/",
-                solution: userAccount.properties.resource.player_format == 0 ? "flash, html":"html, flash",
+                solution: userAccount.properties.resource ? (userAccount.properties.resource.player_format == 0 ? "flash, html":"html, flash"):"flash, html",
                 supplied: "mp3",
-                volume: userAccount.properties.resource.player_volume
+                volume: userAccount.properties.resource ? userAccount.properties.resource.player_volume:0.5
             });
         });
         $scope.loadMore = function() {

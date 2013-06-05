@@ -41,10 +41,10 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
                         }, function(success) {
                             $('#loginButton .inner').text(success.username);
                             parentObj.properties.resource = success;
-                            console.log($location);
-                            console.log($location.hash());
-                            console.log($location.url());
-                            location.reload(false);
+                            if (arguments[1])
+                                $location.path('/user/' + success.username);
+                            else
+                                location.reload(false);
                         });
                     }
                 });              
@@ -88,7 +88,7 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
                 gender: registerUser.gender,
                 id: null,
             }, function(data) {
-                parentObj.logIn({name: registerUser.name, pw: registerUser.pw});
+                parentObj.logIn({name: registerUser.name, pw: registerUser.pw}, true);
             }, function(data) {
             });
         };
@@ -231,7 +231,7 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
             }
             else if (setting == userSettingsObj.settings.general.name)
             {
-                if (userSettingsObj.settings.changes.general.length != 0)
+                if (userSettingsObj.settings.changes.general.player_volume)
                 {
                     var vol = userSettingsObj.settings.changes.general.player_volume,
                         ap = userSettingsObj.settings.changes.general.player_autoplay == "Yes" ? true:false,

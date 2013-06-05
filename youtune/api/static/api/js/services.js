@@ -41,7 +41,10 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
                         }, function(success) {
                             $('#loginButton .inner').text(success.username);
                             parentObj.properties.resource = success;
-                            $location.path('user/' + success.username); 
+                            console.log($location);
+                            console.log($location.hash());
+                            console.log($location.url());
+                            location.reload(false);
                         });
                     }
                 });              
@@ -70,6 +73,7 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
             this.properties.resource = undefined;
             $location.path('');
             $('#loginButton .inner').text('Login');
+            location.reload(false);
         };
         this.register = function(registerUser) {
             parentObj = this;

@@ -2,10 +2,10 @@
 
 <div class="center description">
     <span id="likeBtn">
-        <button class="btn" ng-disabled="!voteallowed || votedlike" ng-click="vote('like')">
+        <button class="btn" ng-disabled="!voteallowed || votedlike" ng-click="vote('like')" title="{{commentService.properties.text}}">
             <i class="icon-thumbs-up"></i> Like</button>
         <br />
-        <button class="btn" ng-disabled="!voteallowed || voteddislike" ng-click="vote('dislike')">
+        <button class="btn" ng-disabled="!voteallowed || voteddislike" ng-click="vote('dislike')" title="commentService.properties.text">
             <i class="icon-thumbs-down"></i> Dislike</button>
     </span>
 

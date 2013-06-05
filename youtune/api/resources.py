@@ -10,7 +10,7 @@ from django.utils import timezone
 from tastypie import resources, fields
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
-from tastypie.constants import ALL
+from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.utils import trailing_slash
 from tastypie.http import HttpUnauthorized, HttpForbidden
 
@@ -194,6 +194,7 @@ class UserProfileResource(resources.ModelResource):
             
 class FileResource(resources.ModelResource):
     objects_returned = 0
+    owner = fields.ForeignKey(UserProfileResource, 'owner')
 
     class Meta:
         allowed_methods = ['get']
@@ -202,7 +203,7 @@ class FileResource(resources.ModelResource):
         filtering = {
             'base64id': ALL,
             'upload_date': ALL,
-            'owner': ALL,
+            'owner': ALL_WITH_RELATIONS,
             'views': ALL,
             'lastview_date': ALL,
             'query': ['icontains',],

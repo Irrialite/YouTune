@@ -168,6 +168,7 @@ function ChannelCtrl($scope, $routeParams, apiCall, userRes)
     $scope.loadMore = function() {
         apiCall.get({
             type: 'music',
+            owner: $scope.user.id,
             sortby: '-upload_date',
             offset: $scope.offset,
             limit: $scope.increment + 1,

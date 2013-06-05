@@ -22,6 +22,7 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
         this.properties.incorrectLoginInfo = false;
         
         this.logIn = function(user) {
+            arg2 = arguments[1];
             parentObj = this;
             apiCall.post({
                 type: 'userprofile',
@@ -41,7 +42,7 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
                         }, function(success) {
                             $('#loginButton .inner').text(success.username);
                             parentObj.properties.resource = success;
-                            if (arguments[1])
+                            if (arg2)
                                 $location.path('/user/' + success.username);
                             else
                                 location.reload(false);

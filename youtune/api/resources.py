@@ -319,12 +319,15 @@ class FileResource(resources.ModelResource):
 
         # Update with the provided kwargs.
         filters.update(kwargs)
+        channel = False
+        if 'owner' in filters:
+            channel = True
         applicable_filters = self.build_filters(filters=filters)
 
         try:
             objects = self.apply_filters(bundle.request, applicable_filters)
             self.objects_returned = len(objects)
-            if len(objects) == 1 and applicable_filters:
+            if len(objects) == 1 and applicable_filters and not channel:
                 obj = objects[0]
                 obj.views = obj.views + 1
                 obj.lastview_date = timezone.now()

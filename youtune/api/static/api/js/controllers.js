@@ -214,7 +214,7 @@ ChannelCtrl.resolve = {
         };
         apiCall.get({
             type: 'userprofile',
-            username: $route.current.params.name,
+            username__iexact: $route.current.params.name,
         }, successCb);
         
         return deferred.promise;

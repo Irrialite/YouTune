@@ -2,14 +2,14 @@
 	<div id="searchBarBox">
 	    <a href="/" id="mainLogo"></a>
 	    <form id="searchArea">
-	        <input ng-model="search" id="searchInput" title="Find your music">
+	        <input ui-keypress="{enter: doSearch}" ng-model="search" id="searchInput" title="Find your music">
 	        <button ng-disabled="!search" ng-click="doSearch()">♫</button>
 	    </form>
 	    <button id="loginButton" class="btn btn-primary" ng-click="displayLogBox()"><span class="inner">Login</span><b class="caret"></b></button>
 	    <div name="loginForm" class="form-actions loginForm" ng-controller="YouTuneLoginWindowCtrl">
 		    <input id="login_username" type="text" ng-model="user.name" placeholder="Username" required />
 		    <input id="login_password" type="password" ng-model="user.pw" placeholder="Password" required />
-		    <button class="btn btn-primary" ng-click="login(user)">Login</button>
+		    <button class="btn btn-primary" ng-click="login()">Login</button>
 		    <a href="/#/register" target="_self">
 		        <button type="button" class="btn btn-success" ng-click="displayLogBox()">
 		        Register

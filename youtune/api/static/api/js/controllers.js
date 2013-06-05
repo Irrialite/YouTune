@@ -31,7 +31,8 @@ function YouTuneCtrl($scope, $http, $cookies, apiCall, userAccount, userSettings
     
     $scope.user = {};
 
-    $scope.login = function(user) {
+    $scope.login = function() {
+        var user = {name:$scope.user.name, pw:$scope.user.pw};
         userAccount.logIn(user);
     };
     

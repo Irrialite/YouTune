@@ -1,29 +1,29 @@
 <div id="searchBar" ng-controller="SearchBarCtrl">
-    <a href="/#/" id="mainLogo"></a>
-    <form id="searchArea">
-        <input id="searchInput" title="Find your music">
-        <button id="btn">♫</button>
-    </form>
-    <button id="loginButton" class="btn btn-primary login" ng-click="displayLogBox()"> Login </button>
-</div>
-
-
-<div name="loginForm" class="form-actions loginForm" ng-controller="YouTuneLoginWindowCtrl">
-    <input id="login_username" type="text" ng-model="user.name" placeholder="Username" required />
-    <input id="login_password" type="password" ng-model="user.pw" placeholder="Password" required />
-    <button class="btn btn-primary" ng-click="login(user)">Login</button>
-    <a href="/#/register" target="_self">
-        <button type="button" class="btn btn-success" ng-click="displayLogBox()">
-        Register
-        </button>
-    </a> <br />
-    <span ng-show="userAccount.properties.incorrectLoginInfo">Invalid credentials.</span>
-</div>
-
-
-<div ng-show="userAccount.properties.loggedIn" name="loggedForm" class="form-actions loggedForm" ng-controller="YouTuneLoginWindowCtrl">
-    <a ng-click="goUpload()">Upload</a> <br/>
-    <a ng-click="goChannel()">Channel</a> <br/>
-    <a ng-click="goSettings()">Settings</a> <br/>
-    <a ng-click="logout()">Logout</a> <br/>
+	<div id="searchBarBox">
+	    <a href="/" id="mainLogo"></a>
+	    <form id="searchArea">
+	        <input id="searchInput" title="Find your music">
+	        <button>♫</button>
+	    </form>
+	    <button id="loginButton" class="btn btn-primary" ng-click="displayLogBox()"><span class="inner">Login</span><b class="caret"></b></button>
+	    <div name="loginForm" class="form-actions loginForm" ng-controller="YouTuneLoginWindowCtrl">
+		    <input id="login_username" type="text" ng-model="user.name" placeholder="Username" required />
+		    <input id="login_password" type="password" ng-model="user.pw" placeholder="Password" required />
+		    <button class="btn btn-primary" ng-click="login(user)">Login</button>
+		    <a href="/#/register" target="_self">
+		        <button type="button" class="btn btn-success" ng-click="displayLogBox()">
+		        Register
+		        </button>
+		    </a> <br />
+		    <span ng-show="userAccount.properties.incorrectLoginInfo">Invalid credentials.</span>
+		</div>
+		
+		
+		<div ng-show="userAccount.properties.loggedIn" name="loggedForm" class="form-actions loggedForm" ng-controller="YouTuneLoginWindowCtrl">
+		    <a ng-click="goUpload()">Upload</a> <br/>
+		    <a ng-click="goChannel()">Channel</a> <br/>
+		    <a ng-click="goSettings()">Settings</a> <br/>
+		    <a ng-click="logout()">Logout</a> <br/>
+		</div>
+	</div>
 </div>

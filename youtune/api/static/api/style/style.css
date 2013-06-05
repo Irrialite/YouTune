@@ -1,8 +1,8 @@
 
 /* ------OVERALL-------- */
 body{
-    overflow-y: scroll;
-    overflow-x: hidden;
+    margin: 0 auto;
+    width: 80%;
 }
 textarea {
     height: 175px;
@@ -10,59 +10,92 @@ textarea {
     resize: none;
 }
 
+.clear{
+	clear: both;
+}
+
 
 /* ------TOP AREA-------- */
 #searchBar{
-    position: relative;
-    background:#e3e3e3;
+    background: none repeat scroll 0 0 #E3E3E3;
+    height: 40px;
+    left: 0;
+    position: fixed;
     width: 100%;
-    height: 4em;
-    z-index: 2;
-
+    z-index: 1;
+}
+#searchBarBox{
+    background: none repeat scroll 0 0 #E3E3E3;
+    height: 30px;
+    left: 0;
+    margin: 0 auto;
+    padding: 5px 0;
+    position: relative;
+    width: 80%;
+    z-index: 1;
 }
 #mainLogo{
-    display: inline-block;
-    vertical-align: middle;
-
     background-image: url("../img/logo.png");
     background-repeat: no-repeat;
-    height: 3em;
-    margin-left: 1em;
-    margin-top: 1em;
-    width: 10%;
+    cursor: pointer;
+    float: left;
+    height: 25px;
+    vertical-align: middle;
+    width: 100px;
+    z-index: 2;
 }
 #searchArea{
+    float: left;
+    left: 50%;
+    margin: 0 0 0 -325px;
+    position: relative;
     text-align: center;
-    display: inline-block;
-    margin-left: auto;
-    margin-right: auto;
-    width:80%;
-}
-#btn{
-    width: 3em;
-    margin-right: 3em;
+    width: 450px;
 }
 #searchInput{
      width:28em;
 }
 
-.login{
-    position: absolute;
-    top: 1em;
-    right: 2em;
-    width: 10%;
+#loginButton{
+    float: right;
+    width: 100px;
+}
+#loginButton .inner{
+	padding: 0 10px;
+    text-align: center;
 }
 
 .loginForm{
     position: absolute;
-    width: 15em;
-    height: 8em;
-    right: 0em;
-    top: 2em;
+    width: 236px;
+    right: 0;
+    top: 20px;
     visibility: hidden;
-    z-index: 1;
+    z-index: 2;
+    border: 2px solid #002A80;
 }
 
+
+/* ------LOGGED IN PAGE-------- */
+.loggedForm{
+    position: absolute;
+    width: 56px;
+    right: 0;
+    top: 20px;
+    visibility: hidden;
+    text-align: center;
+    z-index: 2;
+    border: 2px solid #002A80;
+}
+a:hover{
+    cursor:default;
+}
+
+
+/* ------MAIN AREA-------- */
+#youtune-main{
+    padding-top: 40px;
+}
 
 
 /* ------CHANNEL CONTENT-------- */
@@ -70,7 +103,6 @@ textarea {
     background-color: #005580;
     color: #FFFFFF;
     height: 10em;
-    margin-top: 4em;
     margin-bottom: 0em;
 }
 .channelAvatar{
@@ -89,10 +121,7 @@ textarea {
     padding-top: 1em;
 }
 #channel{
-    position: absolute;
-    top: 0em;
-    width: 100%;
-    z-index: -1;
+    
 }
 
 
@@ -131,22 +160,6 @@ textarea {
 }
 
 
-/* ------LOGGED IN PAGE-------- */
-.loggedForm{
-    position: absolute;
-    width: 5em;
-    height: 6em;
-    right: 0em;
-    top: 2em;
-    visibility: hidden;
-    text-align: center;
-    z-index: 5;
-}
-a:hover{
-    cursor:default;
-}
-
-
 /* ------UPLOAD PAGE-------- */
 .box{
     background-color: #0077b3;
@@ -180,39 +193,40 @@ a:hover{
 
 
 /* ------SETTINGS PAGE-------- */
-/* CLEANUP */
-/* [x] remove the tick as well and add some other indicator */
+
+.title{
+    color: #ffffff;
+    background-color: #002a80;
+    height: 40px;
+    padding: 5px;
+}
+.title .name{
+	    float: left;
+	    margin: 0;
+	}
+.title .save{
+	    float: right;
+	    margin: 5px;
+	}
 
 .options {
-    display: inline-block;
     background:#0077b3;
-    text-emphasis-color: #ffffff;
     color: #ffffff;
     width: 25%;
-    height: 100%;
-    margin-top: 7em;
+    float: left;
+    display: block;
 }
-
-
 .options a {
-    display:block;
+    display: block;
     color: #ffffff;
-    padding: 1em;
+    padding: 10px 30px;
     background:#0077b3;
-    border-bottom:1px solid #cac9c9;
-    cursor:pointer;
-}
-.options a:hover {
-    color: #ffffff;
+    border-bottom: 1px solid #cac9c9;
+    cursor: pointer;
+    text-decoration: none;
 }
 .options a.selected {
-    color: #ffffff;
     background:#002a80;
-}
-.options a.selected:hover {
-    /*background:#f4f4f4;*/
-}
-.options a.selected:after {
 }
 .options a.no-border {
     border:none;
@@ -220,16 +234,18 @@ a:hover{
 .padtop {
    padding-top: 5px;
 }
+
 .stuff{
-    background-color: #0077b3;
-    color: #ffffff;
-    height: 100%;
-    position: absolute;
-    top: 11em;
-    margin-left: 25%;
-    z-index: 0;
-    padding: 1em;
-    padding-top: 2em;
+    -webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+    background-color: #0077B3;
+    border: 1px solid #CAC9C9;
+    color: #FFFFFF;
+    display: block;
+    float: left;
+    min-height: 123px;
+    padding: 10px;
     width: 75%;
 }
 .basicPic{
@@ -237,28 +253,9 @@ a:hover{
     width: 128px;
     float: left;
 }
-.title{
-    color: #ffffff;
-    position: absolute;
-    background-color: #002a80;
-    top: 4em;
-    /*left: 25%;*/
-    width: 100%;
-    height: 5em;
-    padding: 0.98em;
-    z-index: -2;
-    border-bottom:1px solid #cac9c9;
-}
-.save{
-    position: absolute;
-    right: 5%;
-    top: 6em;
-    width: 5em;
-    height: 3em;
-    z-index: 0;
-}
+
 #introduction{
-   /* background-color: tomato;*/
+   
 }
 
 /* ------MAIN PAGE-------- */

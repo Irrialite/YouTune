@@ -1,1 +1,9 @@
-kekeke
+<h3>Player volume:</h3>
+<input type="text" ng-model="userSettings.settings.changes.general.player_volume" smart-float /><br />
+<span ng-show="!userSettings.settings.changes.general.player_volume">Please enter a number between 0 and 1!</span>
+<h3>Player autoplay:</h3>
+<select ng-model="userSettings.settings.changes.general.player_autoplay" ng-options="item for item in userSettings.settings.general.poptions"></select>
+<h3>Player repeat:</h3>
+<select ng-model="userSettings.settings.changes.general.player_repeat" ng-options="item for item in userSettings.settings.general.poptions"></select>
+<h3>Player format:</h3>
+<select ng-model="userSettings.settings.changes.general.player_format" ng-options="item for item in userSettings.settings.general.pformats"></select>

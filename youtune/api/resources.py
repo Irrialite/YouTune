@@ -10,7 +10,7 @@ from django.utils import timezone
 from tastypie import resources, fields
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
-from tastypie.constants import ALL
+from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.utils import trailing_slash
 from tastypie.http import HttpUnauthorized, HttpForbidden
 
@@ -65,6 +65,9 @@ class UserProfileResource(resources.ModelResource):
             url(r'^(?P<resource_name>%s)/checkfordupe%s$' %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('checkfordupe'), name='api_checkfordupe'),
+            url(r'^(?P<resource_name>%s)/update%s$' %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('update'), name='api_update'),
         ]
 
     def login(self, request, **kwargs):
@@ -146,6 +149,41 @@ class UserProfileResource(resources.ModelResource):
                 'success': False,
                 'id': user.id,
             })
+    
+    def update(self, request, **kwargs):
+        self.method_check(request, allowed=['post'])
+
+        data = self.deserialize(request, request.raw_post_data,
+                                format=request.META.get('CONTENT_TYPE', 'application/json'))
+
+        player_volume = data.get('player_volume', '')
+        player_autoplay = data.get('player_autoplay', '')
+        player_repeat = data.get('player_repeat', '')
+        player_format = data.get('player_format', '')
+
+        if request.user:
+            if request.user.is_authenticated():
+                user = request.user
+                user.player_volume = player_volume
+                user.player_autoplay = player_autoplay
+                user.player_repeat = player_repeat
+                user.player_format = player_format
+                user.save(update_fields=['player_volume', 
+                                         'player_autoplay', 
+                                         'player_repeat', 
+                                         'player_format'])
+                return self.create_response(request, {
+                    'success': True
+                })
+            else:
+                return self.create_response(request, {
+                    'success': False,
+                }, HttpForbidden)
+        else:
+            return self.create_response(request, {
+                'success': False,
+                'reason': 'incorrect',
+            }, HttpUnauthorized)
             
     def save(self, bundle, skip_errors=False):
         bundle = super(UserProfileResource, self).save(bundle, skip_errors)
@@ -156,6 +194,7 @@ class UserProfileResource(resources.ModelResource):
             
 class FileResource(resources.ModelResource):
     objects_returned = 0
+    owner = fields.ForeignKey(UserProfileResource, 'owner')
 
     class Meta:
         allowed_methods = ['get']
@@ -164,7 +203,7 @@ class FileResource(resources.ModelResource):
         filtering = {
             'base64id': ALL,
             'upload_date': ALL,
-            'owner': ALL,
+            'owner': ALL_WITH_RELATIONS,
             'views': ALL,
             'lastview_date': ALL,
             'query': ['icontains',],
@@ -232,9 +271,10 @@ class FileResource(resources.ModelResource):
             query = query.split(' ')
             qset = Q()
             for q in query:
-                qset |= Q(title__icontains=q)
-                qset |= Q(tags__icontains=q)
-                qset |= Q(artist__icontains=q)
+                if len(q) > 1:
+                    qset |= Q(title__icontains=q)
+                    qset |= Q(tags__icontains=q)
+                    qset |= Q(artist__icontains=q)
             orm_filters.update({'custom': qset})
     
         return orm_filters
@@ -279,12 +319,15 @@ class FileResource(resources.ModelResource):
 
         # Update with the provided kwargs.
         filters.update(kwargs)
+        channel = False
+        if 'owner' in filters:
+            channel = True
         applicable_filters = self.build_filters(filters=filters)
 
         try:
             objects = self.apply_filters(bundle.request, applicable_filters)
             self.objects_returned = len(objects)
-            if len(objects) == 1 and applicable_filters:
+            if len(objects) == 1 and applicable_filters and not channel:
                 obj = objects[0]
                 obj.views = obj.views + 1
                 obj.lastview_date = timezone.now()
@@ -391,6 +434,7 @@ class CommentResource(resources.ModelResource):
 
     def dehydrate(self, bundle):
         bundle.data['owner'] = bundle.obj.owner.username
+        bundle.data['avatar'] = bundle.obj.owner.avatar + "?s=64"
         return bundle
     
 class UserValidation(FieldsValidation):

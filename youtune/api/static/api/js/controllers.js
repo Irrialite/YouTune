@@ -31,7 +31,8 @@ function YouTuneCtrl($scope, $http, $cookies, apiCall, userAccount, userSettings
     
     $scope.user = {};
 
-    $scope.login = function(user) {
+    $scope.login = function() {
+        var user = {name:$scope.user.name, pw:$scope.user.pw};
         userAccount.logIn(user);
     };
     
@@ -128,8 +129,12 @@ function SettingsCtrl($scope, $routeParams, userSettings, userAccount) {
         };
         
         $scope.saveChanges = userSettings.saveChanges;
-        
+      
         userSettings.settings.changes.channel.description = userAccount.properties.resource.channel.description;
+        userSettings.settings.changes.general.player_volume = userAccount.properties.resource.player_volume;
+        userSettings.settings.changes.general.player_autoplay = userAccount.properties.resource.player_autoplay ? "Yes":"No";
+        userSettings.settings.changes.general.player_repeat = userAccount.properties.resource.player_repeat ? "Yes":"No";
+        userSettings.settings.changes.general.player_format = userAccount.properties.resource.player_format == 0 ? "Flash":"HTML5";
     }
     else
     {
@@ -163,6 +168,7 @@ function ChannelCtrl($scope, $routeParams, apiCall, userRes)
     $scope.loadMore = function() {
         apiCall.get({
             type: 'music',
+            owner: $scope.user.id,
             sortby: '-upload_date',
             offset: $scope.offset,
             limit: $scope.increment + 1,
@@ -321,12 +327,20 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
                 ready: function () {
                     $(this).jPlayer("setMedia", {
                         mp3: trackRes.file,
-                    }).jPlayer("play"); // Attempts to Auto-Play the media
+                    });
+                    if (userAccount.properties.resource)
+                    {
+                        if (userAccount.properties.resource.player_autoplay)
+                            $(this).jPlayer("play"); // Attempts to Auto-Play the media
+                    }
+                    else
+                        $(this).jPlayer("play"); // Attempts to Auto-Play the media
                 },
+                loop: userAccount.properties.resource ? userAccount.properties.resource.player_repeat:false,
                 swfPath: "static/api/swf/",
-                solution: "flash, html",
+                solution: userAccount.properties.resource ? (userAccount.properties.resource.player_format == 0 ? "flash, html":"html, flash"):"flash, html",
                 supplied: "mp3",
-                volume: 0.2
+                volume: userAccount.properties.resource ? userAccount.properties.resource.player_volume:0.5
             });
         });
         $scope.loadMore = function() {
@@ -357,7 +371,7 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
                 fileid: $scope.track.id,
                 commenttext: text,
             }, function(done) {
-                $scope.comments.splice(0,0,{owner:userAccount.properties.resource.username, body:text});
+                $scope.comments.splice(0,0,{owner:userAccount.properties.resource.username, body:text, avatar:userAccount.properties.resource.avatar});
                 $scope.offset += 1;
             });
         };
@@ -370,7 +384,10 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
             $scope.voteddislike = true;
     
         if (!$scope.voteallowed)
+        {
             commentService.properties.text = 'Please login to post comments.';
+            $scope.loginPlz = 'Login to vote.';
+        }
         $scope.commentService = commentService;
         $scope.comments = new Array();
         $scope.loadMore();

@@ -45,3 +45,29 @@ app.directive("repeatPassword", function() {
         }
     };
 });
+
+var FLOAT_REGEXP = /^\-?\d+((\.|\,)\d+)?$/;
+app.directive('smartFloat', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, elm, attrs, ctrl) {
+      ctrl.$parsers.unshift(function(viewValue) {
+        if (FLOAT_REGEXP.test(viewValue)) {
+          if (parseFloat(viewValue.replace(',', '.')) > 1 || parseFloat(viewValue.replace(',', '.')) < 0 )
+          {
+            ctrl.$setValidity('float', false);
+            return undefined;
+          }
+          else
+          {
+            ctrl.$setValidity('float', true);
+            return parseFloat(viewValue.replace(',', '.'));
+          }
+        } else {
+          ctrl.$setValidity('float', false);
+          return undefined;
+        }
+      });
+    }
+  };
+});

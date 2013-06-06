@@ -24,6 +24,21 @@ class UserProfile(auth_models.User):
     token = django_models.CharField(max_length=150)
     language = fields.LanguageField(verbose_name=u'language')
     avatar = django_models.CharField(max_length=200);
+    
+    player_volume = django_models.FloatField(blank=True)
+    player_autoplay = django_models.BooleanField(blank=True)
+    player_repeat = django_models.BooleanField(blank=True)
+    player_format = django_models.IntegerField(blank=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.player_volume:
+            self.player_volume = 1.0
+            self.player_autoplay = True
+        if not self.player_repeat:
+            self.player_repeat = False
+        if not self.player_format:
+            self.player_format = 0
+        super(UserProfile, self).save(*args, **kwargs)
 
     #def __unicode__(self):
         #return u'%s' % (self)

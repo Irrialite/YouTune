@@ -2,10 +2,10 @@
 
 <div class="center description">
     <span id="likeBtn">
-        <button class="btn" ng-disabled="!voteallowed || votedlike" ng-click="vote('like')">
+        <button class="btn" ng-disabled="!voteallowed || votedlike" ng-click="vote('like')" title="{{loginPlz}}">
             <i class="icon-thumbs-up"></i> Like</button>
         <br />
-        <button class="btn" ng-disabled="!voteallowed || voteddislike" ng-click="vote('dislike')">
+        <button class="btn" ng-disabled="!voteallowed || voteddislike" ng-click="vote('dislike')" title="{{loginPlz}}">
             <i class="icon-thumbs-down"></i> Dislike</button>
     </span>
 
@@ -27,14 +27,12 @@
         <button ng-disabled="!commentService.properties.text || !voteallowed" id="addComment" ng-click="addComment()">Add Comment</button>
     </form>
 
-    <div id="comments">
-        <ul>
-            <li ng-repeat="comment in comments">
-            {{comment.owner}}<br/>
+        <div class="comment" ng-repeat="comment in comments">
+            <img class="avatar" ng-src="{{comment.avatar}}"/>
+            <author><a href="#/user/{{comment.owner}}">{{comment.owner}}</a></author><br/>
             {{comment.body}}
-            </li>
-        </ul>
+        </div>
 
-    </div>
+
     <button ng-show="hasMore" ng-click="loadMore()" class="loadMore">Load More</button>
 </div>

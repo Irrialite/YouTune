@@ -294,6 +294,8 @@ class FileResource(resources.ModelResource):
         bundle.data['likes'] = track.likes.count()        
         bundle.data['dislikes'] = track.dislikes.count()
         if self.objects_returned == 1:
+            bundle.data['owner'] = bundle.obj.owner.username
+            bundle.data['avatar'] = bundle.obj.owner.avatar + "?s=64"
             if bundle.request.user and bundle.request.user.is_authenticated():
                 if bundle.request.user in track.likes.all():
                     bundle.data['voted'] = "like"

@@ -1,6 +1,9 @@
 <div ng-include="'/static/api/templates/partial/player.html'"></div>
 
 <div class="center description">
+    <span id="uploadby">
+        Uploaded by: <a href="#/user/{{track.owner}}">{{track.owner}}</a>
+    </span><br/>
     <span id="likeBtn">
         <button class="btn" ng-disabled="!voteallowed || votedlike" ng-click="vote('like')" title="{{loginPlz}}">
             <i class="icon-thumbs-up"></i> Like</button>

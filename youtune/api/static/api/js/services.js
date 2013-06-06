@@ -225,7 +225,7 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
                         id: 'update',
                         description: userSettingsObj.settings.changes.channel.description,
                     }, function (success) {
-                        $('#settings_top').append(userSettingsObj.settings.channel.successAlert);
+                        $('#settings_top').prepend(userSettingsObj.settings.channel.successAlert);
                     });
                     userAccount.properties.resource.channel.description = userSettingsObj.settings.changes.channel.description;
                 }

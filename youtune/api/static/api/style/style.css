@@ -14,6 +14,28 @@ textarea {
 	clear: both;
 }
 
+/* ------MAIN AREA-------- */
+#youtune-main{
+    padding-top: 40px;
+}
+
+.main-content{
+    background-color: #0077b3;
+    color: #ffffff;
+    width: 80%;
+    margin: 0 auto;
+    margin-right: auto;
+    text-align: center;
+    padding: 5px;
+}
+
+.border-box{
+	background-color: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
 
 /* ------TOP AREA-------- */
 #searchBar{
@@ -92,12 +114,6 @@ a:hover{
 }
 
 
-/* ------MAIN AREA-------- */
-#youtune-main{
-    padding-top: 40px;
-}
-
-
 /* ------CHANNEL CONTENT-------- */
 .channelHeader{
     background-color: #005580;
@@ -130,7 +146,6 @@ a:hover{
 .date{
     margin-right: 1em;
 }
-
 
 .register-form{
     background-color: #0077b3;
@@ -263,21 +278,50 @@ a:hover{
     background-color: #0077b3;
     text-align: center;
 }
-.topFive{
-    display: inline-block;
-    margin-right: 8em;
-}
-.songList{
-    display: inline-block;
 
+li.track-item{
+	display: block;
+	height: 100px;
+    margin: 20px;
 }
-.mainTxt{
-    color: #ffffff;
-    text-decoration: underline;
-}
-.fieldLimit{
-    width: 8em;
-}
+	li.track-item .preview{
+		border: 2px solid #0077B3;
+	    float: left;
+	    height: 80%;
+	    margin: 8px 20px;
+	    overflow: hidden;
+	    cursor: pointer;
+	}
+	li.track-item .name{
+    	float: left;
+	    margin: 8px 0;
+	    width: 60%;
+	}
+		li.track-item .name table{
+	    	color: black;
+		    font-size: 10px;
+		    line-height: 12px;
+		    width: 100%;
+		    border-collapse: separate;
+   			border-spacing: 2px;
+		}
+			li.track-item .name table th,
+			li.track-item .name table td{
+		    	border-bottom: 1px solid black;
+			}
+			li.track-item .name table th{
+		    	text-transform: uppercase;
+		    	font-size: 12px;
+			}
+				li.track-item .name table td.tags{
+			    	border-bottom: 0;
+				}
+	li.track-item .play{
+		float: left;
+    	margin: 12px;
+    	cursor: pointer;
+	}
+
 
 /* ------PLAYBACK PAGE-------- */
 .center{ /*used globaly, dont change*/

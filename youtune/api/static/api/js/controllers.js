@@ -228,6 +228,7 @@ function IndexCtrl($scope, tracksRes, tracksRes2, apiCall)
     $scope.tracks1 = tracksRes;
     $scope.tracks2 = tracksRes2;
     $scope.offset = $scope.increment;
+    
     if (tracksRes.length > $scope.increment)
     {
         $scope.hasMore = true;

@@ -316,6 +316,7 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
     $scope.voteallowed = true;
     $scope.votedlike = false;
     $scope.voteddislike = false;
+    $scope.renderedPlayer = 0;
     
     // check here if musicRes != null etc
     if ($scope.track)
@@ -323,25 +324,29 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
         $scope.track.fulltitle = trackRes.artist + " - " + trackRes.title;
         $scope.playbackPage = '/static/api/templates/partial/playback.html'
         $scope.$on('doneRender', function(){
-            $("#jquery_jplayer_1").jPlayer({
-                ready: function () {
-                    $(this).jPlayer("setMedia", {
-                        mp3: trackRes.file,
-                    });
-                    if (userAccount.properties.resource)
-                    {
-                        if (userAccount.properties.resource.player_autoplay)
+            $scope.renderedPlayer++;
+            if ($scope.renderedPlayer < 4)
+            {
+                $("#jquery_jplayer_1").jPlayer({
+                    ready: function () {
+                        $(this).jPlayer("setMedia", {
+                            mp3: trackRes.file,
+                        });
+                        if (userAccount.properties.resource)
+                        {
+                            if (userAccount.properties.resource.player_autoplay)
+                                $(this).jPlayer("play"); // Attempts to Auto-Play the media
+                        }
+                        else
                             $(this).jPlayer("play"); // Attempts to Auto-Play the media
-                    }
-                    else
-                        $(this).jPlayer("play"); // Attempts to Auto-Play the media
-                },
-                loop: userAccount.properties.resource ? userAccount.properties.resource.player_repeat:false,
-                swfPath: "static/api/swf/",
-                solution: userAccount.properties.resource ? (userAccount.properties.resource.player_format == 0 ? "flash, html":"html, flash"):"flash, html",
-                supplied: "mp3",
-                volume: userAccount.properties.resource ? userAccount.properties.resource.player_volume:0.5
-            });
+                    },
+                    loop: userAccount.properties.resource ? userAccount.properties.resource.player_repeat:false,
+                    swfPath: "static/api/swf/",
+                    solution: userAccount.properties.resource ? (userAccount.properties.resource.player_format == 0 ? "flash, html":"html, flash"):"flash, html",
+                    supplied: "mp3",
+                    volume: userAccount.properties.resource ? userAccount.properties.resource.player_volume:0.5
+                });
+            }
         });
         $scope.loadMore = function() {
             apiCall.get({

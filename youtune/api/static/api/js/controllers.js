@@ -325,7 +325,7 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
         $scope.playbackPage = '/static/api/templates/partial/playback.html'
         $scope.$on('doneRender', function(){
             $scope.renderedPlayer++;
-            if ($scope.renderedPlayer < 4)
+            if ($scope.renderedPlayer < 5)
             {
                 $("#jquery_jplayer_1").jPlayer({
                     ready: function () {

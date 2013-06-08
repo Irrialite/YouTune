@@ -46,4 +46,14 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
 app.run(function($rootScope, userAccount) {
     userAccount.initUser();
-})
+});
+
+app.directive('imageFit', function() {
+    return {
+        link: function(scope, element, attrs) {
+        	$(window).load(function(){
+        		$(element).imagefit();
+        	});
+        }
+    };
+});

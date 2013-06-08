@@ -1,9 +1,9 @@
-﻿<div class="main-content row-fluid">
+<div class="main-content row-fluid">
 
     <ul class="nav span6">
         <h3>Popular 5</h3>
         <li ng-repeat="track1 in tracks1" class="track-item border-box">
-            <div class="preview">
+            <div class="preview" data-image-fit="">
                 <a href="#/listen/{{ track1.base64id }}"><img ng-src="{{ track1.artist_img }}" /></a>
             </div>
             <div class="name">

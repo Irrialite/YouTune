@@ -139,7 +139,11 @@ a:hover{
 #channel{
     
 }
-
+td.name .social-btn {
+    float: left;
+    width: 14%;
+    text-align: center;
+}
 
 
 /* ------REGISTRATION PAGE-------- */
@@ -279,12 +283,11 @@ a:hover{
     text-align: center;
 }
 
-li.track-item{
-	display: block;
+.track-item{
 	height: 100px;
     margin: 20px;
 }
-	li.track-item .preview{
+	.track-item .preview{
 		border: 2px solid #0077B3;
 	    float: left;
 	    height: 80%;
@@ -292,12 +295,12 @@ li.track-item{
 	    overflow: hidden;
 	    cursor: pointer;
 	}
-	li.track-item .name{
+	.track-item .name{
     	float: left;
 	    margin: 8px 0;
 	    width: 60%;
 	}
-		li.track-item .name table{
+		.track-item .name table{
 	    	color: black;
 		    font-size: 10px;
 		    line-height: 12px;
@@ -305,18 +308,26 @@ li.track-item{
 		    border-collapse: separate;
    			border-spacing: 2px;
 		}
-			li.track-item .name table th,
-			li.track-item .name table td{
+			.track-item .name table th,
+			.track-item .name table td{
 		    	border-bottom: 1px solid black;
 			}
-			li.track-item .name table th{
+			.track-item .name table th{
 		    	text-transform: uppercase;
 		    	font-size: 12px;
+		    	width: 20px;
 			}
 				li.track-item .name table td.tags{
 			    	border-bottom: 0;
 				}
-	li.track-item .play{
+	.track-item .fill{
+	    margin: 0;
+	    width: 82%;
+	}
+	.track-item .social{
+	    width: 10%;
+	}
+	.track-item .play{
 		float: left;
     	margin: 12px;
     	cursor: pointer;

@@ -1,28 +1,68 @@
 <article id="channel">
-    <header class="page-header img-rounded channelHeader">
-        <img class="thumbnail channelAvatar" ng-style="userAccount.getAvatarStyle(128, user.avatar)" >
-        <h1 id="channelTitle">{{user.username}}'s Channel </h1>
-    </header>
+	<header class="page-header img-rounded channelHeader">
+		<img class="thumbnail channelAvatar"
+			ng-style="userAccount.getAvatarStyle(128, user.avatar)">
+		<h1 id="channelTitle">{{user.username}}'s Channel</h1>
+	</header>
 
-    <section class="content" id="introduction">
-        {{user.channel.description}}
-    </section>
+	<section class="content" id="introduction">
+		{{user.channel.description}}</section>
 
-    <table class="table table-striped">
-        <tr ng-repeat="upload in uploads">
-            <td class="preview">
-                <a href="#/listen/{{ upload.base64id }}"><img ng-src="{{ upload.artist_img }}" /></>
-            </td>
-            <td class="name"><a href="#/listen/{{ upload.base64id }}">{{ upload.artist }} - {{ upload.title }}</a></td>
-            <td class="delete" ng-show="owner">
-                <a class="btn btn-danger" href="#/upload/delete/{{ upload.id }}">
-                    <i class="icon-trash icon-white"></i>
-                    <span>Delete</span>
-                </a>
-            </td>
-        </tr>
-    </table>
-    <button ng-show="hasMore" ng-click="loadMore()" class="loadMore">Show More</button>
-    <footer>
-    </footer>
+	<table class="table">
+		<tr ng-repeat="upload in uploads" class="track-item">
+			<td data-image-fit="" class="preview"><a href="#/listen/{{ upload.base64id }}"><img
+					ng-src="{{ upload.artist_img }}" /></> </td>
+			<td class="name fill">
+				<table>
+					<tr>
+						<th>Artist</th>
+						<td>{{ upload.artist }}</td>
+					</tr>
+					<tr>
+						<th>Title</th>
+						<td>{{ upload.title }}</td>
+					</tr>
+					<tr>
+						<th>Album</th>
+						<td>{{ upload.album }}</td>
+					</tr>
+					<tr>
+						<td class="tags" colspan="4">{{ upload.tags }}</td>
+					</tr>
+				</table>
+			</td>
+			<td class="social">
+				<div class="fb-like social-btn"
+					data-href="http://www.youtune.com/#/listen/{{ upload.base64id }}"
+					data-send="false" data-layout="box_count" data-width="450"
+					data-show-faces="false"></div>
+				<div class="g-plusone social-btn" data-size="tall"
+					data-annotation="bubble" data-width="300"
+					data-href="http://www.youtune.com/#/listen/{{ upload.base64id }}"></div>
+				<div class="social-btn">
+					<a href="https://twitter.com/share" class="twitter-share-button"
+						data-url="http://www.youtune.com/#/listen/{{ upload.base64id }}"
+						data-text="Listening to" data-size="large" data-hashtags="youtune">Tweet</a>
+				</div> <script>
+					!function(d, s, id) {
+						var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/
+								.test(d.location) ? 'http' : 'https';
+						if (!d.getElementById(id)) {
+							js = d.createElement(s);
+							js.id = id;
+							js.src = p + '://platform.twitter.com/widgets.js';
+							fjs.parentNode.insertBefore(js, fjs);
+						}
+					}(document, 'script', 'twitter-wjs');
+				</script>
+			</td>
+			<td class="delete" ng-show="owner"><a class="btn btn-danger"
+				href="#/upload/delete/{{ upload.id }}"> <i
+					class="icon-trash icon-white"></i> <span>Delete</span>
+			</a></td>
+		</tr>
+	</table>
+	<button ng-show="hasMore" ng-click="loadMore()" class="loadMore">Show
+		More</button>
+	<footer> </footer>
 </article>

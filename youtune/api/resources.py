@@ -271,10 +271,13 @@ class FileResource(resources.ModelResource):
             query = query.split(' ')
             qset = Q()
             for q in query:
-                if len(q) > 1:
-                    qset |= Q(title__icontains=q)
-                    qset |= Q(tags__icontains=q)
-                    qset |= Q(artist__icontains=q)
+                if len(q.strip()) > 1:
+                    print q
+                    qset &= (
+                             Q(title__icontains=q) | 
+                             Q(tags__icontains=q) | 
+                             Q(artist__icontains=q)
+                            )
             orm_filters.update({'custom': qset})
     
         return orm_filters

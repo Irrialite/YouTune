@@ -1,12 +1,27 @@
 <div id="center searchResults">
     <img ng-show="loading" ng-src="{{loading}}" />
     <h2 ng-show="noResults">{{noResults}}</h2>
+    <div class="btn-group" ng-show="!noResults">
+      <a class="btn dropdown-toggle" data-toggle="dropdown">
+        Sort
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a tabindex="-1" ng-click="sort('-views')">Views</a></li>
+        <li><a tabindex="-1" ng-click="sort('-date')">Upload date</a></li>
+        <li><a tabindex="-1" ng-click="sort('-rating')">Rating</a></li>
+        <li><a tabindex="-1" ng-click="sort('alphabetical')">Name</a></li>
+      </ul>
+    </div>
     <table class="table table-striped">
         <tr ng-repeat="result in results">
             <td class="preview">
                 <a href="#/listen/{{ result.base64id }}"><img ng-src="{{ result.artist_img }}" /></>
             </td>
-            <td class="name"><a href="#/listen/{{ result.base64id }}">{{ result.artist }} - {{ result.title }}</a></td>
+            <td class="name"><a href="#/listen/{{ result.base64id }}">{{ result.artist }} - {{ result.title }}</a><br/>
+                {{ result.tags }}
+            </td>
+            <td>Views: {{result.views}}</td>
         </tr>
     </table>
     <button ng-show="hasMore" ng-click="loadMore()" class="loadMore">Show More</button>

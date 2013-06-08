@@ -415,3 +415,12 @@ td.name .social-btn {
 		width: 64px;
 		margin-right: 0.5em;
 }
+/* ------FOOTER----------*/
+.footer {
+  position: relative;
+  margin-top: 0em; /* negative value of footer height */
+  height: 2em;
+  clear:both;
+  padding-top:20px;
+  background-color: #eee
+} 

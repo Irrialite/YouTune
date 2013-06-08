@@ -727,6 +727,8 @@
             scope.$apply(function () {
                 scope.disabled = false;
             });
+            // Limit upload to 1 file at once
+            data.files = data.files.splice(0, 1);
             var that = this,
                 result = true,
                 options = $.extend({}, this.options, data),

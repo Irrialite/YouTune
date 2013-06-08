@@ -68,6 +68,9 @@ class UserProfileResource(resources.ModelResource):
             url(r'^(?P<resource_name>%s)/update%s$' %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('update'), name='api_update'),
+            url(r'^(?P<resource_name>%s)/count%s$' %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('count'), name='api_count'),
         ]
 
     def login(self, request, **kwargs):
@@ -184,6 +187,15 @@ class UserProfileResource(resources.ModelResource):
                 'success': False,
                 'reason': 'incorrect',
             }, HttpUnauthorized)
+    
+    def count(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+        
+        count = models.UserProfile.objects.count()
+        
+        return self.create_response(request, {
+                    'count': count,
+                })
             
     def save(self, bundle, skip_errors=False):
         bundle = super(UserProfileResource, self).save(bundle, skip_errors)
@@ -271,10 +283,13 @@ class FileResource(resources.ModelResource):
             query = query.split(' ')
             qset = Q()
             for q in query:
-                if len(q) > 1:
-                    qset |= Q(title__icontains=q)
-                    qset |= Q(tags__icontains=q)
-                    qset |= Q(artist__icontains=q)
+                if len(q.strip()) > 1:
+                    print q
+                    qset &= (
+                             Q(title__icontains=q) | 
+                             Q(tags__icontains=q) | 
+                             Q(artist__icontains=q)
+                            )
             orm_filters.update({'custom': qset})
     
         return orm_filters

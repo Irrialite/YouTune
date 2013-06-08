@@ -40,10 +40,18 @@ function YouTuneCtrl($scope, $http, $cookies, apiCall, userAccount, userSettings
         userAccount.logOut();
         logBoxService.display();
     };
+    
+    apiCall.get({
+            type: 'userprofile',
+            id: 'count',
+    }, function(success) {
+        $scope.registeredUsers = success.count;
+        $("#nUsers").append(success.count);
+    });
 }
 
 function YouTuneRegisterCtrl($scope, $location, userAccount, apiCall) {
-    $scope.registerUser = {};    
+    $scope.registerUser = {};
     $scope.dupename = false;
     $scope.registerUser.birthdate = null;
     
@@ -100,6 +108,8 @@ function YouTuneLoginWindowCtrl($scope, $location, logBoxService) {
 
 function YouTuneUploadCtrl($scope) {
     $scope.disabled = true;
+    var fetchingAlert = '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Fetching track info from last.fm. Please wait.</div>';
+    $('#settings_top').prepend(userSettingsObj.settings.general.successAlert);
 }
 
 function YouTuneUploadDelete($scope, $routeParams) {
@@ -157,7 +167,7 @@ SettingsCtrl.resolve = {
     }
 }
 
-function ChannelCtrl($scope, $routeParams, apiCall, userRes)
+function ChannelCtrl($scope, $routeParams, $http, apiCall, userRes)
 {
     $scope.user = userRes;
     
@@ -197,6 +207,22 @@ function ChannelCtrl($scope, $routeParams, apiCall, userRes)
             limit: $scope.increment + 1,
         }, function (success) {
             $scope.owner = $scope.userAccount.properties.resource && userRes.id == $scope.userAccount.properties.resource.id;
+            if ($scope.owner)
+            {
+                $scope.deleteFile = function (url, id) {
+                    $http({method: 'POST', url: url + id}).
+                        success(function(data, status, headers, config) {
+                            for (var i = 0; i < $scope.uploads.length; i++)
+                            {
+                                if ($scope.uploads[i].id == id)
+                                {
+                                    $scope.uploads.splice(i, 1);
+                                    $scope.offset--;
+                                }
+                            }
+                        });
+                };
+            }
             if (success.objects.length > $scope.increment)
                 $scope.hasMore = true;
             else
@@ -456,34 +482,101 @@ function SearchCtrl($scope, $routeParams, apiCall, $timeout)
     $scope.increment = 10; // controls how many it will load per click
     $scope.hasMore = false;
     $scope.offset = 0;
+    $scope.currentSort = "-views";
     
     $scope.loading = '/static/api/img/loading.gif';
-    $timeout(function() {
-        apiCall.get({
-            type: 'music',
-            sortby: '-views',
-            query: $routeParams.q,
-            limit: 100,
-        }, function (success) {
-            $scope.allResults = success.objects;
-            var len = success.objects.length;
-            $scope.hasMore = len > $scope.increment;
-            $scope.offset = len > $scope.increment ? $scope.increment:len;
-            if (len == 0)
-                $scope.noResults = 'No matches found!';
-            else
-                $scope.results = (0, 0, $scope.allResults.splice(0, $scope.increment));
-            $scope.loading = undefined;
-        });
-
-    }, 3000); 
+    
+    apiCall.get({
+        type: 'music',
+        //sortby: '-views',
+        query: $routeParams.q,
+        limit: 200,
+    }, function (success) {
+        $scope.allResults = success.objects;
+        var len = success.objects.length;
+        $scope.hasMore = len > $scope.increment;
+        $scope.offset = len > $scope.increment ? $scope.increment:len;
+        if (len == 0)
+            $scope.noResults = 'No matches found!';
+        else
+        {
+            $scope.sort($scope.currentSort);
+            $scope.results = (0, 0, $scope.allResults.slice(0, $scope.increment));
+        }
+        $scope.loading = undefined;
+    });
     
     $scope.loadMore = function () {
-        var objs = $scope.allResults.splice($scope.offset, $scope.increment)
-        if (objs.length <= $scope.increment)
-            hasMore = false;
-        $scope.results.splice(0, 0, objs);
+        var objs = $scope.allResults.slice($scope.offset, $scope.offset + $scope.increment)
+        for (var i = 0; i < objs.length; i++)
+            $scope.results.push(objs[i]);
         $scope.offset += objs.length;
+        if ($scope.offset >= $scope.allResults.length)
+            $scope.hasMore = false;
+        objs = undefined;
+    };
+    
+    $scope.sort = function (sortParam) {
+        // arguments[1] is parameter to reverse sort next time user clicks button
+        if (sortParam == "views")
+        {
+            $scope.allResults.sort(function(a,b) {
+                return a.views-b.views;
+            });
+            $scope.results = (0, 0, $scope.allResults.slice(0, $scope.offset));
+        }
+        else if (sortParam == "-views")
+        {
+            $scope.allResults.sort(function(a,b) {
+                return b.views-a.views;
+            });
+            $scope.results = (0, 0, $scope.allResults.slice(0, $scope.offset));
+        }
+        else if (sortParam == "alphabetical")
+        {
+            $scope.allResults.sort(function(a,b) {
+                return (a.artist + a.title).localeCompare(b.artist + b.title);
+            });
+            $scope.results = (0, 0, $scope.allResults.slice(0, $scope.offset));
+        }
+        else if (sortParam == "-alphabetical")
+        {
+            $scope.allResults.sort(function(a,b) {
+                return (b.artist + b.title).localeCompare(a.artist + a.title);
+            });
+            $scope.results = (0, 0, $scope.allResults.slice(0, $scope.offset));
+        }
+        else if (sortParam == "rating")
+        {
+            $scope.allResults.sort(function(a,b) {
+                return (a.likes-a.dislikes)-(b.likes-b.dislikes);
+            });
+            $scope.results = (0, 0, $scope.allResults.slice(0, $scope.offset));
+        }
+        else if (sortParam == "-rating")
+        {
+            $scope.allResults.sort(function(a,b) {
+                return (b.likes-b.dislikes)-(a.likes-a.dislikes);
+            });
+            $scope.results = (0, 0, $scope.allResults.slice(0, $scope.offset));
+        }
+        else if (sortParam == "date")
+        {
+            $scope.allResults.sort(function(a,b) {
+                return new Date(a.upload_date).getTime() - new Date(b.upload_date).getTime();
+            });
+            $scope.results = (0, 0, $scope.allResults.slice(0, $scope.offset));
+        }
+        else if (sortParam == "-date")
+        {
+            $scope.allResults.sort(function(a,b) {
+                return new Date(b.upload_date).getTime() - new Date(a.upload_date).getTime();
+            });
+            $scope.results = (0, 0, $scope.allResults.slice(0, $scope.offset));
+        }
+        else
+            return;
+        $scope.currentSort = sortParam;
     };
 }
 

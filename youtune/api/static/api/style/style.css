@@ -295,6 +295,9 @@ td.name .social-btn {
 	    overflow: hidden;
 	    cursor: pointer;
 	}
+		.track-item .preview img{
+		    min-height: 100%;
+		}
 	.track-item .name{
     	float: left;
 	    margin: 8px 0;

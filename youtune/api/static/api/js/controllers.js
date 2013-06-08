@@ -40,10 +40,18 @@ function YouTuneCtrl($scope, $http, $cookies, apiCall, userAccount, userSettings
         userAccount.logOut();
         logBoxService.display();
     };
+    
+    apiCall.get({
+            type: 'userprofile',
+            id: 'count',
+    }, function(success) {
+        $scope.registeredUsers = success.count;
+        $("#nUsers").append(success.count);
+    });
 }
 
 function YouTuneRegisterCtrl($scope, $location, userAccount, apiCall) {
-    $scope.registerUser = {};    
+    $scope.registerUser = {};
     $scope.dupename = false;
     $scope.registerUser.birthdate = null;
     
@@ -100,6 +108,8 @@ function YouTuneLoginWindowCtrl($scope, $location, logBoxService) {
 
 function YouTuneUploadCtrl($scope) {
     $scope.disabled = true;
+    var fetchingAlert = '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Fetching track info from last.fm. Please wait.</div>';
+    $('#settings_top').prepend(userSettingsObj.settings.general.successAlert);
 }
 
 function YouTuneUploadDelete($scope, $routeParams) {
@@ -157,7 +167,7 @@ SettingsCtrl.resolve = {
     }
 }
 
-function ChannelCtrl($scope, $routeParams, apiCall, userRes)
+function ChannelCtrl($scope, $routeParams, $http, apiCall, userRes)
 {
     $scope.user = userRes;
     
@@ -197,6 +207,22 @@ function ChannelCtrl($scope, $routeParams, apiCall, userRes)
             limit: $scope.increment + 1,
         }, function (success) {
             $scope.owner = $scope.userAccount.properties.resource && userRes.id == $scope.userAccount.properties.resource.id;
+            if ($scope.owner)
+            {
+                $scope.deleteFile = function (url, id) {
+                    $http({method: 'POST', url: url + id}).
+                        success(function(data, status, headers, config) {
+                            for (var i = 0; i < $scope.uploads.length; i++)
+                            {
+                                if ($scope.uploads[i].id == id)
+                                {
+                                    $scope.uploads.splice(i, 1);
+                                    $scope.offset--;
+                                }
+                            }
+                        });
+                };
+            }
             if (success.objects.length > $scope.increment)
                 $scope.hasMore = true;
             else

@@ -68,6 +68,9 @@ class UserProfileResource(resources.ModelResource):
             url(r'^(?P<resource_name>%s)/update%s$' %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('update'), name='api_update'),
+            url(r'^(?P<resource_name>%s)/count%s$' %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('count'), name='api_count'),
         ]
 
     def login(self, request, **kwargs):
@@ -184,6 +187,15 @@ class UserProfileResource(resources.ModelResource):
                 'success': False,
                 'reason': 'incorrect',
             }, HttpUnauthorized)
+    
+    def count(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+        
+        count = models.UserProfile.objects.count()
+        
+        return self.create_response(request, {
+                    'count': count,
+                })
             
     def save(self, bundle, skip_errors=False):
         bundle = super(UserProfileResource, self).save(bundle, skip_errors)

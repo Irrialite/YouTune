@@ -1,8 +1,8 @@
 <div id="center searchResults">
     <img ng-show="loading" ng-src="{{loading}}" />
     <h2 ng-show="noResults">{{noResults}}</h2>
-    <div class="btn-group">
-      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+    <div class="btn-group" ng-show="!noResults">
+      <a class="btn dropdown-toggle" data-toggle="dropdown">
         Sort
         <span class="caret"></span>
       </a>

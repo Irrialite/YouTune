@@ -56,9 +56,16 @@
 					}(document, 'script', 'twitter-wjs');
 				</script>
 			</td>
-			<td class="delete" ng-show="owner"><a class="btn btn-danger"
-				href="#/upload/delete/{{ upload.id }}"> <i
-					class="icon-trash icon-white"></i> <span>Delete</span>
+			<td class="delete" ng-show="owner">
+			    <div class="btn-group" ng-show="!noResults">
+                  <a class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                    Delete
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a tabindex="-1" ng-click="deleteFile('/upload/delete/', upload.id)">Confirm</a></li>
+                  </ul>
+                </div>
 			</a></td>
 		</tr>
 	</table>

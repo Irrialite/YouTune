@@ -17,10 +17,6 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
                 templateUrl: '/static/api/templates/upload.html',
                 controller: YouTuneUploadCtrl
             })
-            .when('/upload/delete/:id', {
-                templateUrl: '/static/api/templates/upload_delete.html', 
-                controller: YouTuneUploadDelete
-            })
             .when('/user/:name/settings', {
                 templateUrl: '/static/api/templates/settings.html', 
                 controller: SettingsCtrl,

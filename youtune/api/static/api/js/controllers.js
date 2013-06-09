@@ -145,12 +145,10 @@ function YouTuneUploadDelete($scope, $routeParams) {
 }
 
 
-function SearchBarCtrl($scope, $location, logBoxService) {
+function SearchBarCtrl($scope, searchService, logBoxService) {
     $scope.displayLogBox = logBoxService.display;
-    $scope.search = '';
-    $scope.doSearch = function () {
-        $location.path('/search').search({q: $scope.search});
-    };
+    $scope.vars = searchService.properties;
+    $scope.doSearch = searchService.doSearch;
 }
 
 function SettingsCtrl($scope, $routeParams, userSettings, userAccount) {
@@ -361,7 +359,7 @@ IndexCtrl.resolve = {
     }
 }
 
-function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, commentService)
+function PlaybackCtrl($scope, $routeParams, searchService, trackRes, apiCall, userAccount, commentService)
 {
     $scope.track = trackRes;
     $scope.increment = 5; // controls how many it will load per click
@@ -370,19 +368,26 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
     $scope.voteallowed = true;
     $scope.votedlike = false;
     $scope.voteddislike = false;
-    $scope.renderedPlayer = 0;
+    $scope.renderedPlayer = false;
     
     // check here if musicRes != null etc
     if ($scope.track)
     {
+        $scope.vars = searchService.properties;
+        $scope.doSearch = searchService.doSearch;
+        var tmptags = $scope.track.tags.split(", ");
+        $scope.ntags = tmptags.length;
+        $scope.tracktags = new Array();
+        for (var i = 0; i < $scope.ntags; i++)
+            $scope.tracktags.push({id: i+1, text: tmptags[i]});
         $scope.track.fulltitle = trackRes.artist + " - " + trackRes.title;
         $scope.playbackPage = '/static/api/templates/partial/playback.html'
         $scope.$on('doneRender', function(){
-            $scope.renderedPlayer++;
-            if ($scope.renderedPlayer < 5)
+            if (!$scope.renderedPlayer)
             {
                 $("#jquery_jplayer_1").jPlayer({
                     ready: function () {
+                        $scope.renderedPlayer = true;
                         $(this).jPlayer("setMedia", {
                             mp3: trackRes.file,
                         });
@@ -484,6 +489,11 @@ function PlaybackCtrl($scope, $routeParams, trackRes, apiCall, userAccount, comm
         {
             // send msg that you can't vote if not logged in
         }
+    }
+    
+    $scope.clickTag = function(tag) {
+        $scope.vars.search = tag;
+        $scope.doSearch();
     }
 }
 

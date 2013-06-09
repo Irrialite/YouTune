@@ -32,7 +32,7 @@ class UserProfile(auth_models.User):
     
     def save(self, *args, **kwargs):
         if not self.player_volume:
-            self.player_volume = 1.0
+            self.player_volume = 0.5
             self.player_autoplay = True
         if not self.player_repeat:
             self.player_repeat = False

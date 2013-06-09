@@ -386,9 +386,14 @@ td.name .social-btn {
     width: 29.8em;
     border: #e3e3e3;
     border-style: solid;
+    word-wrap: break-word;
+}
+.description p{
+		text-align: left;
 }
 #tags{
     display: inline-block;
+    margin-bottom: 1em;
 }
 
 

@@ -2,8 +2,8 @@
 	<div id="searchBarBox">
 	    <a href="#" id="mainLogo"></a>
 	    <form id="searchArea">
-	        <input ui-keypress="{enter: doSearch}" ng-model="search" id="searchInput" title="Find your music">
-	        <button ng-disabled="!search" ng-click="doSearch()">♫</button>
+	        <input ui-keypress="{enter: doSearch}" ng-model="vars.search" id="searchInput" title="Find your music">
+	        <button ng-disabled="!vars.search" ng-click="doSearch()">♫</button>
 	    </form>
 	    <button id="loginButton" class="btn btn-primary" ng-click="displayLogBox()"><span class="inner">Login</span><b class="caret"></b></button>
 	    <div name="loginForm" class="form-actions loginForm" ng-controller="YouTuneLoginWindowCtrl">

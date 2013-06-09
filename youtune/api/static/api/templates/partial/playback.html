@@ -18,13 +18,14 @@
         Views: {{track.views}}
     </span>
 
-    <h5>Description:</h5>
-    <span id="tags">
-        {{track.tags}}
-    </span>
+    <h5 ng-show="track.description">Description:</h5>
     <p>
         {{track.description}}
     </p>
+    <h6 ng-show="track.tags">Tags:</h6>
+    <span ng-show="track.tags" id="tags">
+        <span ng-repeat="tag in tracktags"><a ng-click="clickTag(tag.text)">{{tag.text}}</a><span ng-show="tag.id < ntags">, </span></span>
+    </span>
     <form id="addComment">
         <input ng-disabled="!voteallowed" ng-model="commentService.properties.text" id="commentInput" title="Add Comment">
         <button ng-disabled="!commentService.properties.text || !voteallowed" id="addComment" ng-click="addComment()">Add Comment</button>
@@ -32,6 +33,7 @@
 
         <div class="comment" ng-repeat="comment in comments">
             <img class="avatar" ng-src="{{comment.avatar}}"/>
+            <span>{{comment.post_date}}</span>
             <author><a href="#/user/{{comment.owner}}">{{comment.owner}}</a></author><br/>
             {{comment.body}}
         </div>

@@ -264,4 +264,12 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
     .service('commentService', ['$rootScope', 'userAccount', 'apiCall', function($rootScope, userAccount, apiCall) {
         this.properties = {};
     }])
+    .service('searchService', ['$rootScope', '$location', function($rootScope, $location) {
+        var searchServiceObj = this;
+        this.properties = {};
+        this.properties.search = "";
+        this.doSearch = function() {
+            $location.path('/search').search({q: searchServiceObj.properties.search});
+        }
+    }])
 

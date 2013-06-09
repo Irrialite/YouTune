@@ -64,7 +64,7 @@ $(function () {
     	                        if (!data.error)
     	                        {
         	                    	var tags = [];
-        	                    	if (data.artist.tags instanceof Array)
+        	                    	if (data.artist.tags instanceof Object)
         	                    	{
             	                    	$.each(data.artist.tags.tag, function (idx, val) {
             	                    		tags.push(val.name);

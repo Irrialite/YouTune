@@ -30,7 +30,7 @@
         <button ng-disabled="!commentService.properties.text || !voteallowed" id="addComment" ng-click="addComment()">Add Comment</button>
     </form>
 
-        <div class="comment" ng-repeat="comment in comments">
+        <div class="comment border-box" ng-repeat="comment in comments">
             <img class="avatar" ng-src="{{comment.avatar}}"/>
             <author><a href="#/user/{{comment.owner}}">{{comment.owner}}</a></author><br/>
             {{comment.body}}

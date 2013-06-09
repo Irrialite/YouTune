@@ -31,10 +31,11 @@
         <button ng-disabled="!commentService.properties.text || !voteallowed" id="addComment" ng-click="addComment()">Add Comment</button>
     </form>
 
-        <div class="comment" ng-repeat="comment in comments">
+        <div class="comment border-box" ng-repeat="comment in comments">
             <img class="avatar" ng-src="{{comment.avatar}}"/>
-            <span>{{comment.post_date}}</span>
-            <author><a href="#/user/{{comment.owner}}">{{comment.owner}}</a></author><br/>
+            <author><a href="#/user/{{comment.owner}}">{{comment.owner}}</a></author>
+            <span class="date">{{comment.post_date | date:'medium'}}</span>
+            <br/>
             {{comment.body}}
         </div>
 

@@ -15,7 +15,8 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
             })
             .when('/upload', {
                 templateUrl: '/static/api/templates/upload.html',
-                controller: YouTuneUploadCtrl
+                controller: YouTuneUploadCtrl,
+                resolve: YouTuneUploadCtrl.resolve,
             })
             .when('/user/:name/settings', {
                 templateUrl: '/static/api/templates/settings.html', 

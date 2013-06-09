@@ -71,6 +71,8 @@ function YouTuneRegisterCtrl($scope, $location, userAccount, apiCall) {
     };
     
     $scope.$on('userAccount::successLogin', function(event, state) {
+        $("#nUsers").empty();
+        $("#nUsers").append($scope.registeredUsers + 1);
         //logBoxService.display();
         //$location.path('user/test');
     });
@@ -106,10 +108,36 @@ function YouTuneLoginWindowCtrl($scope, $location, logBoxService) {
     });
 }
 
-function YouTuneUploadCtrl($scope) {
+function YouTuneUploadCtrl($scope, loggedIn) {
     $scope.disabled = true;
-    var fetchingAlert = '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Fetching track info from last.fm. Please wait.</div>';
-    $('#settings_top').prepend(userSettingsObj.settings.general.successAlert);
+    if (loggedIn)
+        $scope.page = 'upload/new';
+    else
+        $scope.page = '/static/api/templates/partial/login_required.html';
+}
+
+YouTuneUploadCtrl.resolve = {
+    loggedIn: function ($q, $route, userAccount, apiCall) {
+        var deferred = $q.defer();
+        
+        if (userAccount.properties.resource)
+            deferred.resolve(true);
+        else
+        {
+            apiCall.get({
+                type: 'userprofile',
+                id: 'loggedin',
+            }, function (data) {
+                if (data.success == true) {
+                    deferred.resolve(true);
+                }
+                else
+                    deferred.resolve(false);
+            });
+        }
+        
+        return deferred.promise;
+    }
 }
 
 function YouTuneUploadDelete($scope, $routeParams) {

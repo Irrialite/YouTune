@@ -32,7 +32,9 @@
 
         <div class="comment border-box" ng-repeat="comment in comments">
             <img class="avatar" ng-src="{{comment.avatar}}"/>
-            <author><a href="#/user/{{comment.owner}}">{{comment.owner}}</a></author><br/>
+            <author><a href="#/user/{{comment.owner}}">{{comment.owner}}</a></author>
+            <span class="date">{{comment.post_date | date:'medium'}}</span>
+            <br/>
             {{comment.body}}
         </div>
 

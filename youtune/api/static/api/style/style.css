@@ -408,12 +408,15 @@ td.name .social-btn {
 			font-size:1.5em;
 			font-weight:bold;
 	}
-	.avatar{
+	.comment .avatar{
 			float: left;
 			height: auto;
 			width: 64px;
 			margin: 5px;
-}
+	}
+	.comment .date{
+			float: right;
+	}
 /* ------FOOTER----------*/
 footer {
 	position: absolute;

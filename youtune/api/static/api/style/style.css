@@ -78,9 +78,10 @@ textarea {
      width:28em;
 }
 
-#loginButton{
+#loginButton {
     float: right;
-    width: 100px;
+    min-width: 100px;
+    max-width: 30%;
 }
 #loginButton .inner{
 	padding: 0 10px;

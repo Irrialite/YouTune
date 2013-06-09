@@ -56,8 +56,13 @@ function YouTuneRegisterCtrl($scope, $location, userAccount, apiCall) {
     $scope.registerUser.birthdate = null;
     
     $scope.register = function(registerUser) {
-        tempDate = new Date(year, month - 1, day);
-        $scope.registerUser.birthdate = tempDate.getFullYear() + "-" + (tempDate.getMonth() + 1) + "-" + tempDate.getDate();
+        if (year == 0 || month == 0 || day == 0)
+            $scope.registerUser.birthdate = null;
+        else
+        {
+            tempDate = new Date(year, month - 1, day);
+            $scope.registerUser.birthdate = tempDate.getFullYear() + "-" + (tempDate.getMonth() + 1) + "-" + tempDate.getDate();
+        }
         var users = apiCall.post({
             type: 'userprofile',
             id: 'checkfordupe',
@@ -359,7 +364,7 @@ IndexCtrl.resolve = {
     }
 }
 
-function PlaybackCtrl($scope, $routeParams, searchService, trackRes, apiCall, userAccount, commentService)
+function PlaybackCtrl($scope, $routeParams, $filter, searchService, trackRes, apiCall, userAccount, commentService)
 {
     $scope.track = trackRes;
     $scope.increment = 5; // controls how many it will load per click
@@ -421,7 +426,11 @@ function PlaybackCtrl($scope, $routeParams, searchService, trackRes, apiCall, us
                     $scope.hasMore = false;
                 var extraComments = success.objects.splice(0, $scope.increment)
                 for (var i = 0; i < extraComments.length; i++ )
+                {
+                    var d = new Date(extraComments[i].post_date);
+                    extraComments[i].post_date_tz = $filter('date')(d, 'dd-MM-yyyy HH:mm:ss');
                     $scope.comments.push(extraComments[i]);
+                }
                 $scope.offset = $scope.offset + extraComments.length;
             });
         }
@@ -435,7 +444,8 @@ function PlaybackCtrl($scope, $routeParams, searchService, trackRes, apiCall, us
                 fileid: $scope.track.id,
                 commenttext: text,
             }, function(done) {
-                $scope.comments.splice(0,0,{owner:userAccount.properties.resource.username, body:text, avatar:userAccount.properties.resource.avatar});
+                var d = new Date(done.date);
+                $scope.comments.splice(0,0,{owner:userAccount.properties.resource.username, body:text, avatar:userAccount.properties.resource.avatar, post_date_tz:$filter('date')(d, 'dd-MM-yyyy HH:mm:ss')});
                 $scope.offset += 1;
             });
         };

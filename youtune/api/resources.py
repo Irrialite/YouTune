@@ -11,6 +11,7 @@ from tastypie import resources, fields
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
+from tastypie.serializers import Serializer
 from tastypie.utils import trailing_slash
 from tastypie.http import HttpUnauthorized, HttpForbidden
 
@@ -19,6 +20,12 @@ from youtune.api.helpers import FieldsValidation
 from youtune.api.authorization import UserObjectsOnlyAuthorization
 from youtune.fileupload import models as file_models
 
+class CommentDateSerializer(Serializer):
+     def format_datetime(self, data):
+        if self.datetime_formatting == 'rfc-2822':
+            return super(CommentDateSerializer, self).format_datetime(data)
+
+        return data.isoformat()
 
 class UserProfileResource(resources.ModelResource):
     id = fields.IntegerField(attribute="id", null=True)
@@ -397,6 +404,7 @@ class CommentResource(resources.ModelResource):
         allowed_methods = ['get']
         queryset = file_models.Comment.objects.all()
         resource_name = 'comment'
+        serializer = CommentDateSerializer()
         filtering = {
             'base64id': ALL,
         }
@@ -429,8 +437,10 @@ class CommentResource(resources.ModelResource):
                     comment = file_models.Comment(owner=request.user, body=body, file=file)
                     comment.save()
                     file.comments.add(comment)
+                    print comment.post_date
                     return self.create_response(request, {
                         'success': True,
+                        'date': comment.post_date,
                     })
             else:
                 return self.create_response(request, {

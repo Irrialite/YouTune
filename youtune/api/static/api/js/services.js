@@ -65,16 +65,21 @@ angular.module('youtuneServices', ['ngResource', 'ngCookies'])
 
         };
         this.logOut = function() {
+            parentObj = this;
             apiCall.get({
                 type: 'userprofile',
                 id: 'logout',
+            }, function (success) {
+                if (success.success)
+                {
+                    parentObj.properties.loggedIn = false;
+                    parentObj.properties.sessionid = undefined;
+                    parentObj.properties.resource = undefined;
+                    $location.path('');
+                    $('#loginButton .inner').text('Login');
+                    location.reload(false);
+                }
             });
-            this.properties.loggedIn = false;
-            this.properties.sessionid = undefined;
-            this.properties.resource = undefined;
-            $location.path('');
-            $('#loginButton .inner').text('Login');
-            location.reload(false);
         };
         this.register = function(registerUser) {
             parentObj = this;

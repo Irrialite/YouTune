@@ -291,7 +291,6 @@ class FileResource(resources.ModelResource):
             qset = Q()
             for q in query:
                 if len(q.strip()) > 1:
-                    print q
                     qset &= (
                              Q(title__icontains=q) | 
                              Q(tags__icontains=q) | 
@@ -437,7 +436,6 @@ class CommentResource(resources.ModelResource):
                     comment = file_models.Comment(owner=request.user, body=body, file=file)
                     comment.save()
                     file.comments.add(comment)
-                    print comment.post_date
                     return self.create_response(request, {
                         'success': True,
                         'date': comment.post_date,

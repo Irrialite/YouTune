@@ -14,15 +14,6 @@
             		<tr><td class="tags" colspan="4">{{ track1.tags }}</td></tr>
             	</table>
             </div>
-            <div class="play">
-            	<a href="#/listen/{{ track1.base64id }}">Play</a>
-            </div>
-            <div class="delete" ng-show="owner">
-                <a class="btn btn-danger" href="#/upload/delete/{{ track1.id }}">
-                    <i class="icon-trash icon-white"></i>
-                    <span>Delete</span>
-                </a>
-            </div>
         </li>
     </ul>
 
@@ -39,15 +30,6 @@
             		<tr><th>Album</th><td>{{ track2.album }}</td></tr>
             		<tr><td class="tags" colspan="4">{{ track2.tags }}</td></tr>
             	</table>
-            </div>
-            <div class="play">
-            	<a href="#/listen/{{ track2.base64id }}">Play</a>
-            </div>
-            <div class="delete" ng-show="owner">
-                <a class="btn btn-danger" href="#/upload/delete/{{ track2.id }}">
-                    <i class="icon-trash icon-white"></i>
-                    <span>Delete</span>
-                </a>
             </div>
         </li>
     </ul>

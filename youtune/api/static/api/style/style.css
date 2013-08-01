@@ -27,6 +27,7 @@ textarea {
     margin-right: auto;
     text-align: center;
     padding: 5px;
+    min-width: 1200px;
 }
 
 .border-box{
@@ -287,6 +288,8 @@ td.name .social-btn {
 .track-item{
 	height: 100px;
     margin: 20px;
+    overflow: hidden;
+ 	min-width: 540px;
 }
 	.track-item .preview{
 		border: 2px solid #0077B3;
@@ -375,10 +378,8 @@ td.name .social-btn {
 #uploadby{
     display: inline-block;
     position: relative;
-    right: 7.2em;
-    padding-top: 1em;
+    float: left;
     text-align: left;
-    margin-right: 7em;
 }
 .loadMore{
     margin-left: 11em;
